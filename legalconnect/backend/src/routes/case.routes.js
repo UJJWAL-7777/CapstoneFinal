@@ -11,6 +11,8 @@ const router = Router();
 router.use(protect);
 
 // Case CRUD
+router.get('/documents/all', documentController.getAllMyDocuments);
+router.get('/documents/:docId/download', documentController.downloadDocument);
 router.post('/', authorize(ROLES.ADVOCATE), caseController.createCase);
 router.get('/', caseController.getCases);
 router.get('/:id', caseController.getCase);

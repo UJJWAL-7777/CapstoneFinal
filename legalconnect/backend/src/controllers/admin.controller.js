@@ -5,7 +5,8 @@ import { Case } from '../models/Case.js';
 import { Payment } from '../models/Payment.js';
 import { Report } from '../models/Report.js';
 import { AuditLog } from '../models/AuditLog.js';
-import { Badge } from '../models/Badge.js';
+import { Badge, UserBadge } from '../models/Badge.js';
+import { PlatformSetting } from '../models/PlatformSetting.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { ApiError } from '../utils/ApiError.js';
 import { VERIFICATION_STATUS, NOTIFICATION_TYPES, PAYMENT_STATUS } from '../constants/index.js';
@@ -151,35 +152,57 @@ export const updateVerificationStatus = asyncHandler(async (req, res) => {
 // ─── Consultations Overview ───────────────────────────────────────
 
 export const getAllConsultations = asyncHandler(async (req, res) => {
-  const { status, page = 1, limit = 20 } = req.query;
+  const { status, search, page = 1, limit = 50 } = req.query;
   const query = {};
   if (status) query.status = status;
 
-  const total = await Consultation.countDocuments(query);
-  const consultations = await Consultation.find(query)
+  let queryBuilder = Consultation.find(query)
     .sort({ createdAt: -1 })
-    .skip((page - 1) * limit)
-    .limit(Number(limit))
-    .populate('client', 'name email')
-    .populate('advocate', 'name email');
+    .populate('client', 'name email phone avatar')
+    .populate('advocate', 'name email phone avatar')
+    .populate('payment', 'amount status receiptNumber');
 
-  res.json({ success: true, data: { consultations, total, page: Number(page), pages: Math.ceil(total / limit) } });
+  let consultations = await queryBuilder;
+
+  if (search?.trim()) {
+    const s = search.trim().toLowerCase();
+    consultations = consultations.filter(
+      (c) =>
+        c.client?.name?.toLowerCase().includes(s) ||
+        c.advocate?.name?.toLowerCase().includes(s) ||
+        c.legalIssue?.toLowerCase().includes(s) ||
+        c.practiceArea?.toLowerCase().includes(s)
+    );
+  }
+
+  const total = consultations.length;
+  const paginated = consultations.slice((page - 1) * limit, page * limit);
+
+  res.json({ success: true, data: { consultations: paginated, total, page: Number(page), pages: Math.ceil(total / limit) } });
 });
 
 // ─── Cases Overview ───────────────────────────────────────────────
 
 export const getAllCases = asyncHandler(async (req, res) => {
-  const { status, page = 1, limit = 20 } = req.query;
+  const { status, search, page = 1, limit = 50 } = req.query;
   const query = {};
   if (status) query.status = status;
+  if (search?.trim()) {
+    query.$or = [
+      { title: { $regex: search.trim(), $options: 'i' } },
+      { caseId: { $regex: search.trim(), $options: 'i' } },
+      { practiceArea: { $regex: search.trim(), $options: 'i' } },
+      { courtName: { $regex: search.trim(), $options: 'i' } },
+    ];
+  }
 
   const total = await Case.countDocuments(query);
   const cases = await Case.find(query)
     .sort({ createdAt: -1 })
     .skip((page - 1) * limit)
     .limit(Number(limit))
-    .populate('client', 'name email')
-    .populate('advocate', 'name email');
+    .populate('client', 'name email phone avatar')
+    .populate('advocate', 'name email phone avatar');
 
   res.json({ success: true, data: { cases, total, page: Number(page), pages: Math.ceil(total / limit) } });
 });
@@ -205,10 +228,26 @@ export const getAllPayments = asyncHandler(async (req, res) => {
 // ─── Audit Logs ───────────────────────────────────────────────────
 
 export const getAuditLogs = asyncHandler(async (req, res) => {
-  const { page = 1, limit = 50, action, actorId } = req.query;
+  const { page = 1, limit = 50, action, actorId, search } = req.query;
   const query = {};
   if (action) query.action = { $regex: action, $options: 'i' };
   if (actorId) query.actor = actorId;
+  if (search) {
+    const matchingUsers = await User.find({
+      $or: [
+        { name: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+      ],
+    }).select('_id');
+    const userIds = matchingUsers.map((u) => u._id);
+
+    query.$or = [
+      { action: { $regex: search, $options: 'i' } },
+      { entityType: { $regex: search, $options: 'i' } },
+      { ip: { $regex: search, $options: 'i' } },
+      ...(userIds.length > 0 ? [{ actor: { $in: userIds } }] : []),
+    ];
+  }
 
   const total = await AuditLog.countDocuments(query);
   const logs = await AuditLog.find(query)
@@ -289,4 +328,235 @@ export const grantBadgeToUser = asyncHandler(async (req, res) => {
 
   res.status(201).json({ success: true, data: userBadge });
 });
+
+// ─── Granted Badges List & Revocation ─────────────────────────────
+
+export const getGrantedBadges = asyncHandler(async (req, res) => {
+  const userBadges = await UserBadge.find()
+    .sort({ createdAt: -1 })
+    .populate('user', 'name email avatar role')
+    .populate('badge', 'name type icon description')
+    .populate('awardedBy', 'name');
+  res.json({ success: true, data: userBadges });
+});
+
+export const revokeBadge = asyncHandler(async (req, res) => {
+  const userBadge = await UserBadge.findByIdAndDelete(req.params.id);
+  if (!userBadge) throw ApiError.notFound('Badge award not found');
+  await logAudit({
+    actor: req.user._id,
+    action: 'admin.badge.revoked',
+    entityType: 'UserBadge',
+    entityId: userBadge._id,
+    metadata: { userId: userBadge.user, badgeId: userBadge.badge },
+    req,
+  });
+  res.json({ success: true, message: 'Badge revoked successfully' });
+});
+
+// ─── User Full Inspection ─────────────────────────────────────────
+
+export const getUserDetails = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id).select('-password -tokenVersion').lean();
+  if (!user) throw ApiError.notFound('User not found');
+
+  let profile = null;
+  if (user.role === 'advocate') {
+    profile = await AdvocateProfile.findOne({ user: user._id }).lean();
+  }
+
+  const [consultations, cases, payments] = await Promise.all([
+    Consultation.find({ [user.role]: user._id })
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .populate('client', 'name email')
+      .populate('advocate', 'name email')
+      .lean(),
+    Case.find({ [user.role]: user._id })
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .lean(),
+    Payment.find({ [user.role]: user._id })
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .lean(),
+  ]);
+
+  const [totalConsultations, totalCases, totalPayments] = await Promise.all([
+    Consultation.countDocuments({ [user.role]: user._id }),
+    Case.countDocuments({ [user.role]: user._id }),
+    Payment.countDocuments({ [user.role]: user._id }),
+  ]);
+
+  res.json({
+    success: true,
+    data: {
+      user,
+      profile,
+      consultations,
+      cases,
+      payments,
+      stats: {
+        totalConsultations,
+        totalCases,
+        totalPayments,
+      },
+    },
+  });
+});
+
+// ─── Platform Analytics ───────────────────────────────────────────
+
+export const getAnalytics = asyncHandler(async (req, res) => {
+  const sixMonthsAgo = new Date();
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+  sixMonthsAgo.setDate(1);
+  sixMonthsAgo.setHours(0, 0, 0, 0);
+
+  const monthlyPayments = await Payment.aggregate([
+    { $match: { status: PAYMENT_STATUS.SUCCESSFUL, createdAt: { $gte: sixMonthsAgo } } },
+    {
+      $group: {
+        _id: {
+          year: { $year: '$createdAt' },
+          month: { $month: '$createdAt' },
+        },
+        revenue: { $sum: '$amount' },
+        platformFee: { $sum: '$platformFee' },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { '_id.year': 1, '_id.month': 1 } },
+  ]);
+
+  const monthlyConsultations = await Consultation.aggregate([
+    { $match: { createdAt: { $gte: sixMonthsAgo } } },
+    {
+      $group: {
+        _id: {
+          year: { $year: '$createdAt' },
+          month: { $month: '$createdAt' },
+          status: '$status',
+        },
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  const practiceAreas = await Consultation.aggregate([
+    { $group: { _id: '$practiceArea', count: { $sum: 1 } } },
+    { $sort: { count: -1 } },
+    { $limit: 6 },
+  ]);
+
+  const [totalClients, totalAdvocates, verifiedAdvocates, activeCases, totalRevenueResult] = await Promise.all([
+    User.countDocuments({ role: 'client' }),
+    User.countDocuments({ role: 'advocate' }),
+    AdvocateProfile.countDocuments({ verificationStatus: VERIFICATION_STATUS.VERIFIED }),
+    Case.countDocuments({ isArchived: false, status: { $nin: ['Resolved', 'Closed'] } }),
+    Payment.aggregate([
+      { $match: { status: PAYMENT_STATUS.SUCCESSFUL } },
+      { $group: { _id: null, total: { $sum: '$amount' }, platformFee: { $sum: '$platformFee' } } },
+    ]),
+  ]);
+
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const revenueChart = [];
+  const now = new Date();
+
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const y = d.getFullYear();
+    const m = d.getMonth() + 1;
+    const label = `${monthNames[m - 1]} ${y}`;
+
+    const matchPay = monthlyPayments.find((p) => p._id.year === y && p._id.month === m);
+    const consForMonth = monthlyConsultations.filter((c) => c._id.year === y && c._id.month === m);
+    const confirmedCount = consForMonth
+      .filter((c) => c._id.status === 'Confirmed' || c._id.status === 'Completed')
+      .reduce((s, c) => s + c.count, 0);
+    const pendingCount = consForMonth
+      .filter((c) => c._id.status === 'Pending')
+      .reduce((s, c) => s + c.count, 0);
+
+    revenueChart.push({
+      month: label,
+      revenue: matchPay?.revenue || 0,
+      platformFee: matchPay?.platformFee || Math.round((matchPay?.revenue || 0) * 0.1),
+      transactions: matchPay?.count || 0,
+      consultations: confirmedCount + pendingCount,
+      confirmed: confirmedCount,
+    });
+  }
+
+  res.json({
+    success: true,
+    data: {
+      stats: {
+        totalClients,
+        totalAdvocates,
+        verifiedAdvocates,
+        activeCases,
+        totalRevenue: totalRevenueResult[0]?.total || 0,
+        totalPlatformFee: totalRevenueResult[0]?.platformFee || 0,
+      },
+      revenueChart,
+      practiceAreas: practiceAreas.map((p) => ({ name: p._id || 'General', value: p.count })),
+    },
+  });
+});
+
+// ─── Platform Settings ────────────────────────────────────────────
+
+export const getPlatformSettings = asyncHandler(async (req, res) => {
+  let settings = await PlatformSetting.findOne();
+  if (!settings) {
+    settings = await PlatformSetting.create({});
+  }
+  res.json({ success: true, data: settings });
+});
+
+export const updatePlatformSettings = asyncHandler(async (req, res) => {
+  const allowed = [
+    'platformCommissionPercent',
+    'minConsultationFee',
+    'escrowHoldHours',
+    'maintenanceMode',
+    'announcementBanner',
+    'supportEmail',
+    'supportPhone',
+  ];
+  const updates = {};
+  for (const f of allowed) {
+    if (req.body[f] !== undefined) updates[f] = req.body[f];
+  }
+
+  let settings = await PlatformSetting.findOneAndUpdate(
+    {},
+    { $set: updates },
+    { new: true, upsert: true, runValidators: true }
+  );
+
+  await logAudit({
+    actor: req.user._id,
+    action: 'admin.settings.updated',
+    entityType: 'PlatformSetting',
+    entityId: settings._id,
+    metadata: updates,
+    req,
+  });
+
+  const io = getIo(req);
+  if (io) {
+    io.emit('platform:status:updated', {
+      maintenanceMode: Boolean(settings.maintenanceMode),
+      announcementBanner: settings.announcementBanner,
+      supportEmail: settings.supportEmail,
+      supportPhone: settings.supportPhone,
+    });
+  }
+
+  res.json({ success: true, data: settings });
+});
+
 

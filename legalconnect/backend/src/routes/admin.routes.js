@@ -12,6 +12,7 @@ router.get('/dashboard', adminController.getDashboardStats);
 
 // Users
 router.get('/users', adminController.getUsers);
+router.get('/users/:id/details', adminController.getUserDetails);
 router.put('/users/:id/status', adminController.updateUserStatus);
 
 // Advocates (all advocates list + verification)
@@ -33,8 +34,15 @@ router.get('/audit-logs', adminController.getAuditLogs);
 
 // Badges
 router.get('/badges', adminController.getBadges);
+router.get('/badges/granted', adminController.getGrantedBadges);
+router.delete('/badges/granted/:id', adminController.revokeBadge);
 router.put('/badges/:id', adminController.updateBadge);
 router.post('/badges/grant', adminController.grantBadgeToUser);
+
+// Platform Analytics & Settings
+router.get('/analytics', adminController.getAnalytics);
+router.get('/settings', adminController.getPlatformSettings);
+router.put('/settings', adminController.updatePlatformSettings);
 
 export default router;
 

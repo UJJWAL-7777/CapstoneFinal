@@ -29,7 +29,12 @@ export function isUserOnline(userId) {
 export function initSocketIO(server) {
   const io = new Server(server, {
     cors: {
-      origin: env.CLIENT_URLS,
+      origin(origin, cb) {
+        if (!origin) return cb(null, true);
+        if (!env.isProd && /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) return cb(null, true);
+        if (env.CLIENT_URLS.includes(origin)) return cb(null, true);
+        cb(new Error('Origin not allowed by CORS'));
+      },
       credentials: true,
     },
     path: '/socket.io',
@@ -60,18 +65,34 @@ export function initSocketIO(server) {
     // Join user's personal room for notifications
     socket.join(`user:${userId}`);
 
-    // ─── Case Chat ───────────────────────────────────────────────
-    socket.on('chat:join', async ({ caseId }) => {
+    // ─── Chat (Case or Consultation) ──────────────────────────────
+    socket.on('chat:join', async ({ caseId, consultationId }) => {
       try {
-        const caseDoc = await Case.findById(caseId).lean();
-        if (!caseDoc) return;
-        const participants = [String(caseDoc.client), String(caseDoc.advocate)];
-        if (!participants.includes(userId)) return;
+        let roomId = null;
+        let query = {};
 
-        socket.join(`case:${caseId}`);
+        if (caseId) {
+          const caseDoc = await Case.findById(caseId).lean();
+          if (!caseDoc) return;
+          const participants = [String(caseDoc.client), String(caseDoc.advocate)];
+          if (!participants.includes(userId)) return;
+          roomId = `case:${caseId}`;
+          query = { case: caseId };
+        } else if (consultationId) {
+          const consDoc = await Consultation.findById(consultationId).lean();
+          if (!consDoc) return;
+          const participants = [String(consDoc.client), String(consDoc.advocate)];
+          if (!participants.includes(userId)) return;
+          roomId = `consultation:${consultationId}`;
+          query = { consultation: consultationId };
+        } else {
+          return;
+        }
+
+        socket.join(roomId);
 
         // Send message history (last 50)
-        const messages = await Message.find({ case: caseId, isDeleted: false })
+        const messages = await Message.find({ ...query, isDeleted: false })
           .sort({ createdAt: -1 })
           .limit(50)
           .populate('sender', 'name avatar role')
@@ -80,39 +101,56 @@ export function initSocketIO(server) {
 
         // Mark messages as read
         await Message.updateMany(
-          { case: caseId, sender: { $ne: userId }, readBy: { $not: { $elemMatch: { $eq: userId } } } },
+          { ...query, sender: { $ne: userId }, readBy: { $not: { $elemMatch: { $eq: userId } } } },
           { $addToSet: { readBy: userId } }
         );
       } catch (err) {
-        socket.emit('error', { message: 'Failed to join case chat' });
+        socket.emit('error', { message: 'Failed to join chat' });
       }
     });
 
-    socket.on('chat:message', async ({ caseId, content, type = 'text', attachment }) => {
+    socket.on('chat:message', async ({ caseId, consultationId, content, type = 'text', attachment }) => {
       try {
-        const caseDoc = await Case.findById(caseId).lean();
-        if (!caseDoc) return;
-        const participants = [String(caseDoc.client), String(caseDoc.advocate)];
-        if (!participants.includes(userId)) return;
-
-        const message = await Message.create({
-          case: caseId,
+        let roomId = null;
+        const msgData = {
           sender: userId,
           content,
           type,
           attachment,
           readBy: [userId],
-        });
+        };
 
+        if (caseId) {
+          const caseDoc = await Case.findById(caseId).lean();
+          if (!caseDoc) return;
+          const participants = [String(caseDoc.client), String(caseDoc.advocate)];
+          if (!participants.includes(userId)) return;
+          roomId = `case:${caseId}`;
+          msgData.case = caseId;
+        } else if (consultationId) {
+          const consDoc = await Consultation.findById(consultationId).lean();
+          if (!consDoc) return;
+          const participants = [String(consDoc.client), String(consDoc.advocate)];
+          if (!participants.includes(userId)) return;
+          roomId = `consultation:${consultationId}`;
+          msgData.consultation = consultationId;
+        } else {
+          return;
+        }
+
+        const message = await Message.create(msgData);
         const populated = await message.populate('sender', 'name avatar role');
-        io.to(`case:${caseId}`).emit('chat:message', populated);
+        io.to(roomId).emit('chat:message', populated);
       } catch {
         socket.emit('error', { message: 'Failed to send message' });
       }
     });
 
-    socket.on('chat:typing', ({ caseId, isTyping }) => {
-      socket.to(`case:${caseId}`).emit('chat:typing', { userId, isTyping });
+    socket.on('chat:typing', ({ caseId, consultationId, isTyping }) => {
+      const roomId = caseId ? `case:${caseId}` : (consultationId ? `consultation:${consultationId}` : null);
+      if (roomId) {
+        socket.to(roomId).emit('chat:typing', { userId, isTyping });
+      }
     });
 
     // ─── Video Signaling (WebRTC) ─────────────────────────────────

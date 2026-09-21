@@ -17,39 +17,56 @@ export const createConsultation = asyncHandler(async (req, res) => {
   const { advocateId, date, timeSlot, duration, mode, legalIssue, practiceArea } = req.body;
   const io = getIo(req);
 
-  // Get fee from advocate profile
-  const profile = await AdvocateProfile.findOne({ user: advocateId });
+  // Resolve advocate profile and user ID
+  const profile = await AdvocateProfile.findOne({
+    $or: [{ user: advocateId }, { _id: advocateId }],
+  });
   if (!profile) throw ApiError.notFound('Advocate not found');
 
-  const fee = profile.consultationFee;
+  const advocateUserId = profile.user;
+
+  // Validate date is not in the past
+  const bookingDate = new Date(date);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (bookingDate < today) {
+    throw ApiError.badRequest('Cannot schedule a consultation in the past');
+  }
+
+  const fee = profile.consultationFee || 0;
 
   // Check for double booking
+  const startOfDay = new Date(date);
+  startOfDay.setHours(0, 0, 0, 0);
+  const endOfDay = new Date(date);
+  endOfDay.setHours(23, 59, 59, 999);
+
   const existing = await Consultation.findOne({
-    advocate: advocateId,
-    date: new Date(date),
+    advocate: advocateUserId,
+    date: { $gte: startOfDay, $lte: endOfDay },
     timeSlot,
     status: { $in: [CONSULTATION_STATUS.PENDING, CONSULTATION_STATUS.CONFIRMED] },
   });
-  if (existing) throw ApiError.conflict('This time slot is already booked');
+  if (existing) throw ApiError.conflict('This time slot has already been booked. Please choose another slot.');
 
   const consultation = await Consultation.create({
     client: req.user._id,
-    advocate: advocateId,
+    advocate: advocateUserId,
     date: new Date(date),
     timeSlot,
     duration: duration || 60,
-    mode,
+    mode: mode || 'video',
     legalIssue,
-    practiceArea,
+    practiceArea: practiceArea || profile.practiceAreas?.[0] || 'General Legal Advice',
     fee,
-    videoRoomId: mode === 'video' ? uuidv4() : undefined,
+    videoRoomId: (mode === 'video' || !mode) ? uuidv4() : undefined,
   });
 
   // Create pending payment
   const payment = await Payment.create({
     consultation: consultation._id,
     client: req.user._id,
-    advocate: advocateId,
+    advocate: advocateUserId,
     amount: fee,
     status: PAYMENT_STATUS.PENDING,
     platformFee: Math.round(fee * 0.1),
@@ -59,10 +76,10 @@ export const createConsultation = asyncHandler(async (req, res) => {
   await consultation.save();
 
   await createNotification(io, {
-    recipient: advocateId,
+    recipient: advocateUserId,
     type: NOTIFICATION_TYPES.BOOKING,
     title: 'New Consultation Request',
-    message: `${req.user.name} has requested a ${mode} consultation.`,
+    message: `${req.user.name} has requested a ${mode || 'video'} consultation.`,
     link: `/advocate/consultations`,
     relatedEntity: { type: 'Consultation', id: consultation._id },
   });
@@ -70,8 +87,8 @@ export const createConsultation = asyncHandler(async (req, res) => {
   await logAudit({ actor: req.user._id, action: 'consultation.created', entityType: 'Consultation', entityId: consultation._id, req });
 
   const populated = await consultation.populate([
-    { path: 'client', select: 'name email avatar' },
-    { path: 'advocate', select: 'name email avatar' },
+    { path: 'client', select: 'name email avatar phone' },
+    { path: 'advocate', select: 'name email avatar phone' },
   ]);
 
   res.status(201).json({ success: true, data: { consultation: populated, payment } });

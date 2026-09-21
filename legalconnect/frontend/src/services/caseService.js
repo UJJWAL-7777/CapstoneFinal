@@ -7,6 +7,7 @@ export const caseService = {
   update: (id, data) => api.put(`/cases/${id}`, data).then((r) => r.data.data),
 
   // Documents
+  getAllDocuments: () => api.get('/cases/documents/all').then((r) => r.data.data),
   uploadDocument: (caseId, formData) =>
     api.post(`/cases/${caseId}/documents`, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then((r) => r.data.data),
   getDocuments: (caseId) => api.get(`/cases/${caseId}/documents`).then((r) => r.data.data),

@@ -5,6 +5,7 @@ export const adminService = {
 
   // Users
   getUsers: (params) => api.get('/admin/users', { params }).then((r) => r.data.data),
+  getUserDetails: (id) => api.get(`/admin/users/${id}/details`).then((r) => r.data.data),
   updateUserStatus: (id, status) => api.put(`/admin/users/${id}/status`, { status }).then((r) => r.data.data),
 
   // Advocates
@@ -29,7 +30,14 @@ export const adminService = {
   // Badges
   grantBadge: (userId, badgeType) => api.post('/admin/badges/grant', { userId, badgeType }).then((r) => r.data.data),
   getBadges: () => api.get('/admin/badges').then((r) => r.data.data),
+  getGrantedBadges: () => api.get('/admin/badges/granted').then((r) => r.data.data),
+  revokeBadge: (id) => api.delete(`/admin/badges/granted/${id}`).then((r) => r.data.data),
 
   // Audit logs
   getAuditLogs: (params) => api.get('/admin/audit-logs', { params }).then((r) => r.data.data),
+
+  // Analytics & Platform Settings
+  getAnalytics: () => api.get('/admin/analytics').then((r) => r.data.data),
+  getSettings: () => api.get('/admin/settings').then((r) => r.data.data),
+  updateSettings: (data) => api.put('/admin/settings', data).then((r) => r.data.data),
 };

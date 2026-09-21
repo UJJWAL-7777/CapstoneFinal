@@ -2,11 +2,14 @@ import { useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Mic, MicOff, Video, VideoOff, PhoneOff, Monitor, Clock } from 'lucide-react';
 import { useVideoCall } from '../../hooks/useVideoCall.js';
+import { usePlatformStatus } from '../../context/PlatformContext.jsx';
+import MaintenanceNotice from '../../components/ui/MaintenanceNotice.jsx';
 
 export default function VideoCall() {
   const { id: consultationId } = useParams();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { maintenanceMode, isAdmin } = usePlatformStatus();
   const { localStream, remoteStream, status, mediaMode, isMuted, isCameraOff, duration, endCall, toggleMute, toggleCamera } = useVideoCall(consultationId);
 
   const localVideoRef = useRef(null);
@@ -14,6 +17,19 @@ export default function VideoCall() {
 
   // Determine back-destination by role (from URL prefix)
   const backTo = pathname.startsWith('/advocate') ? '/advocate/consultations' : '/client/consultations';
+
+  if (maintenanceMode && !isAdmin) {
+    return (
+      <div className="min-h-screen bg-paper flex items-center justify-center p-4">
+        <MaintenanceNotice
+          serviceName="Video Consultation Room"
+          description="LegalConnect video servers are currently undergoing scheduled platform upgrades. Scheduled consultations will resume promptly once the maintenance window is concluded."
+          backTo={backTo}
+          backLabel="Back to Consultations"
+        />
+      </div>
+    );
+  }
 
   useEffect(() => {
     if (localVideoRef.current && localStream) {

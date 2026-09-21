@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, SlidersHorizontal, X, MapPin, Star, IndianRupee } from 'lucide-react';
+import { Search, SlidersHorizontal, X, MapPin, Star, IndianRupee, Calendar, AlertTriangle } from 'lucide-react';
 import { advocateService } from '../../services/advocateService.js';
+import { usePlatformStatus } from '../../context/PlatformContext.jsx';
 import Avatar from '../../components/ui/Avatar.jsx';
 import Badge from '../../components/ui/Badge.jsx';
 import VerifiedBadge from '../../components/ui/VerifiedBadge.jsx';
@@ -65,6 +66,7 @@ export default function FindAdvocates() {
     setPage(1);
   };
 
+  const { maintenanceMode, isAdmin } = usePlatformStatus();
   const activeFilterCount = Object.entries(filters).filter(([k, v]) => v && k !== 'sort').length;
 
   return (
@@ -73,6 +75,18 @@ export default function FindAdvocates() {
         <h1 className="text-2xl">Find Advocates</h1>
         <p className="text-ink-soft mt-1">Search from {total} verified legal professionals</p>
       </div>
+
+      {/* Maintenance alert notice */}
+      {maintenanceMode && !isAdmin && (
+        <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-2.5">
+            <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
+            <span>
+              <strong>Platform Notice:</strong> Direct consultation booking is temporarily paused due to scheduled system maintenance. You may still view profiles and credentials.
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Search bar */}
       <div className="flex gap-3">
@@ -176,7 +190,7 @@ export default function FindAdvocates() {
         <>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {advocates.map((adv) => (
-              <AdvocateCard key={adv._id} advocate={adv} />
+              <AdvocateCard key={adv._id} advocate={adv} maintenanceMode={maintenanceMode} isAdmin={isAdmin} />
             ))}
           </div>
 
@@ -194,7 +208,7 @@ export default function FindAdvocates() {
   );
 }
 
-function AdvocateCard({ advocate }) {
+function AdvocateCard({ advocate, maintenanceMode, isAdmin }) {
   return (
     <div className="panel p-5 hover:shadow-lg hover:border-chamber-200 transition-all cursor-pointer group">
       <div className="flex items-start gap-3">
@@ -241,9 +255,20 @@ function AdvocateCard({ advocate }) {
         </div>
       </div>
 
-      <Button to={`/client/advocates/${advocate.user?._id}`} variant="outline" size="sm" className="mt-4 w-full">
-        View Profile
-      </Button>
+      <div className="mt-4 flex items-center gap-2">
+        <Button to={`/client/advocates/${advocate.user?._id || advocate._id}`} variant="outline" size="sm" className="flex-1">
+          View Profile
+        </Button>
+        <Button
+          to={`/client/book/${advocate.user?._id || advocate._id}`}
+          variant={maintenanceMode && !isAdmin ? 'secondary' : 'primary'}
+          size="sm"
+          className="flex-1 gap-1.5 shadow-sm"
+        >
+          <Calendar className="h-3.5 w-3.5" />
+          {maintenanceMode && !isAdmin ? 'Booking Paused' : 'Book Now'}
+        </Button>
+      </div>
     </div>
   );
 }

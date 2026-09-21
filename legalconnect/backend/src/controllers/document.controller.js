@@ -55,6 +55,26 @@ export const uploadDocument = asyncHandler(async (req, res) => {
   if (!caseDoc) throw ApiError.notFound('Case not found');
   assertCaseAccess(caseDoc, req.user._id, req.user.role);
 
+  const rawCategory = req.body.category;
+  const categoryMap = {
+    'Identity Proof': 'Identity',
+    'Property Document': 'Legal',
+    'Legal Notice': 'Legal',
+    'Court Order': 'Court',
+    'Evidence': 'Evidence',
+    'Agreement / Contract': 'Agreement',
+    'Agreement': 'Agreement',
+    'Identity': 'Identity',
+    'Legal': 'Legal',
+    'Financial': 'Financial',
+    'Financial Statement': 'Financial',
+    'Court': 'Court',
+    'Correspondence': 'Correspondence',
+    'Medical Record': 'Other',
+    'Other': 'Other',
+  };
+  const category = categoryMap[rawCategory] || (Object.values(DOCUMENT_CATEGORIES).includes(rawCategory) ? rawCategory : 'Other');
+
   const doc = await CaseDocument.create({
     case: caseDoc._id,
     uploadedBy: req.user._id,
@@ -63,7 +83,7 @@ export const uploadDocument = asyncHandler(async (req, res) => {
     url: `/uploads/case-documents/${req.file.filename}`,
     mimeType: req.file.mimetype,
     size: req.file.size,
-    category: req.body.category || 'Other',
+    category,
     description: req.body.description,
     documentRequest: req.body.documentRequestId || undefined,
   });
@@ -193,3 +213,43 @@ export const getDocumentRequests = asyncHandler(async (req, res) => {
 
   res.json({ success: true, data: requests });
 });
+
+export const getAllMyDocuments = asyncHandler(async (req, res) => {
+  const query = req.user.role === ROLES.CLIENT ? { client: req.user._id } : { advocate: req.user._id };
+  const userCases = await Case.find(query).select('_id title caseId');
+  const caseIds = userCases.map((c) => c._id);
+
+  const docs = await CaseDocument.find({
+    $or: [
+      { case: { $in: caseIds } },
+      { uploadedBy: req.user._id },
+    ],
+    isDeleted: false,
+  })
+    .populate('uploadedBy', 'name avatar role')
+    .populate('case', 'title caseId status')
+    .sort({ createdAt: -1 });
+
+  res.json({ success: true, data: docs });
+});
+
+export const downloadDocument = asyncHandler(async (req, res) => {
+  const doc = await CaseDocument.findById(req.params.docId).populate('case');
+  if (!doc || doc.isDeleted) throw ApiError.notFound('Document not found');
+  if (doc.case) {
+    assertCaseAccess(doc.case, req.user._id, req.user.role);
+  } else if (String(doc.uploadedBy) !== String(req.user._id) && req.user.role !== ROLES.ADMIN) {
+    throw ApiError.forbidden();
+  }
+
+  const relativePath = doc.url.startsWith('/') ? doc.url.slice(1) : doc.url;
+  const fullPath = path.resolve(relativePath);
+  if (!fs.existsSync(fullPath)) {
+    throw ApiError.notFound('File not found on server disk');
+  }
+
+  const filename = doc.originalName || doc.name || path.basename(fullPath);
+  res.download(fullPath, filename);
+});
+
+

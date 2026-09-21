@@ -3,11 +3,13 @@ import Logo from '../components/Logo.jsx';
 import Button from '../components/ui/Button.jsx';
 import { useAuth } from '../hooks/useAuth.js';
 import { ROLE_HOME } from '../utils/constants.js';
+import { PlatformBanners } from '../context/PlatformContext.jsx';
 
 export default function PublicLayout() {
   const { isAuthenticated, user } = useAuth();
   return (
     <div className="flex min-h-screen flex-col">
+      <PlatformBanners />
       <header className="border-b border-line bg-white/80 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Logo />

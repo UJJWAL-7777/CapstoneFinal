@@ -114,6 +114,12 @@ export const BADGE_TYPES = Object.freeze({
   ACTIVE_CONSULTANT: 'active_consultant',
   EXPERIENCED_ADVOCATE: 'experienced_advocate',
   CLIENT_TRUSTED: 'client_trusted',
+  TOP_RATED: 'top_rated',
+  CASE_WINNER: 'case_winner',
+  CASE_CHAMPION: 'case_champion',
+  CLIENT_FAVORITE: 'client_favorite',
+  COMMUNITY_CONTRIBUTOR: 'community_contributor',
+  VERIFIED_EXPERT: 'verified_expert',
 });
 
 export const TIMELINE_EVENT_TYPES = Object.freeze({

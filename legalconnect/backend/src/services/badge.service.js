@@ -161,12 +161,14 @@ export async function checkAndAwardBadges(io, advocateUserId, advocateProfile) {
 
 export async function getAchievements(advocateUserId) {
   const stats = await getAdvocateStats(advocateUserId);
-  const milestones = [1, 10, 25, 50, 100, 250];
+  const milestones = [1, 5, 10, 25, 50, 100];
 
   return milestones.map((milestone) => ({
-    label: milestone === 1 ? 'First Consultation' : `${milestone} Consultations`,
+    label: milestone === 1 ? 'First Consultation' : `${milestone} Consultations Milestone`,
     milestone,
-    unlocked: stats.completedConsultations >= milestone,
-    unlockedAt: null, // Could track this with a separate collection
+    target: milestone,
+    current: Math.min(stats.completedConsultations || 0, milestone),
+    unlocked: (stats.completedConsultations || 0) >= milestone,
+    unlockedAt: null,
   }));
 }

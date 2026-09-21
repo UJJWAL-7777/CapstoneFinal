@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Scale, FileText, CheckSquare, Clock, Gavel, MessageSquare, StickyNote,
-  Upload, Plus, Download, Trash2, CheckCircle
+  Upload, Plus, Download, Trash2, CheckCircle, Eye, Image as ImageIcon
 } from 'lucide-react';
 import { caseService } from '../../services/caseService.js';
 import { useAuth } from '../../hooks/useAuth.js';
 import { useChat } from '../../hooks/useChat.js';
 import { useToast } from '../../context/ToastContext.jsx';
+import DocumentPreviewModal from '../../components/ui/DocumentPreviewModal.jsx';
+import { getFileUrl, downloadFile, formatFileSize } from '../../utils/file.js';
 import Tabs from '../../components/ui/Tabs.jsx';
 import Badge from '../../components/ui/Badge.jsx';
 import Button from '../../components/ui/Button.jsx';
@@ -48,6 +50,9 @@ export default function CaseWorkspace() {
   const [showUpload, setShowUpload] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadName, setUploadName] = useState('');
+  const [uploadCategory, setUploadCategory] = useState('Other');
+  const [uploadDescription, setUploadDescription] = useState('');
+  const [previewDoc, setPreviewDoc] = useState(null);
   const [showReview, setShowReview] = useState(false);
   const [reviewForm, setReviewForm] = useState({ rating: 5, comment: '' });
   const [submittingReview, setSubmittingReview] = useState(false);
@@ -73,19 +78,25 @@ export default function CaseWorkspace() {
       .finally(() => setLoading(false));
   }, [caseId]);
 
-  const handleUpload = async () => {
+  const handleUpload = async (keepOpen = false) => {
     if (!uploadFile) return;
     setUploading(true);
     try {
       const fd = new FormData();
       fd.append('file', uploadFile);
-      fd.append('name', uploadName || uploadFile.name);
+      fd.append('name', uploadName.trim() || uploadFile.name);
+      fd.append('category', uploadCategory);
+      if (uploadDescription) fd.append('description', uploadDescription);
       const doc = await caseService.uploadDocument(caseId, fd);
       setDocuments((prev) => [doc, ...prev]);
-      setShowUpload(false);
+      toast.success(`"${doc.name}" uploaded successfully!`);
       setUploadFile(null);
       setUploadName('');
-      toast.success('Document uploaded');
+      setUploadCategory('Other');
+      setUploadDescription('');
+      if (!keepOpen) {
+        setShowUpload(false);
+      }
     } catch { toast.error('Upload failed'); }
     finally { setUploading(false); }
   };
@@ -195,19 +206,37 @@ export default function CaseWorkspace() {
             <div className="panel p-10 text-center"><FileText className="mx-auto h-10 w-10 text-ink-muted mb-3" /><p className="text-ink-muted">No documents yet</p></div>
           ) : (
             <div className="panel divide-y divide-line">
-              {documents.map((doc) => (
-                <div key={doc._id} className="flex items-center gap-3 p-4">
-                  <FileText className="h-5 w-5 text-chamber-500 shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm truncate">{doc.name}</p>
-                    <p className="text-xs text-ink-muted">{doc.category} · {(doc.size / 1024).toFixed(0)} KB · {format(new Date(doc.createdAt), 'MMM d')}</p>
+              {documents.map((doc) => {
+                const isImage = doc.mimeType?.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(doc.name || doc.url);
+                return (
+                  <div key={doc._id} className="flex items-center gap-3 p-4 hover:bg-paper/40 transition-colors">
+                    <div className="p-1.5 rounded-lg bg-chamber-50 text-chamber-700 shrink-0">
+                      {isImage ? <ImageIcon className="h-5 w-5" /> : <FileText className="h-5 w-5" />}
+                    </div>
+                    <div className="flex-1 min-w-0 cursor-pointer" onClick={() => setPreviewDoc({ ...doc, caseTitle: caseData?.title })}>
+                      <p className="font-semibold text-sm text-ink truncate hover:text-chamber-700">{doc.name}</p>
+                      <p className="text-xs text-ink-muted">{doc.category} · {formatFileSize(doc.size)} · {format(new Date(doc.createdAt), 'MMM d')}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {doc.isReviewed && <Badge variant="success" size="xs">Reviewed</Badge>}
+                      <button
+                        onClick={() => setPreviewDoc({ ...doc, caseTitle: caseData?.title })}
+                        className="rounded-lg p-1.5 text-chamber-700 hover:bg-chamber-50 transition-colors"
+                        title="Preview document"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => downloadFile(doc.url, doc.originalName || doc.name)}
+                        className="rounded-lg p-1.5 text-ink-muted hover:text-ink hover:bg-paper transition-colors"
+                        title="Download file"
+                      >
+                        <Download className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {doc.isReviewed && <Badge variant="success" size="xs">Reviewed</Badge>}
-                    <a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-chamber-600 hover:text-chamber-800"><Download className="h-4 w-4" /></a>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -324,13 +353,49 @@ export default function CaseWorkspace() {
       )}
 
       {/* Upload Modal */}
-      <Modal isOpen={showUpload} onClose={() => setShowUpload(false)} title="Upload Document"
-        footer={<><Button variant="secondary" onClick={() => setShowUpload(false)}>Cancel</Button><Button onClick={handleUpload} loading={uploading} disabled={!uploadFile}>Upload</Button></>}>
+      <Modal isOpen={showUpload} onClose={() => setShowUpload(false)} title="Upload Case Document"
+        footer={
+          <div className="flex flex-col sm:flex-row gap-2 w-full justify-between items-center">
+            <Button variant="outline" size="sm" onClick={() => handleUpload(true)} loading={uploading} disabled={!uploadFile} className="w-full sm:w-auto">
+              Upload & Add Another
+            </Button>
+            <div className="flex gap-2 w-full sm:w-auto justify-end">
+              <Button variant="secondary" size="sm" onClick={() => setShowUpload(false)}>Cancel</Button>
+              <Button onClick={() => handleUpload(false)} loading={uploading} disabled={!uploadFile} size="sm" className="w-full sm:w-auto">Upload & Finish</Button>
+            </div>
+          </div>
+        }>
         <div className="space-y-4">
-          <FileDropzone onFile={setUploadFile} />
+          <FileDropzone onFile={(f) => {
+            setUploadFile(f);
+            if (f && !uploadName) setUploadName(f.name.replace(/\.[^/.]+$/, ''));
+          }} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-ink mb-1">Document Name</label>
+              <input type="text" value={uploadName} onChange={(e) => setUploadName(e.target.value)} placeholder="e.g. Property deed" className="input-base text-xs" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-ink mb-1">Category</label>
+              <select value={uploadCategory} onChange={(e) => setUploadCategory(e.target.value)} className="input-base text-xs">
+                {[
+                  { value: 'Agreement', label: 'Agreement / Contract' },
+                  { value: 'Identity', label: 'Identity Proof' },
+                  { value: 'Court', label: 'Court Order' },
+                  { value: 'Evidence', label: 'Evidence' },
+                  { value: 'Legal', label: 'Legal Notice / Property Deed' },
+                  { value: 'Financial', label: 'Financial Statement' },
+                  { value: 'Correspondence', label: 'Correspondence' },
+                  { value: 'Other', label: 'Other' },
+                ].map((c) => (
+                  <option key={c.value} value={c.value}>{c.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
           <div>
-            <label className="block text-sm font-medium text-ink mb-1.5">Document Name (optional)</label>
-            <input type="text" value={uploadName} onChange={(e) => setUploadName(e.target.value)} placeholder="e.g. Property deed" className="input-base" />
+            <label className="block text-xs font-semibold text-ink mb-1">Description (Optional)</label>
+            <textarea rows={2} value={uploadDescription} onChange={(e) => setUploadDescription(e.target.value)} placeholder="Brief remarks..." className="input-base text-xs resize-none" />
           </div>
         </div>
       </Modal>
@@ -349,6 +414,13 @@ export default function CaseWorkspace() {
           </div>
         </div>
       </Modal>
+
+      {/* In-Website Document Viewer Preview Modal */}
+      <DocumentPreviewModal
+        document={previewDoc}
+        isOpen={!!previewDoc}
+        onClose={() => setPreviewDoc(null)}
+      />
     </div>
   );
 }

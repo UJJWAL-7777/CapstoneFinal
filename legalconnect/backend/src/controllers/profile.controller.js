@@ -160,11 +160,21 @@ export const searchAdvocates = asyncHandler(async (req, res) => {
 });
 
 export const getAdvocatePublicProfile = asyncHandler(async (req, res) => {
-  const advocate = await User.findById(req.params.id).select('name email avatar createdAt');
-  if (!advocate || advocate.role !== ROLES.ADVOCATE) throw ApiError.notFound('Advocate not found');
+  let advocate = await User.findById(req.params.id).select('name email avatar createdAt role');
+  let profile;
 
-  const profile = await AdvocateProfile.findOne({ user: advocate._id });
-  if (!profile) throw ApiError.notFound('Profile not found');
+  if (advocate && advocate.role === ROLES.ADVOCATE) {
+    profile = await AdvocateProfile.findOne({ user: advocate._id });
+  } else {
+    profile = await AdvocateProfile.findById(req.params.id);
+    if (profile) {
+      advocate = await User.findById(profile.user).select('name email avatar createdAt role');
+    }
+  }
+
+  if (!advocate || !profile || advocate.role !== ROLES.ADVOCATE) {
+    throw ApiError.notFound('Advocate not found');
+  }
 
   const [reviewStats] = await Review.aggregate([
     { $match: { advocate: advocate._id, isHidden: false } },

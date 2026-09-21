@@ -12,6 +12,7 @@ import { useToast } from '../context/ToastContext.jsx';
 import { ROLE_HOME } from '../utils/constants.js';
 import { useNotifications } from '../hooks/useNotifications.js';
 import Avatar from '../components/ui/Avatar.jsx';
+import { PlatformBanners } from '../context/PlatformContext.jsx';
 
 const NAV = {
   client: [
@@ -119,45 +120,49 @@ export default function DashboardLayout() {
         {sidebar}
       </aside>
 
-      {/* Mobile header */}
-      <div className="flex h-14 items-center justify-between border-b border-line bg-white px-4 lg:hidden">
-        <Logo to={ROLE_HOME[user.role]} />
-        <div className="flex items-center gap-2">
-          {unreadCount > 0 && (
-            <span className="rounded-full bg-brass-500 px-2 py-0.5 text-xs font-bold text-white">{unreadCount}</span>
-          )}
-          <button
-            onClick={() => setOpen(true)}
-            className="rounded-lg p-2 text-ink hover:bg-paper transition-colors"
-            aria-label="Open menu"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+        <PlatformBanners />
 
-      {/* Mobile drawer */}
-      {open && (
-        <div className="fixed inset-0 z-40 lg:hidden animate-fade-in" role="dialog" aria-modal="true" aria-label="Navigation menu">
-          <div className="absolute inset-0 bg-ink/50" onClick={() => setOpen(false)} />
-          <aside className="relative h-full w-64 bg-chamber-900 flex flex-col animate-slide-up">
+        {/* Mobile header */}
+        <div className="flex h-14 items-center justify-between border-b border-line bg-white px-4 lg:hidden">
+          <Logo to={ROLE_HOME[user.role]} />
+          <div className="flex items-center gap-2">
+            {unreadCount > 0 && (
+              <span className="rounded-full bg-brass-500 px-2 py-0.5 text-xs font-bold text-white">{unreadCount}</span>
+            )}
             <button
-              onClick={() => setOpen(false)}
-              className="absolute right-3 top-4 rounded-lg p-1.5 text-chamber-100 hover:bg-white/10 transition-colors"
-              aria-label="Close menu"
+              onClick={() => setOpen(true)}
+              className="rounded-lg p-2 text-ink hover:bg-paper transition-colors"
+              aria-label="Open menu"
             >
-              <X className="h-5 w-5" />
+              <Menu className="h-5 w-5" />
             </button>
-            {sidebar}
-          </aside>
+          </div>
         </div>
-      )}
 
-      <main className="min-w-0 flex-1 overflow-auto">
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-          <Outlet />
-        </div>
-      </main>
+        {/* Mobile drawer */}
+        {open && (
+          <div className="fixed inset-0 z-40 lg:hidden animate-fade-in" role="dialog" aria-modal="true" aria-label="Navigation menu">
+            <div className="absolute inset-0 bg-ink/50" onClick={() => setOpen(false)} />
+            <aside className="relative h-full w-64 bg-chamber-900 flex flex-col animate-slide-up">
+              <button
+                onClick={() => setOpen(false)}
+                className="absolute right-3 top-4 rounded-lg p-1.5 text-chamber-100 hover:bg-white/10 transition-colors"
+                aria-label="Close menu"
+              >
+                <X className="h-5 w-5" />
+              </button>
+              {sidebar}
+            </aside>
+          </div>
+        )}
+
+        <main className="min-w-0 flex-1 overflow-auto">
+          <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+            <Outlet />
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
