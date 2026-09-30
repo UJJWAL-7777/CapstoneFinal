@@ -4,7 +4,7 @@ import StatCard from '../../components/ui/StatCard.jsx';
 import Avatar from '../../components/ui/Avatar.jsx';
 import Badge from '../../components/ui/Badge.jsx';
 import Button from '../../components/ui/Button.jsx';
-import { SkeletonCard } from '../../components/ui/Skeleton.jsx';
+import { SkeletonCard, SkeletonStatCard } from '../../components/ui/Skeleton.jsx';
 import {
   Users,
   Scale,
@@ -64,11 +64,11 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="space-y-6 animate-pulse">
-        <div className="h-10 bg-paper rounded w-1/3"></div>
+      <div className="space-y-6">
+        <div className="h-10 skeleton w-1/3 rounded-lg"></div>
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <SkeletonCard key={i} />
+            <SkeletonStatCard key={i} />
           ))}
         </div>
       </div>

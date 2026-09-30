@@ -13,6 +13,8 @@ import { ROLE_HOME } from '../utils/constants.js';
 import { useNotifications } from '../hooks/useNotifications.js';
 import Avatar from '../components/ui/Avatar.jsx';
 import { PlatformBanners } from '../context/PlatformContext.jsx';
+import ChatbotWidget from '../components/ChatbotWidget.jsx';
+import ThemeToggle from '../components/ui/ThemeToggle.jsx';
 
 const NAV = {
   client: [
@@ -96,12 +98,15 @@ export default function DashboardLayout() {
         ))}
       </nav>
       <div className="border-t border-white/10 p-4">
-        <div className="flex items-center gap-3 mb-3">
-          <Avatar name={user.name} src={user.avatar?.url} size="sm" />
-          <div className="min-w-0">
-            <p className="truncate text-sm font-medium text-white">{user.name}</p>
-            <p className="truncate text-xs capitalize text-chamber-200">{user.role}</p>
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <Avatar name={user.name} src={user.avatar?.url} size="sm" />
+            <div className="min-w-0">
+              <p className="truncate text-sm font-medium text-white">{user.name}</p>
+              <p className="truncate text-xs capitalize text-chamber-200">{user.role}</p>
+            </div>
           </div>
+          <ThemeToggle className="bg-white/10 text-white border-white/20 hover:bg-white/20 hover:text-white dark:bg-white/10 dark:text-white shrink-0" />
         </div>
         <button
           onClick={handleLogout}
@@ -114,7 +119,7 @@ export default function DashboardLayout() {
   );
 
   return (
-    <div className="min-h-screen lg:flex bg-paper">
+    <div className="min-h-screen lg:flex bg-paper text-ink transition-colors duration-200">
       {/* Desktop sidebar */}
       <aside className="hidden w-64 shrink-0 bg-chamber-900 lg:flex lg:flex-col">
         {sidebar}
@@ -127,12 +132,13 @@ export default function DashboardLayout() {
         <div className="flex h-14 items-center justify-between border-b border-line bg-white px-4 lg:hidden">
           <Logo to={ROLE_HOME[user.role]} />
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             {unreadCount > 0 && (
               <span className="rounded-full bg-brass-500 px-2 py-0.5 text-xs font-bold text-white">{unreadCount}</span>
             )}
             <button
               onClick={() => setOpen(true)}
-              className="rounded-lg p-2 text-ink hover:bg-paper transition-colors"
+              className="rounded-lg p-2 text-ink hover:bg-paper dark:text-[#E2ECE8] dark:hover:bg-[#182824] transition-colors"
               aria-label="Open menu"
             >
               <Menu className="h-5 w-5" />
@@ -163,6 +169,7 @@ export default function DashboardLayout() {
           </div>
         </main>
       </div>
+      <ChatbotWidget />
     </div>
   );
 }

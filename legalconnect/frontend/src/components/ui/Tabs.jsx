@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 export default function Tabs({ tabs, activeTab, onChange, className = '' }) {
   return (
-    <div className={`border-b border-line ${className}`}>
+    <div className={`border-b border-line dark:border-[#233833] ${className}`}>
       <nav className="-mb-px flex gap-1 overflow-x-auto scrollbar-thin">
         {tabs.map((tab) => (
           <button
@@ -12,8 +12,8 @@ export default function Tabs({ tabs, activeTab, onChange, className = '' }) {
             className={`
               flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-3 text-sm font-medium transition-colors
               ${activeTab === tab.id
-                ? 'border-chamber-600 text-chamber-700'
-                : 'border-transparent text-ink-muted hover:border-line hover:text-ink'
+                ? 'border-chamber-600 text-chamber-700 dark:border-chamber-400 dark:text-chamber-300'
+                : 'border-transparent text-ink-muted hover:border-line hover:text-ink dark:text-[#8A9E99] dark:hover:border-[#233833] dark:hover:text-white'
               }
             `}
             role="tab"
@@ -23,7 +23,7 @@ export default function Tabs({ tabs, activeTab, onChange, className = '' }) {
             {tab.label}
             {tab.count !== undefined && (
               <span className={`ml-1 rounded-full px-2 py-0.5 text-xs font-medium
-                ${activeTab === tab.id ? 'bg-chamber-100 text-chamber-700' : 'bg-line text-ink-muted'}`}>
+                ${activeTab === tab.id ? 'bg-chamber-100 text-chamber-700 dark:bg-chamber-900/60 dark:text-chamber-300' : 'bg-line text-ink-muted dark:bg-[#182824] dark:text-[#8A9E99]'}`}>
                 {tab.count}
               </span>
             )}

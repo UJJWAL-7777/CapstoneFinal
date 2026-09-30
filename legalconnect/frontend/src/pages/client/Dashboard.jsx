@@ -6,7 +6,7 @@ import { consultationService } from '../../services/consultationService.js';
 import { caseService } from '../../services/caseService.js';
 import { useNotifications } from '../../hooks/useNotifications.js';
 import StatCard from '../../components/ui/StatCard.jsx';
-import { SkeletonCard } from '../../components/ui/Skeleton.jsx';
+import { SkeletonCard, SkeletonStatCard } from '../../components/ui/Skeleton.jsx';
 import Button from '../../components/ui/Button.jsx';
 import Badge from '../../components/ui/Badge.jsx';
 import Avatar from '../../components/ui/Avatar.jsx';
@@ -40,12 +40,21 @@ export default function ClientDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard title="Active Cases" value={cases.length} icon={Scale} color="chamber" />
-        <StatCard title="Consultations" value={consultations.length} icon={Calendar} color="brass" />
-        <StatCard title="Notifications" value={unreadCount} icon={Bell} color="info" />
-        <StatCard title="Documents" value="—" icon={FileText} color="success" subtitle="View all" />
-      </div>
+      {loading ? (
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <SkeletonStatCard />
+          <SkeletonStatCard />
+          <SkeletonStatCard />
+          <SkeletonStatCard />
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <StatCard title="Active Cases" value={cases.length} icon={Scale} color="chamber" />
+          <StatCard title="Consultations" value={consultations.length} icon={Calendar} color="brass" />
+          <StatCard title="Notifications" value={unreadCount} icon={Bell} color="info" />
+          <StatCard title="Documents" value="—" icon={FileText} color="success" subtitle="View all" />
+        </div>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Upcoming consultation */}

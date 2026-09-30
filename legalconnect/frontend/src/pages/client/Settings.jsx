@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Lock, Eye, EyeOff, Save } from 'lucide-react';
+import { Lock, Eye, EyeOff, Save, Sun, Moon } from 'lucide-react';
 import api from '../../services/api.js';
 import { useToast } from '../../context/ToastContext.jsx';
 import Button from '../../components/ui/Button.jsx';
+import ThemeToggle from '../../components/ui/ThemeToggle.jsx';
 
 export default function ClientSettings() {
   const toast = useToast();
@@ -26,7 +27,24 @@ export default function ClientSettings() {
 
   return (
     <div className="max-w-xl space-y-6 animate-fade-in">
-      <h1 className="text-2xl">Settings</h1>
+      <h1 className="text-2xl font-bold">Settings</h1>
+
+      {/* Theme & Appearance */}
+      <div className="panel p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-chamber-50 dark:bg-chamber-900/50 text-chamber-700 dark:text-chamber-300">
+              <Sun className="h-5 w-5 dark:hidden" />
+              <Moon className="h-5 w-5 hidden dark:block" />
+            </div>
+            <div>
+              <h2 className="text-base font-semibold text-ink dark:text-white">Theme & Appearance</h2>
+              <p className="text-xs text-ink-muted dark:text-[#8A9E99]">Switch between light, dark, or system mode</p>
+            </div>
+          </div>
+          <ThemeToggle variant="segmented" />
+        </div>
+      </div>
 
       <div className="panel p-6">
         <div className="flex items-center gap-3 mb-5">

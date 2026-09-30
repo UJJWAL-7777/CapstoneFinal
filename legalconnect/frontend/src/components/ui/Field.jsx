@@ -1,8 +1,8 @@
 import { forwardRef, useId } from 'react';
 
 const inputCls = (error) =>
-  `block w-full rounded-md border bg-white px-3 py-2 text-sm text-ink placeholder:text-ink-muted/70 ${
-    error ? 'border-danger-500' : 'border-line hover:border-chamber-300'
+  `block w-full rounded-md border bg-white dark:bg-[#0E1715] px-3 py-2 text-sm text-ink dark:text-[#E2ECE8] placeholder:text-ink-muted/70 dark:placeholder-[#5D7570] transition-colors ${
+    error ? 'border-danger-500' : 'border-line dark:border-[#233833] hover:border-chamber-300 dark:hover:border-chamber-500'
   }`;
 
 export const Field = forwardRef(function Field({ label, error, hint, as: Tag = 'input', className = '', children, ...props }, ref) {
@@ -10,7 +10,7 @@ export const Field = forwardRef(function Field({ label, error, hint, as: Tag = '
   const describedBy = error ? `${id}-err` : hint ? `${id}-hint` : undefined;
   return (
     <div className={className}>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-ink">{label}</label>
+      <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-ink dark:text-[#E2ECE8]">{label}</label>
       <Tag id={id} ref={ref} aria-invalid={Boolean(error)} aria-describedby={describedBy} className={`${inputCls(error)} ${Tag === 'input' ? 'h-10' : ''}`} {...props}>
         {children}
       </Tag>

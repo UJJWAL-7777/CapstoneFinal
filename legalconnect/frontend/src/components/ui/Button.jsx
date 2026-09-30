@@ -4,10 +4,10 @@ import { Loader2 } from 'lucide-react';
 const VARIANTS = {
   primary: 'bg-chamber-700 text-white hover:bg-chamber-800 disabled:bg-chamber-700/60',
   brass: 'bg-brass-500 text-white hover:bg-brass-600 disabled:bg-brass-500/60',
-  secondary: 'border border-line bg-white text-ink hover:bg-chamber-50 disabled:text-ink-muted',
-  ghost: 'text-ink-soft hover:bg-chamber-50 hover:text-ink',
+  secondary: 'border border-line bg-white text-ink hover:bg-chamber-50 dark:border-[#233833] dark:bg-[#182824] dark:text-[#E2ECE8] dark:hover:bg-[#20342f] disabled:text-ink-muted dark:disabled:text-[#5d7570]',
+  ghost: 'text-ink-soft hover:bg-chamber-50 hover:text-ink dark:text-[#A4B7B2] dark:hover:bg-[#182824] dark:hover:text-white',
   danger: 'bg-danger-500 text-white hover:bg-danger-700 disabled:bg-danger-500/60',
-  outline: 'border border-chamber-600 text-chamber-700 hover:bg-chamber-50 disabled:text-ink-muted',
+  outline: 'border border-chamber-600 text-chamber-700 hover:bg-chamber-50 dark:border-chamber-500 dark:text-chamber-300 dark:hover:bg-[#182824] disabled:text-ink-muted',
 };
 const SIZES = { sm: 'h-8 px-3 text-xs', md: 'h-10 px-4 text-sm', lg: 'h-12 px-6 text-base' };
 

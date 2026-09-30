@@ -7,7 +7,7 @@ import { caseService } from '../../services/caseService.js';
 import { paymentService } from '../../services/paymentService.js';
 import { advocateService } from '../../services/advocateService.js';
 import StatCard from '../../components/ui/StatCard.jsx';
-import { SkeletonCard } from '../../components/ui/Skeleton.jsx';
+import { SkeletonCard, SkeletonStatCard } from '../../components/ui/Skeleton.jsx';
 import Avatar from '../../components/ui/Avatar.jsx';
 import Badge from '../../components/ui/Badge.jsx';
 import Button from '../../components/ui/Button.jsx';
@@ -68,12 +68,21 @@ export default function AdvocateDashboard() {
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard title="Pending Inquiries" value={pending} icon={Clock} color="warning" />
-        <StatCard title="Upcoming Sessions" value={upcoming} icon={Calendar} color="chamber" />
-        <StatCard title="Active Cases" value={cases.length} icon={Scale} color="info" />
-        <StatCard title="Net Earnings" value={`₹${revenue.toLocaleString()}`} icon={CreditCard} color="success" />
-      </div>
+      {loading ? (
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <SkeletonStatCard />
+          <SkeletonStatCard />
+          <SkeletonStatCard />
+          <SkeletonStatCard />
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <StatCard title="Pending Inquiries" value={pending} icon={Clock} color="warning" />
+          <StatCard title="Upcoming Sessions" value={upcoming} icon={Calendar} color="chamber" />
+          <StatCard title="Active Cases" value={cases.length} icon={Scale} color="info" />
+          <StatCard title="Net Earnings" value={`₹${revenue.toLocaleString()}`} icon={CreditCard} color="success" />
+        </div>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Recent consultations & cases */}

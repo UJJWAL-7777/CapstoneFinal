@@ -15,7 +15,10 @@ import {
   ShieldAlert,
   CheckCircle2,
   Server,
+  Sun,
+  Moon,
 } from 'lucide-react';
+import ThemeToggle from '../../components/ui/ThemeToggle.jsx';
 
 export default function AdminSettings() {
   const toast = useToast();
@@ -102,6 +105,23 @@ export default function AdminSettings() {
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
+        {/* Appearance & Interface Theme */}
+        <div className="panel p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-chamber-50 dark:bg-chamber-900/50 text-chamber-700 dark:text-chamber-300">
+                <Sun className="h-5 w-5 dark:hidden" />
+                <Moon className="h-5 w-5 hidden dark:block" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-ink dark:text-white">Admin Theme & Appearance</h2>
+                <p className="text-xs text-ink-muted dark:text-[#8A9E99]">Personalize your administration workspace display mode</p>
+              </div>
+            </div>
+            <ThemeToggle variant="segmented" />
+          </div>
+        </div>
+
         {/* Financial & Fee Rules */}
         <div className="panel p-6 space-y-5">
           <div className="flex items-center gap-2 border-b border-line pb-3">

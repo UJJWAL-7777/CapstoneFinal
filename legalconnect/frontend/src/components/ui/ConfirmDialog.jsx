@@ -19,7 +19,7 @@ export default function ConfirmDialog({ isOpen, onClose, onConfirm, title, messa
           ? <XCircle className="h-8 w-8 shrink-0 text-danger-500 mt-0.5" />
           : <CheckCircle className="h-8 w-8 shrink-0 text-chamber-500 mt-0.5" />
         }
-        <p className="text-ink-soft leading-relaxed">{message}</p>
+        <p className="text-ink-soft dark:text-[#A4B7B2] leading-relaxed">{message}</p>
       </div>
     </Modal>
   );

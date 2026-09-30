@@ -304,7 +304,29 @@ export const grantBadgeToUser = asyncHandler(async (req, res) => {
   const { userId, badgeType } = req.body;
   if (!userId || !badgeType) throw ApiError.badRequest('userId and badgeType are required');
 
-  const badge = await Badge.findOne({ type: badgeType });
+  let badge = await Badge.findOne({ $or: [{ type: badgeType }, { name: badgeType }] });
+  if (!badge) {
+    const meta = {
+      case_winner: { name: 'Case Champion', icon: '🏆', description: '10+ successfully resolved client court cases' },
+      case_champion: { name: 'Case Champion', icon: '🏆', description: '10+ successfully resolved client court cases' },
+      top_rated: { name: 'Top Rated', icon: '⭐', description: 'Avg rating ≥ 4.5 with 10+ reviews' },
+      verified_expert: { name: 'Verified Expert', icon: '✅', description: 'Bar Council credentials authenticated' },
+      client_favorite: { name: 'Client Favorite', icon: '❤️', description: '50+ completed consultations with stellar feedback' },
+      community_contributor: { name: 'Community Contributor', icon: '🤝', description: 'Active contributor in legal pro bono forums' },
+    }[badgeType] || { name: badgeType.replace(/_/g, ' '), icon: '🎖️', description: 'Platform achievement credential' };
+
+    try {
+      badge = await Badge.create({
+        type: badgeType,
+        name: meta.name,
+        description: meta.description,
+        icon: meta.icon,
+      });
+    } catch {
+      badge = await Badge.findOne({ type: badgeType });
+    }
+  }
+
   if (!badge) throw ApiError.notFound('Badge type not found');
 
   const { UserBadge } = await import('../models/Badge.js');
