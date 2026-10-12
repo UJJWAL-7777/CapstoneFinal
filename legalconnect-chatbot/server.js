@@ -9,7 +9,7 @@ import cors from 'cors';
 import { generateChatResponse } from './services/chatbot.service.js';
 
 const app = express();
-const PORT = process.env.CHATBOT_PORT || 5001;
+const PORT = process.env.PORT || process.env.CHATBOT_PORT || 5001;
 
 // ─── Middleware ──────────────────────────────────────────────────
 app.use(cors({
@@ -18,8 +18,12 @@ app.use(cors({
     if (!origin) return callback(null, true);
     // Allow any localhost port
     if (/^https?:\/\/localhost(:\d+)?$/.test(origin)) return callback(null, true);
-    // Allow production origin if set
-    if (process.env.CORS_ORIGIN && origin === process.env.CORS_ORIGIN) return callback(null, true);
+    // Allow production origin(s) if set
+    if (process.env.CORS_ORIGIN) {
+      if (process.env.CORS_ORIGIN === '*') return callback(null, true);
+      const allowed = process.env.CORS_ORIGIN.split(',').map((s) => s.trim());
+      if (allowed.includes(origin)) return callback(null, true);
+    }
     callback(new Error('Not allowed by CORS'));
   },
   methods: ['GET', 'POST'],

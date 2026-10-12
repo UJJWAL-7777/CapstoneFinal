@@ -4,7 +4,7 @@ import { MessageCircle, X, Send, Bot, User, Sparkles, ChevronDown, Minimize2, Ar
 import { useAuth } from '../hooks/useAuth.js';
 import './chatbot.css';
 
-const CHATBOT_API = 'http://localhost:5001/api/chat';
+const CHATBOT_API = import.meta.env.VITE_CHATBOT_API_URL || 'http://localhost:5001/api/chat';
 
 const WELCOME = {
   client: {
