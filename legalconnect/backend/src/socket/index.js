@@ -32,7 +32,13 @@ export function initSocketIO(server) {
       origin(origin, cb) {
         if (!origin) return cb(null, true);
         if (!env.isProd && /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) return cb(null, true);
-        if (env.CLIENT_URLS.includes(origin)) return cb(null, true);
+        if (env.CLIENT_URLS.includes('*') || env.CLIENT_URLS.includes(origin)) return cb(null, true);
+        try {
+          const parsed = new URL(origin);
+          if (parsed.hostname.endsWith('.vercel.app') || parsed.hostname.endsWith('.onrender.com') || parsed.hostname === 'localhost') {
+            return cb(null, true);
+          }
+        } catch {}
         cb(new Error('Origin not allowed by CORS'));
       },
       credentials: true,

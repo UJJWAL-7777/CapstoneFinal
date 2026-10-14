@@ -24,8 +24,15 @@ app.use(
       if (!origin) return cb(null, true);
       // In dev: allow any localhost port (covers Vite 5173, 5174, 5175…)
       if (!env.isProd && /^http:\/\/localhost:\d+$/.test(origin)) return cb(null, true);
-      // In prod: only explicitly listed origins
-      if (env.CLIENT_URLS.includes(origin)) return cb(null, true);
+      // Explicit allowed origins or wildcard
+      if (env.CLIENT_URLS.includes('*') || env.CLIENT_URLS.includes(origin)) return cb(null, true);
+      // Allow any Vercel deployment URL and localhost
+      try {
+        const parsed = new URL(origin);
+        if (parsed.hostname.endsWith('.vercel.app') || parsed.hostname.endsWith('.onrender.com') || parsed.hostname === 'localhost') {
+          return cb(null, true);
+        }
+      } catch {}
       cb(new Error('Origin not allowed by CORS'));
     },
     credentials: true,
