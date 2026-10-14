@@ -18,12 +18,10 @@ app.use(cors({
     if (!origin) return callback(null, true);
     // Allow any localhost port
     if (/^https?:\/\/localhost(:\d+)?$/.test(origin)) return callback(null, true);
-    // Allow production origin(s) if set
-    if (process.env.CORS_ORIGIN) {
-      if (process.env.CORS_ORIGIN === '*') return callback(null, true);
-      const allowed = process.env.CORS_ORIGIN.split(',').map((s) => s.trim());
-      if (allowed.includes(origin)) return callback(null, true);
-    }
+    // Allow all origins by default unless CORS_ORIGIN is restricted
+    if (!process.env.CORS_ORIGIN || process.env.CORS_ORIGIN === '*') return callback(null, true);
+    const allowed = process.env.CORS_ORIGIN.split(',').map((s) => s.trim());
+    if (allowed.includes(origin)) return callback(null, true);
     callback(new Error('Not allowed by CORS'));
   },
   methods: ['GET', 'POST'],
