@@ -12,6 +12,7 @@ import aiRoutes from './ai.routes.js';
 import reportRoutes from './report.routes.js';
 import adminRoutes from './admin.routes.js';
 import messageRoutes from './message.routes.js';
+import chatRoutes from './chat.routes.js';
 
 import { PlatformSetting } from '../models/PlatformSetting.js';
 
@@ -60,5 +61,6 @@ router.use('/messages', messageRoutes);
 router.use('/ai', aiRoutes);
 router.use('/reports', reportRoutes);
 router.use('/admin', adminRoutes);
+router.use('/chat', chatRoutes);
 
 export default router;
