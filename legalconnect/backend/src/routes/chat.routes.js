@@ -6,7 +6,7 @@ const router = Router();
 // Public Chatbot endpoint — used by ChatbotWidget
 router.post('/', (req, res) => {
   try {
-    const { message, userRole, userName } = req.body;
+    const { message, userRole, userName, lang } = req.body;
 
     if (!message || typeof message !== 'string' || message.trim().length === 0) {
       return res.status(400).json({
@@ -25,7 +25,8 @@ router.post('/', (req, res) => {
     const result = generateChatResponse(
       message.trim(),
       userRole || 'client',
-      userName || 'User'
+      userName || 'User',
+      lang || null
     );
 
     res.json({

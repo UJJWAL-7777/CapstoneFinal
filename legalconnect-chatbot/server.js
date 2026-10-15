@@ -44,7 +44,7 @@ app.get('/api/health', (_req, res) => {
 // ─── Chat Endpoint ──────────────────────────────────────────────
 app.post('/api/chat', (req, res) => {
   try {
-    const { message, userRole, userName } = req.body;
+    const { message, userRole, userName, lang } = req.body;
 
     if (!message || typeof message !== 'string' || message.trim().length === 0) {
       return res.status(400).json({
@@ -63,7 +63,8 @@ app.post('/api/chat', (req, res) => {
     const result = generateChatResponse(
       message.trim(),
       userRole || 'client',
-      userName || 'User'
+      userName || 'User',
+      lang || null
     );
 
     res.json({

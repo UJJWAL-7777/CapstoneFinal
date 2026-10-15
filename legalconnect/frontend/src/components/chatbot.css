@@ -242,6 +242,72 @@
 .cb-send:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 4px 14px rgba(47, 115, 103, 0.4); }
 .cb-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
+/* ─── Vernacular Language Switcher Bar ──────────────────────── */
+.cb-lang-bar {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 12px;
+  background: #f0f5f3;
+  border-bottom: 1px solid #e1ebe7;
+  font-size: 11px;
+}
+.cb-lang-icon { color: #2F7367; flex-shrink: 0; }
+.cb-lang-btn {
+  padding: 4px 10px; border-radius: 12px; border: 1px solid #d0e0da;
+  background: white; color: #364e49; font-weight: 500; font-size: 11px;
+  cursor: pointer; transition: all 0.2s ease;
+}
+.cb-lang-btn:hover { background: #e3efec; border-color: #a4ccc2; }
+.cb-lang-btn.cb-lang-active {
+  background: linear-gradient(135deg, #2F7367, #1D4A43);
+  color: white; border-color: #1D4A43; font-weight: 600;
+  box-shadow: 0 2px 6px rgba(47, 115, 103, 0.25);
+}
+
+/* ─── Voice Speech Synthesis Button (Suniye / Audio) ───────── */
+.cb-speak-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 6px; padding: 3px 8px; border-radius: 12px;
+  border: 1px solid #d5e6e1; background: #ffffff;
+  color: #2F7367; font-size: 11px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s; align-self: flex-start;
+}
+.cb-speak-btn:hover { background: #eef5f3; border-color: #2F7367; }
+.cb-speak-btn.cb-speaking {
+  background: #FFF1F0; border-color: #FFA39E; color: #CF1322;
+  animation: cbPulseRed 1.2s infinite ease-in-out;
+}
+@keyframes cbPulseRed {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ─── Microphone Button & Voice Input ──────────────────────── */
+.cb-mic-btn {
+  width: 36px; height: 36px; border-radius: 50%; border: 1px solid #DCE3E0;
+  background: #f8faf9; color: #2F7367;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.2s;
+}
+.cb-mic-btn:hover { background: #eef5f3; border-color: #2F7367; }
+.cb-mic-btn.cb-mic-active {
+  background: #B3261E; border-color: #8C1D18; color: white;
+  animation: cbMicPulse 1.2s infinite;
+  box-shadow: 0 0 12px rgba(179, 38, 30, 0.45);
+}
+@keyframes cbMicPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+.cb-listening-toast {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 12px; margin: 0 12px 6px;
+  background: #FFF2E8; border: 1px solid #FFBB96;
+  border-radius: 8px; font-size: 11px; color: #D4380D; font-weight: 500;
+  animation: cbMsgIn 0.2s ease-out;
+}
+
 /* ─── Footer ─────────────────────────────────────────────────── */
 .cb-footer {
   display: flex; align-items: center; justify-content: center; gap: 6px;
@@ -318,3 +384,37 @@
   border-top-color: #233833;
   color: #5D7570;
 }
+.dark .cb-lang-bar {
+  background: #0E1715;
+  border-bottom-color: #233833;
+}
+.dark .cb-lang-btn {
+  background: #182824;
+  border-color: #233833;
+  color: #A9CDC4;
+}
+.dark .cb-lang-btn:hover {
+  background: #20342F;
+}
+.dark .cb-lang-btn.cb-lang-active {
+  background: linear-gradient(135deg, #2F7367, #1D4A43);
+  color: #ffffff;
+  border-color: #4A8E80;
+}
+.dark .cb-speak-btn {
+  background: #182824;
+  border-color: #233833;
+  color: #A9CDC4;
+}
+.dark .cb-speak-btn:hover {
+  background: #20342F;
+}
+.dark .cb-mic-btn {
+  background: #182824;
+  border-color: #233833;
+  color: #A9CDC4;
+}
+.dark .cb-mic-btn:hover {
+  background: #20342F;
+}
+

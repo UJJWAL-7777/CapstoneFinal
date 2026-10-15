@@ -1,40 +1,128 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MessageCircle, X, Send, Bot, User, Sparkles, ChevronDown, Minimize2, ArrowRight, Navigation } from 'lucide-react';
+import {
+  MessageCircle,
+  X,
+  Send,
+  Bot,
+  User,
+  Sparkles,
+  ChevronDown,
+  Minimize2,
+  ArrowRight,
+  Navigation,
+  Languages,
+  Mic,
+  MicOff,
+  Volume2,
+  VolumeX,
+} from 'lucide-react';
 import { useAuth } from '../hooks/useAuth.js';
 import './chatbot.css';
 
 const CHATBOT_API = import.meta.env.VITE_CHATBOT_API_URL || 'http://localhost:5001/api/chat';
 
-const WELCOME = {
-  client: {
-    text: "Hello! 👋 I'm **LexBot**, your LegalConnect assistant.\n\nI can help you navigate the platform, book consultations, track cases, and answer legal questions. Try asking me anything or use the quick links below!",
-    suggestions: ['Book a consultation', 'Track my case', 'Find an advocate', 'Help'],
-    quickActions: [
-      { label: '🔍 Find Advocates', path: '/client/advocates' },
-      { label: '📋 My Cases', path: '/client/cases' },
-      { label: '📅 Consultations', path: '/client/consultations' },
-    ],
+const WELCOME_MESSAGES = {
+  en: {
+    client: {
+      text: "Hello! 👋 I'm **LexBot**, your multilingual LegalConnect assistant.\n\nI can help you navigate Indian laws, book verified advocates, and track your ongoing cases. Try asking in **English, हिन्दी, or Hinglish** — or click the mic 🎙️ to speak!",
+      suggestions: ['Book a consultation', 'Cheque bounce advice', 'Tenant & landlord dispute', '📖 Legal Glossary'],
+      quickActions: [
+        { label: '🔍 Find Advocates', path: '/client/advocates' },
+        { label: '📋 My Cases', path: '/client/cases' },
+        { label: '📅 Consultations', path: '/client/consultations' },
+      ],
+    },
+    advocate: {
+      text: "Hello! 👋 I'm **LexBot**, your practice assistant.\n\nI can help you manage consultations, track earnings, update availability, and review cases in English or हिन्दी.",
+      suggestions: ['View consultations', 'Check earnings', 'Update availability', '📖 Legal Glossary'],
+      quickActions: [
+        { label: '📅 Consultations', path: '/advocate/consultations' },
+        { label: '💰 Earnings', path: '/advocate/earnings' },
+        { label: '🕐 Availability', path: '/advocate/availability' },
+      ],
+    },
+    admin: {
+      text: "Hello! 👋 I'm **LexBot**, your platform assistant.\n\nI can help you navigate verification queues, check platform analytics, and manage users.",
+      suggestions: ['Platform overview', 'Pending verifications', 'View analytics', 'Help'],
+      quickActions: [
+        { label: '📊 Dashboard', path: '/admin/dashboard' },
+        { label: '✅ Verifications', path: '/admin/verification' },
+        { label: '📈 Analytics', path: '/admin/analytics' },
+      ],
+    },
   },
-  advocate: {
-    text: "Hello! 👋 I'm **LexBot**, your practice assistant.\n\nI can help you manage consultations, track earnings, update availability, and more. What would you like to do?",
-    suggestions: ['View consultations', 'Check earnings', 'Update availability', 'Help'],
-    quickActions: [
-      { label: '📅 Consultations', path: '/advocate/consultations' },
-      { label: '💰 Earnings', path: '/advocate/earnings' },
-      { label: '🕐 Availability', path: '/advocate/availability' },
-    ],
+  hi: {
+    client: {
+      text: "नमस्ते! 🙏 मैं **LexBot** हूँ, आपका LegalConnect कानूनी सहायक।\n\nमैं आपको भारतीय कानूनों (चेक बाउंस धारा 138, किरायेदार-मकान मालिक विवाद, ज़मानत, घरेलू हिंसा) को सरल भाषा में समझाने और वकील बुक करने में मदद करूँगा। आप माइक 🎙️ से बोल भी सकते हैं!",
+      suggestions: ['चेक बाउंस की सलाह', 'मकान मालिक विवाद', 'वकील कैसे बुक करें?', '📖 कानूनी शब्दकोश'],
+      quickActions: [
+        { label: '🔍 वकील खोजें', path: '/client/advocates' },
+        { label: '📋 मेरे केस', path: '/client/cases' },
+        { label: '📅 परामर्श (Bookings)', path: '/client/consultations' },
+      ],
+    },
+    advocate: {
+      text: "नमस्ते! 🙏 मैं **LexBot** हूँ, आपका प्रैक्टिस सहायक।\n\nमैं आपको परामर्श शेड्यूल, मुकदमों की सूची और फीस रिकॉर्ड प्रबंधित करने में सहायता कर सकता हूँ।",
+      suggestions: ['परामर्श देखें', 'कमाई रिकॉर्ड', 'समय सारिणी बदलें', '📖 कानूनी शब्दकोश'],
+      quickActions: [
+        { label: '📅 परामर्श', path: '/advocate/consultations' },
+        { label: '💰 कमाई', path: '/advocate/earnings' },
+        { label: '🕐 समय सारिणी', path: '/advocate/availability' },
+      ],
+    },
+    admin: {
+      text: "नमस्ते एडमिन! 🙏 मैं **LexBot** हूँ, आपका एडमिन सहायक।\n\nवकील सत्यापन (Verification), एनालिटिक्स और प्लेटफॉर्म सेटिंग्स में सहायता के लिए मुझसे पूछें।",
+      suggestions: ['डैशबोर्ड देखें', 'लंबित सत्यापन', 'एनालिटिक्स'],
+      quickActions: [
+        { label: '📊 डैशबोर्ड', path: '/admin/dashboard' },
+        { label: '✅ सत्यापन', path: '/admin/verification' },
+        { label: '📈 एनालिटिक्स', path: '/admin/analytics' },
+      ],
+    },
   },
-  admin: {
-    text: "Hello! 👋 I'm **LexBot**, your admin assistant.\n\nI can help you navigate the admin panel, check stats, and manage operations.",
-    suggestions: ['Platform overview', 'Pending verifications', 'View analytics', 'Help'],
-    quickActions: [
-      { label: '📊 Dashboard', path: '/admin/dashboard' },
-      { label: '✅ Verifications', path: '/admin/verification' },
-      { label: '📈 Analytics', path: '/admin/analytics' },
-    ],
+  hinglish: {
+    client: {
+      text: "Namaste! 🙏 Main hoon **LexBot**, aapka legal assistant.\n\nAap mujhse Cheque bounce (Sec 138), tenant dispute, bail process ya FIR ke baare me pooch sakte hain aur direct advocate book kar sakte hain. Mic 🎙️ button daba kar bol bhi sakte hain!",
+      suggestions: ['Cheque bounce advice', 'Makan malik dispute', 'Advocate kaise book kare?', '📖 Nyaya Kosh'],
+      quickActions: [
+        { label: '🔍 Find Advocates', path: '/client/advocates' },
+        { label: '📋 My Cases', path: '/client/cases' },
+        { label: '📅 Consultations', path: '/client/consultations' },
+      ],
+    },
+    advocate: {
+      text: "Namaste Counsel! 🙏 Main **LexBot**, aapka legal practice assistant.\n\nAap upcoming appointments, client cases aur fees tracking ke baare me mujhse pooch sakte hain.",
+      suggestions: ['View consultations', 'Check earnings', 'Update availability', '📖 Nyaya Kosh'],
+      quickActions: [
+        { label: '📅 Consultations', path: '/advocate/consultations' },
+        { label: '💰 Earnings', path: '/advocate/earnings' },
+        { label: '🕐 Availability', path: '/advocate/availability' },
+      ],
+    },
+    admin: {
+      text: "Namaste Admin! 🙏 Main **LexBot** platform assistant.\n\nPending verifications, active cases aur growth analytics check karne ke liye bataiye.",
+      suggestions: ['Platform overview', 'Pending verifications', 'View analytics'],
+      quickActions: [
+        { label: '📊 Dashboard', path: '/admin/dashboard' },
+        { label: '✅ Verifications', path: '/admin/verification' },
+        { label: '📈 Analytics', path: '/admin/analytics' },
+      ],
+    },
   },
 };
+
+function cleanTextForSpeech(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/`(.*?)`/g, '$1')
+    .replace(/•/g, '')
+    .replace(/\[(.*?)\]\(.*?\)/g, '$1')
+    .replace(/https?:\/\/\S+/g, '')
+    .replace(/[#_*~]/g, '')
+    .trim();
+}
 
 function md(text) {
   return text
@@ -96,7 +184,7 @@ function Chips({ items, onSelect, disabled }) {
   );
 }
 
-function Message({ msg, isUser, onNavigate }) {
+function Message({ msg, isUser, onNavigate, onToggleSpeak, isSpeaking, lang }) {
   return (
     <div className={`cb-msg ${isUser ? 'cb-msg-user' : 'cb-msg-bot'}`}>
       <div className={`cb-avatar ${isUser ? 'cb-avatar-user' : 'cb-avatar-bot'}`}>
@@ -109,6 +197,20 @@ function Message({ msg, isUser, onNavigate }) {
             {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
         </div>
+
+        {/* Audio Speech Synthesis Button */}
+        {!isUser && (
+          <button
+            type="button"
+            className={`cb-speak-btn ${isSpeaking ? 'cb-speaking' : ''}`}
+            onClick={() => onToggleSpeak(msg)}
+            title={isSpeaking ? 'Stop speaking' : 'Listen aloud'}
+          >
+            {isSpeaking ? <VolumeX size={13} /> : <Volume2 size={13} />}
+            <span>{isSpeaking ? (lang === 'hi' ? 'रोकें' : 'Stop') : (lang === 'hi' ? 'सुनिए 🔊' : 'Listen 🔊')}</span>
+          </button>
+        )}
+
         {!isUser && msg.navLinks?.length > 0 && (
           <NavLinks links={msg.navLinks} onNavigate={onNavigate} />
         )}
@@ -129,9 +231,14 @@ export default function ChatbotWidget() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showScroll, setShowScroll] = useState(false);
+  const [selectedLang, setSelectedLang] = useState('en'); // 'en' | 'hi' | 'hinglish'
+  const [isListening, setIsListening] = useState(false);
+  const [speakingMessageId, setSpeakingMessageId] = useState(null);
+
   const endRef = useRef(null);
   const containerRef = useRef(null);
   const inputRef = useRef(null);
+  const recognitionRef = useRef(null);
   const [ready, setReady] = useState(false);
 
   if (!isAuthenticated || !user) return null;
@@ -144,9 +251,10 @@ export default function ChatbotWidget() {
     setIsMinimized(false);
   }, [navigate]);
 
+  // Set initial welcome message
   useEffect(() => {
     if (isOpen && !ready) {
-      const w = WELCOME[role] || WELCOME.client;
+      const w = WELCOME_MESSAGES[selectedLang]?.[role] || WELCOME_MESSAGES.en.client;
       setMessages([{
         id: 'welcome',
         text: w.text,
@@ -158,7 +266,29 @@ export default function ChatbotWidget() {
       }]);
       setReady(true);
     }
-  }, [isOpen, ready, role]);
+  }, [isOpen, ready, role, selectedLang]);
+
+  // Handle switching language
+  const handleLanguageChange = (langKey) => {
+    setSelectedLang(langKey);
+    const w = WELCOME_MESSAGES[langKey]?.[role] || WELCOME_MESSAGES.en.client;
+    setMessages(prev => [
+      ...prev,
+      {
+        id: `lang-switch-${Date.now()}`,
+        text: langKey === 'hi'
+          ? '🇮🇳 भाषा बदलकर **हिन्दी** कर दी गई है। अब आप देवनागरी में पूछ सकते हैं या बोल सकते हैं!'
+          : langKey === 'hinglish'
+          ? '🗣️ Language changed to **Hinglish**. Aap conversational Hindi-English me queries pooch sakte hain!'
+          : '🌐 Language switched to **English**. Ask any legal questions or navigate the platform!',
+        isUser: false,
+        timestamp: new Date().toISOString(),
+        suggestions: w.suggestions,
+        quickActions: w.quickActions,
+        navLinks: [],
+      }
+    ]);
+  };
 
   const scrollDown = useCallback((smooth = true) => {
     endRef.current?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
@@ -174,9 +304,82 @@ export default function ChatbotWidget() {
     setShowScroll(c.scrollHeight - c.scrollTop - c.clientHeight > 80);
   }, []);
 
+  // ─── Text-to-Speech (Suniye) ──────────────────────────────────
+  const toggleSpeak = (msg) => {
+    if (!window.speechSynthesis) return;
+
+    if (speakingMessageId === msg.id) {
+      window.speechSynthesis.cancel();
+      setSpeakingMessageId(null);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    const clean = cleanTextForSpeech(msg.text);
+    const utterance = new SpeechSynthesisUtterance(clean);
+    utterance.lang = selectedLang === 'hi' ? 'hi-IN' : selectedLang === 'hinglish' ? 'hi-IN' : 'en-IN';
+    utterance.rate = 0.95;
+
+    utterance.onend = () => setSpeakingMessageId(null);
+    utterance.onerror = () => setSpeakingMessageId(null);
+
+    setSpeakingMessageId(msg.id);
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // ─── Speech-to-Text (Voice Input) ─────────────────────────────
+  const toggleVoiceInput = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert('Speech Recognition is not supported by your browser. Please try Google Chrome or Microsoft Edge.');
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = selectedLang === 'hi' ? 'hi-IN' : selectedLang === 'hinglish' ? 'hi-IN' : 'en-IN';
+
+      recognition.onstart = () => {
+        setIsListening(true);
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map((r) => r[0].transcript)
+          .join('');
+        setInput(transcript);
+      };
+
+      recognition.onerror = () => {
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current = recognition;
+      recognition.start();
+    } catch {
+      setIsListening(false);
+    }
+  };
+
   const sendMessage = async (text) => {
     const msg = text || input.trim();
     if (!msg || isTyping) return;
+
+    // Stop speaking if new message is sent
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    setSpeakingMessageId(null);
 
     setMessages(p => [...p, {
       id: `u-${Date.now()}`,
@@ -191,14 +394,19 @@ export default function ChatbotWidget() {
       const res = await fetch(CHATBOT_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg, userRole: role, userName: user.name }),
+        body: JSON.stringify({
+          message: msg,
+          userRole: role,
+          userName: user.name,
+          lang: selectedLang,
+        }),
       });
       const json = await res.json();
-      await new Promise(r => setTimeout(r, 300 + Math.random() * 400));
+      await new Promise(r => setTimeout(r, 200 + Math.random() * 300));
 
       const data = json.data;
 
-      // Auto-navigate if there's exactly one nav link and intent is navigation
+      // Auto-navigate if exactly 1 nav link and intent is navigation
       if (data.intent === 'navigation' && data.navLinks?.length === 1) {
         setMessages(p => [...p, {
           id: `b-${Date.now()}`,
@@ -226,34 +434,38 @@ export default function ChatbotWidget() {
     } catch {
       setMessages(p => [...p, {
         id: `e-${Date.now()}`,
-        text: 'Sorry, I encountered a connection error. Make sure the chatbot server is running on port 5001. 😔',
+        text: selectedLang === 'hi'
+          ? 'क्षमा करें, सर्वर से कनेक्शन नहीं हो पा रहा है। कृपया कुछ देर बाद प्रयास करें।'
+          : 'Sorry, I encountered a connection error. Please try again shortly. 😔',
         isUser: false,
         timestamp: new Date().toISOString(),
-        suggestions: ['Try again', 'Help'],
       }]);
     } finally {
       setIsTyping(false);
     }
   };
 
-  const handleSubmit = (e) => { e.preventDefault(); sendMessage(); };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendMessage();
+  };
 
   const toggleOpen = () => {
-    if (!isOpen) {
-      setIsOpen(true);
-      setIsMinimized(false);
-      setTimeout(() => inputRef.current?.focus(), 300);
-    } else {
-      setIsOpen(false);
-      setIsMinimized(false);
+    if (isOpen) {
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      if (recognitionRef.current) recognitionRef.current.stop();
+      setSpeakingMessageId(null);
+      setIsListening(false);
     }
+    setIsOpen(!isOpen);
+    setIsMinimized(false);
   };
 
   const lastSuggestions = [...messages].reverse().find(m => !m.isUser && m.suggestions?.length)?.suggestions;
 
   return (
     <>
-      {/* FAB */}
+      {/* Floating Action Button */}
       <button onClick={toggleOpen} className={`cb-fab ${isOpen ? 'cb-fab-active' : ''}`} aria-label={isOpen ? 'Close chat' : 'Open chat'}>
         <div className="cb-fab-icon">
           {isOpen ? <X size={22} /> : <MessageCircle size={22} />}
@@ -271,8 +483,10 @@ export default function ChatbotWidget() {
                 <Sparkles size={18} />
               </div>
               <div>
-                <h3 className="cb-header-title">LexBot</h3>
-                <p className="cb-header-sub"><span className="cb-online-dot" /> Legal Assistant</p>
+                <h3 className="cb-header-title">LexBot AI</h3>
+                <p className="cb-header-sub">
+                  <span className="cb-online-dot" /> Nyaya Bhasha • Multilingual
+                </p>
               </div>
             </div>
             <div className="cb-header-btns">
@@ -287,10 +501,44 @@ export default function ChatbotWidget() {
 
           {!isMinimized && (
             <>
-              {/* Messages */}
+              {/* Vernacular Language Switcher Bar */}
+              <div className="cb-lang-bar">
+                <Languages size={13} className="cb-lang-icon" />
+                <button
+                  type="button"
+                  className={`cb-lang-btn ${selectedLang === 'en' ? 'cb-lang-active' : ''}`}
+                  onClick={() => handleLanguageChange('en')}
+                >
+                  🌐 English
+                </button>
+                <button
+                  type="button"
+                  className={`cb-lang-btn ${selectedLang === 'hi' ? 'cb-lang-active' : ''}`}
+                  onClick={() => handleLanguageChange('hi')}
+                >
+                  🇮🇳 हिन्दी
+                </button>
+                <button
+                  type="button"
+                  className={`cb-lang-btn ${selectedLang === 'hinglish' ? 'cb-lang-active' : ''}`}
+                  onClick={() => handleLanguageChange('hinglish')}
+                >
+                  🗣️ Hinglish
+                </button>
+              </div>
+
+              {/* Messages Container */}
               <div className="cb-messages" ref={containerRef} onScroll={handleScroll}>
                 {messages.map(m => (
-                  <Message key={m.id} msg={m} isUser={m.isUser} onNavigate={handleNavigate} />
+                  <Message
+                    key={m.id}
+                    msg={m}
+                    isUser={m.isUser}
+                    onNavigate={handleNavigate}
+                    onToggleSpeak={toggleSpeak}
+                    isSpeaking={speakingMessageId === m.id}
+                    lang={selectedLang}
+                  />
                 ))}
                 {isTyping && (
                   <div className="cb-msg cb-msg-bot">
@@ -305,28 +553,54 @@ export default function ChatbotWidget() {
                 <button onClick={() => scrollDown()} className="cb-scroll-btn"><ChevronDown size={16} /></button>
               )}
 
+              {/* Chips / Quick Suggestions */}
               <Chips items={lastSuggestions} onSelect={s => sendMessage(s)} disabled={isTyping} />
 
-              {/* Input */}
+              {/* Speech Recognition Active Indicator */}
+              {isListening && (
+                <div className="cb-listening-toast">
+                  <span>🎙️ {selectedLang === 'hi' ? 'सुन रहे हैं... कृपया बोलें' : 'Listening... speak your question'}</span>
+                  <button type="button" onClick={toggleVoiceInput} className="text-xs underline font-bold">Stop</button>
+                </div>
+              )}
+
+              {/* Input Form with Voice Button */}
               <form onSubmit={handleSubmit} className="cb-input-area">
+                <button
+                  type="button"
+                  onClick={toggleVoiceInput}
+                  className={`cb-mic-btn ${isListening ? 'cb-mic-active' : ''}`}
+                  title={isListening ? 'Stop listening' : 'Voice input (Speak)'}
+                  aria-label="Voice input"
+                >
+                  {isListening ? <MicOff size={16} /> : <Mic size={16} />}
+                </button>
+
                 <input
                   ref={inputRef}
                   type="text"
                   value={input}
                   onChange={e => setInput(e.target.value)}
-                  placeholder='Try "Go to my cases" or ask a question...'
+                  placeholder={
+                    selectedLang === 'hi'
+                      ? 'पूछें: "चेक बाउंस नियम" या "वकील कैसे खोजें"...'
+                      : selectedLang === 'hinglish'
+                      ? 'Poochhein: "Makan malik dispute" ya "Bail process"...'
+                      : 'Ask in English, हिन्दी, or click mic to speak...'
+                  }
                   className="cb-input"
                   maxLength={1000}
                   disabled={isTyping}
                   autoComplete="off"
                 />
+
                 <button type="submit" disabled={!input.trim() || isTyping} className="cb-send" aria-label="Send">
                   <Send size={16} />
                 </button>
               </form>
 
               <div className="cb-footer">
-                <Navigation size={10} /> <span>Smart Navigation</span> <span>•</span> <span>⚖️ LegalConnect AI</span>
+                <Navigation size={10} /> <span>Nyaya Bhasha AI</span> <span>•</span> <span>🎙️ Voice & Vernacular Legal Support</span>
               </div>
             </>
           )}
