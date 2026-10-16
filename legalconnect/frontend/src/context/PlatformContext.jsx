@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { io } from 'socket.io-client';
 import { TOKEN_KEY } from '../services/api.js';
 import { useAuth } from '../hooks/useAuth.js';
