@@ -141,7 +141,12 @@ export default function LegalNoticeGenerator() {
   const [selectedCatId, setSelectedCatId] = useState(NOTICE_CATEGORIES[0].id);
   const [lang, setLang] = useState('en'); // 'en' | 'hi'
   const [copied, setCopied] = useState(false);
-  const [darkPaper, setDarkPaper] = useState(false);
+  const [paperMode, setPaperMode] = useState(() => {
+    if (typeof document !== 'undefined' && document.documentElement.classList.contains('dark')) {
+      return 'dark';
+    }
+    return 'white';
+  });
 
   // Form State
   const activeCategory = NOTICE_CATEGORIES.find((c) => c.id === selectedCatId) || NOTICE_CATEGORIES[0];
@@ -690,11 +695,11 @@ ${formData.senderName}`;
             <div className="flex items-center gap-2">
               {/* Paper Appearance Switcher */}
               <button
-                onClick={() => setDarkPaper((prev) => !prev)}
-                className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-line dark:border-[#28443E] px-2.5 py-1.5 text-xs font-medium text-ink dark:text-[#E2ECE8] hover:bg-paper dark:hover:bg-[#1A2C27] transition-colors"
+                onClick={() => setPaperMode((prev) => (prev === 'dark' ? 'white' : 'dark'))}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-line dark:border-[#28443E] px-2.5 py-1.5 text-xs font-semibold text-ink dark:text-[#E2ECE8] hover:bg-paper dark:hover:bg-[#1A2C27] transition-colors"
                 title="Toggle Paper Appearance"
               >
-                {darkPaper ? '📄 White Paper' : '🌙 Dark Paper'}
+                {paperMode === 'dark' ? '📄 Switch to White Paper' : '🌙 Switch to Dark Paper'}
               </button>
               <button
                 onClick={handleCopy}
@@ -715,53 +720,29 @@ ${formData.senderName}`;
           {/* Actual Legal Document (Simulated A4 Court Paper) */}
           <div
             id="legal-notice-document"
-            className={`legal-paper-preview ${darkPaper ? 'dark-paper' : ''} relative p-8 sm:p-12 rounded-xl shadow-2xl font-serif text-[13px] leading-relaxed select-text print:border-none print:shadow-none print:p-0 print:m-0`}
-            style={{
-              minHeight: '800px',
-              backgroundColor: darkPaper ? '#111C19' : '#FFFFFF',
-              color: darkPaper ? '#F0FDF4' : '#0F172A',
-              border: darkPaper ? '1px solid #28443E' : '1px solid #D1D5DB',
-            }}
+            className={`legal-paper-preview ${paperMode === 'dark' ? 'dark-paper' : 'white-paper'} relative p-8 sm:p-12 rounded-xl shadow-2xl font-serif text-[13px] leading-relaxed select-text print:border-none print:shadow-none print:p-0 print:m-0`}
+            style={{ minHeight: '800px' }}
           >
             {/* Watermark Ribbon */}
-            <div
-              className="watermark-tag absolute top-4 right-4 text-[10px] font-sans font-bold tracking-widest uppercase px-2.5 py-1 rounded"
-              style={{
-                color: darkPaper ? '#6EE7B7' : '#64748B',
-                border: darkPaper ? '1px solid rgba(110, 231, 183, 0.4)' : '1px solid #D1D5DB',
-              }}
-            >
+            <div className="watermark-tag absolute top-4 right-4 text-[10px] font-sans font-bold tracking-widest uppercase px-2.5 py-1 rounded">
               FORMAL STATUTORY NOTICE
             </div>
 
             {/* Document Content */}
-            <pre
-              className="whitespace-pre-wrap font-serif leading-6 text-[13.5px]"
-              style={{ color: darkPaper ? '#F0FDF4' : '#0F172A' }}
-            >
+            <pre className="whitespace-pre-wrap font-serif leading-6 text-[13.5px]">
               {noticeText}
             </pre>
 
             {/* Speed Post Instructions Box (Hidden during print) */}
-            <div
-              className="dispatch-box print:hidden mt-8 pt-6 border-t-2 border-dashed font-sans text-xs p-4 rounded-lg"
-              style={{
-                backgroundColor: darkPaper ? '#0E1715' : '#F8FAFC',
-                borderColor: darkPaper ? '#28443E' : '#CBD5E1',
-                color: darkPaper ? '#CBDAD5' : '#334155',
-              }}
-            >
-              <h4
-                className="font-bold flex items-center gap-1.5 mb-1.5"
-                style={{ color: darkPaper ? '#6EE7B7' : '#0F172A' }}
-              >
+            <div className="dispatch-box print:hidden mt-8 pt-6 border-t-2 border-dashed font-sans text-xs p-4 rounded-lg">
+              <h4 className="font-bold flex items-center gap-1.5 mb-1.5">
                 <AlertTriangle size={15} className="text-amber-500" />
                 Dispatch & Evidence Instructions (For Court Admissibility)
               </h4>
-              <ul className="list-disc list-inside space-y-1" style={{ color: darkPaper ? '#CBDAD5' : '#334155' }}>
-                <li>Print 2 copies: Sign both. Send one copy to the recipient via <strong style={{ color: darkPaper ? '#6EE7B7' : '#0F172A' }}>Speed Post with A.D.</strong></li>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Print 2 copies: Sign both. Send one copy to the recipient via <strong>Speed Post with A.D.</strong></li>
                 <li>Keep the post office postal dispatch receipt and consignment tracking sheet safely.</li>
-                <li>The statutory 15-day countdown begins from the date the delivery report marks <em style={{ color: darkPaper ? '#6EE7B7' : '#0F172A' }}>"Item Delivered"</em>.</li>
+                <li>The statutory 15-day countdown begins from the date the delivery report marks <em>"Item Delivered"</em>.</li>
               </ul>
             </div>
           </div>

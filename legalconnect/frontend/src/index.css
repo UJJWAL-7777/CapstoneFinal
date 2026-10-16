@@ -250,52 +250,58 @@ html.dark {
   }
 
   /* Document Paper Preview: High-contrast & always readable */
-  .legal-paper-preview {
+  html.dark .legal-paper-preview.white-paper,
+  html .legal-paper-preview.white-paper,
+  .legal-paper-preview.white-paper {
     background-color: #FFFFFF !important;
     color: #0F172A !important;
     border-color: #D1D5DB !important;
   }
-  .legal-paper-preview pre,
-  .legal-paper-preview p,
-  .legal-paper-preview span,
-  .legal-paper-preview div {
+  html.dark .legal-paper-preview.white-paper pre,
+  .legal-paper-preview.white-paper pre,
+  .legal-paper-preview.white-paper p,
+  .legal-paper-preview.white-paper span,
+  .legal-paper-preview.white-paper div {
     color: #0F172A !important;
   }
-  .legal-paper-preview .watermark-tag {
+  .legal-paper-preview.white-paper .watermark-tag {
     color: #64748B !important;
     border-color: #CBD5E1 !important;
     background-color: transparent !important;
   }
-  .legal-paper-preview .dispatch-box {
+  .legal-paper-preview.white-paper .dispatch-box {
     background-color: #F8FAFC !important;
     border-color: #CBD5E1 !important;
     color: #334155 !important;
   }
-  .legal-paper-preview .dispatch-box * {
+  .legal-paper-preview.white-paper .dispatch-box * {
     color: #334155 !important;
   }
-  .legal-paper-preview .dispatch-box h4 {
+  .legal-paper-preview.white-paper .dispatch-box h4 {
     color: #0F172A !important;
   }
 
+  html.dark .legal-paper-preview.dark-paper,
+  html .legal-paper-preview.dark-paper,
   .legal-paper-preview.dark-paper {
-    background-color: #111C19 !important;
+    background-color: #0B1412 !important;
     border-color: #28443E !important;
-    color: #F0FDF4 !important;
+    color: #F1F7F5 !important;
   }
+  html.dark .legal-paper-preview.dark-paper pre,
   .legal-paper-preview.dark-paper pre,
   .legal-paper-preview.dark-paper p,
   .legal-paper-preview.dark-paper span,
   .legal-paper-preview.dark-paper div {
-    color: #F0FDF4 !important;
+    color: #F1F7F5 !important;
   }
   .legal-paper-preview.dark-paper .watermark-tag {
-    color: #6EE7B7 !important;
-    border-color: rgba(110, 231, 183, 0.4) !important;
+    color: #5EEAD4 !important;
+    border-color: rgba(94, 234, 212, 0.4) !important;
     background-color: rgba(16, 185, 129, 0.08) !important;
   }
   .legal-paper-preview.dark-paper .dispatch-box {
-    background-color: #0E1715 !important;
+    background-color: #12201D !important;
     border-color: #28443E !important;
     color: #CBDAD5 !important;
   }
@@ -303,7 +309,7 @@ html.dark {
     color: #CBDAD5 !important;
   }
   .legal-paper-preview.dark-paper .dispatch-box h4 {
-    color: #6EE7B7 !important;
+    color: #5EEAD4 !important;
   }
 
   /* Theme overrides for standard utility classes in Light Mode */
