@@ -18,6 +18,7 @@ import {
   VolumeX,
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth.js';
+import { generateChatResponse } from '../services/chatbotEngine.js';
 import './chatbot.css';
 
 const CHATBOT_API = import.meta.env.VITE_CHATBOT_API_URL || 'http://localhost:5001/api/chat';
@@ -26,7 +27,7 @@ const WELCOME_MESSAGES = {
   en: {
     client: {
       text: "Hello! 👋 I'm **LexBot**, your multilingual LegalConnect assistant.\n\nI can help you navigate Indian laws, book verified advocates, and track your ongoing cases. Try asking in **English, हिन्दी, or Hinglish** — or click the mic 🎙️ to speak!",
-      suggestions: ['🏛️ Landmark Cases', '📚 Which Section Applies?', 'Cheque bounce advice', 'Tenant & landlord dispute'],
+      suggestions: ['🏛️ Landmark Cases', '📚 Which Section Applies?', "Stealing a friend's pen?", 'Cheque bounce advice'],
       quickActions: [
         { label: '🏛️ Landmark Cases', path: '/legal-resources' },
         { label: '🔍 Find Advocates', path: '/client/advocates' },
@@ -391,20 +392,38 @@ export default function ChatbotWidget() {
     setIsTyping(true);
 
     try {
-      const res = await fetch(CHATBOT_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: msg,
-          userRole: role,
-          userName: user.name,
-          lang: selectedLang,
-        }),
-      });
-      const json = await res.json();
-      await new Promise(r => setTimeout(r, 200 + Math.random() * 300));
+      let data = null;
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
+        const res = await fetch(CHATBOT_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: msg,
+            userRole: role,
+            userName: user.name,
+            lang: selectedLang,
+          }),
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          const json = await res.json();
+          if (json?.data && json.data.intent !== 'unknown') {
+            data = json.data;
+          }
+        }
+      } catch {
+        // Fallback gracefully to client-side engine
+      }
 
-      const data = json.data;
+      // If remote API is offline, timed out, or returned unknown intent, execute client-side intelligence
+      if (!data) {
+        data = generateChatResponse(msg, role, user.name, selectedLang);
+      }
+
+      await new Promise(r => setTimeout(r, 150 + Math.random() * 200));
 
       // Auto-navigate if exactly 1 nav link and intent is navigation
       if (data.intent === 'navigation' && data.navLinks?.length === 1) {
@@ -432,13 +451,16 @@ export default function ChatbotWidget() {
         quickActions: data.quickActions,
       }]);
     } catch {
+      // In extreme event of any error, still provide fallback answer
+      const fallback = generateChatResponse(msg, role, user.name, selectedLang);
       setMessages(p => [...p, {
-        id: `e-${Date.now()}`,
-        text: selectedLang === 'hi'
-          ? 'क्षमा करें, सर्वर से कनेक्शन नहीं हो पा रहा है। कृपया कुछ देर बाद प्रयास करें।'
-          : 'Sorry, I encountered a connection error. Please try again shortly. 😔',
+        id: `b-${Date.now()}`,
+        text: fallback.response,
         isUser: false,
-        timestamp: new Date().toISOString(),
+        timestamp: fallback.timestamp,
+        suggestions: fallback.suggestions,
+        navLinks: fallback.navLinks,
+        quickActions: fallback.quickActions,
       }]);
     } finally {
       setIsTyping(false);

@@ -1,5 +1,6 @@
 // ═══════════════════════════════════════════════════════════════
-// LexBot — LegalConnect Multilingual & Vernacular Intelligence Engine v3
+// LexBot — LegalConnect Multilingual & Vernacular Intelligence Engine v4
+// Deep Intellectual Jurisprudence, BNS 2023 vs IPC, & Landmark Precedents
 // Supports English, हिन्दी (Hindi), and Hinglish with Voice & Nyaya Kosh
 // ═══════════════════════════════════════════════════════════════
 
@@ -37,10 +38,10 @@ export function detectLanguage(text, preferredLang = null) {
 
   // Common Hinglish legal/conversational markers
   const hinglishMarkers = [
-    /\b(kya|kaise|karo|kare|karen|hoga|hogi|hote|mera|meri|mere|mujhe|humko|aap|tum|nahi|nahin)\b/i,
-    /\b(vakil|vakeel|advocte|kanoon|kanun|kanoonee|nyaya|faisla|adalat|shikayat|dhokha|dhokhadhadi)\b/i,
-    /\b(cheque|bounce|kirayedar|kiraya|makan\s*malik|jamanaat|zamanat|talaq|paisa|paise|fees)\b/i,
-    /\b(batao|samjhao|chahiye|de\s*raha|rok|stay|arzi|tarika|madad)\b/i,
+    /\b(kya|kaise|karo|kare|karen|hoga|hogi|hote|mera|meri|mere|mujhe|humko|aap|tum|nahi|nahin|konsi|kon\s*si)\b/i,
+    /\b(vakil|vakeel|advocte|kanoon|kanun|kanoonee|nyaya|faisla|adalat|shikayat|dhokha|dhokhadhadi|dhara)\b/i,
+    /\b(cheque|bounce|kirayedar|kiraya|makan\s*malik|jamanaat|zamanat|talaq|paisa|paise|fees|chori|thappad)\b/i,
+    /\b(batao|samjhao|chahiye|de\s*raha|rok|stay|arzi|tarika|madad|marpeet|gaali|lagegi)\b/i,
   ];
 
   const matchCount = hinglishMarkers.filter((p) => p.test(text)).length;
@@ -53,13 +54,13 @@ export function detectLanguage(text, preferredLang = null) {
 
 // ─── Pattern Definitions ────────────────────────────────────────
 const GREETING_PATTERNS = [
-  /^(hi|hello|hey|good\s*(morning|afternoon|evening)|namaste|namaskar|pranam|greetings|howdy|sup)/i,
-  /^(नमस्ते|नमस्कार|प्रणाम|हेलो|हाय)/i,
+  /^(hi|hello|hey|good\s*(morning|afternoon|evening)|namaste|namaskar|pranam|greetings|howdy|sup)$/i,
+  /^(नमस्ते|नमस्कार|प्रणाम|हेलो|हाय)$/i,
 ];
 
 const FAREWELL_PATTERNS = [
-  /^(bye|goodbye|see you|take care|thanks|thank you|tata|alvida|done|that'?s all|dhanyawad|shukriya)/i,
-  /^(अलविदा|धन्यवाद|शुक्रिया|बाय|नमस्ते)/i,
+  /^(bye|goodbye|see you|take care|thanks|thank you|tata|alvida|done|that'?s all|dhanyawad|shukriya)$/i,
+  /^(अलविदा|धन्यवाद|शुक्रिया|बाय|नमस्ते)$/i,
 ];
 
 const HELP_PATTERNS = [
@@ -127,7 +128,7 @@ const PRACTICE_AREAS = {
     'talaq', 'shadi', 'gharelu hinsa', 'kharcha', 'dahej'
   ],
   'Consumer Protection': [
-    'consumer', 'product', 'defective', 'refund', 'service', 'forum', 'unfair trade', 'fraud', 'cheating',
+    'consumer', 'product', 'defective', 'refund', 'service', 'forum', 'unfair trade', 'cheating',
     'उपभोक्ता', 'कंज्यूमर', 'खराब सामान', 'रिफंड', 'ठगी', 'शिकायत',
     'consumer court', 'refund nahi mila', 'kharab product'
   ],
@@ -558,27 +559,6 @@ const LANDMARK_CASES_DB = [
     },
   },
   {
-    id: 'shreya_singhal',
-    patterns: [/shreya\s*singhal/i, /section\s*66a/i, /66a\s*it\s*act/i, /social\s*media\s*arrest/i],
-    title: 'Shreya Singhal v. Union of India (2015) 5 SCC 1',
-    topic: 'Freedom of Speech on Social Media (Sec 66A Voided)',
-    en: {
-      headline: 'Struck down Section 66A of the IT Act, protecting citizens from arrest for social media posts.',
-      ruling: 'The court held that vague terms like "offensive" or "annoying" cast too wide a net and chilled free speech. Peaceful online criticism or commentary cannot be criminalized.',
-      howToCite: 'Cite if police illegally threaten to book or arrest you under Section 66A for social media commentary.',
-    },
-    hi: {
-      headline: 'सोशल मीडिया पोस्ट पर गिरफ्तारी कराने वाली आईटी एक्ट की धारा 66A को असंवैधानिक घोषित कर रद्द किया।',
-      ruling: 'सुप्रीम कोर्ट ने स्पष्ट किया कि शांतिपूर्ण आलोचना, कार्टून या ऑनलाइन टिप्पणी पर किसी को जेल नहीं भेजा जा सकता।',
-      howToCite: 'यदि सोशल मीडिया पोस्ट पर धारा 66A की धमकी मिले, तो श्रेया सिंघल केस का उल्लेख करें।',
-    },
-    hinglish: {
-      headline: 'Social media post par arrest karne wali IT Act Section 66A ko Supreme Court ne strike down kiya.',
-      ruling: 'Online peaceful criticism ya opinion share karne par FIR karna unconstitutional hai.',
-      howToCite: 'Social media post controversy me Shreya Singhal verdict cite karein.',
-    },
-  },
-  {
     id: 'kesavananda_bharati',
     patterns: [/kesavananda/i, /basic\s*structure/i, /mool\s*dhancha/i, /13\s*judge/i],
     title: 'Kesavananda Bharati v. State of Kerala (1973) 4 SCC 225',
@@ -643,159 +623,412 @@ const LANDMARK_CASES_DB = [
   },
 ];
 
-// ─── Applied Sections & Situational Guide Database ──────────────
+// ─── Intellectual Applied Sections & Jurisprudential Scenarios ───
 const APPLIED_SECTIONS_DB = [
+  // 1. Theft / Stealing Pen / Petty Items
   {
-    patterns: [/landlord.*lock/i, /makan\s*malik.*tala/i, /room\s*locked/i, /evict.*without\s*notice/i],
+    id: 'theft_petty',
+    patterns: [
+      /(steal|stole|theft|thief|chori|frien.*pen|pen|pencil|notebook|wallet|purse|mobile|laptop)/i,
+      /(चोरी|पेन|कलम|दोस्त.*पेन|सामान.*चुराना|पर्स|मोबाइल)/i,
+      /(pen.*chura|pen.*le\s*liya|chori.*kar|pen\s*chori)/i,
+    ],
+    incident: 'Stealing a Friend\'s Pen or Petty Movable Property',
+    en: {
+      title: 'Stealing a Friend\'s Pen / Petty Property (Theft vs The Doctrine of Trifles)',
+      summary: 'Under strict black-letter law, taking someone\'s movable property without consent constitutes Theft under **Section 303(2) of the Bharatiya Nyaya Sanhita (BNS 2023)** [Old **Section 379 IPC**]. However, the legal system applies a profound jurisprudential shield: **The Doctrine of "De Minimis Non Curat Lex"**.',
+      sections: [
+        '⚖️ **Section 303(2) BNS 2023 (Old Section 379 IPC) — Criminal Theft**: Whoever, intending to dishonestly take movable property out of another\'s possession without consent, moves it, commits theft. Standard punishment: Up to 3 years imprisonment or fine or both.',
+        '🏛️ **The 2023 BNS Reform (Section 303(2) Proviso)**: Where stolen property is valued at **less than ₹5,000** and the offender is a first-time offender (restoring the item), the court is statutorily empowered to sentence them to **Community Service** rather than jail!',
+        '🛡️ **Section 21 BNS 2023 (Old Section 95 IPC) — "De Minimis Non Curat Lex" (The law does not concern itself with trifles)**: "Nothing is an offence by reason that it causes harm so slight that no person of ordinary sense and temper would complain." Taking a friend\'s ordinary pen lacks the felonious Mens Rea (*animus furandi* — intention to permanently deprive) required to sustain a criminal prosecution.',
+      ],
+      intellectualAnalysis: 'In criminal jurisprudence, 5 elements (*sine qua non*) must coincide for theft: (1) Dishonest intention, (2) Movable property, (3) Taken out of lawful possession, (4) Absence of consent, (5) Physical asportation (moving). Because friends possess implied social licenses and the value is trivial, Section 21 BNS operates as an absolute statutory defence unless the pen is an ultra-rare luxury fountain pen (e.g. ₹50,000 Montblanc) taken with fraudulent felonious intent.',
+      action: 'No court or police station will register an FIR for an ordinary pen under Section 21 BNS. If valuable property was misappropriated, Section 303(2) BNS applies with the Community Service proviso.',
+    },
+    hi: {
+      title: 'दोस्त का पेन या छोटी वस्तु चुराना (चोरी बनाम तुच्छता का सिद्धांत)',
+      summary: 'शाब्दिक कानून के तहत किसी की चल संपत्ति बिना सहमति लेना **भारतीय न्याय संहिता (BNS 2023) की धारा 303(2)** [पुरानी **IPC धारा 379**] के तहत चोरी है। लेकिन भारतीय न्यायशास्त्र एक महत्वपूर्ण संरक्षण प्रदान करता है: **"De Minimis Non Curat Lex" (तुच्छ बातों पर कानून संज्ञान नहीं लेता)**।',
+      sections: [
+        '⚖️ **धारा 303(2) BNS 2023 (पुरानी IPC धारा 379) — चोरी का अपराध**: बेईमानी के इरादे से किसी की संपत्ति को बिना सहमति हटाना चोरी है। सामान्य सज़ा: 3 वर्ष तक की जेल या जुर्माना या दोनों।',
+        '🏛️ **BNS 2023 का नया सुधार (धारा 303(2) परंतुक)**: यदि चुराई गई वस्तु का मूल्य **₹5,000 से कम** है और आरोपी पहली बार का अपराधी है, तो अदालत जेल भेजने के बजाय **सामुदायिक सेवा (Community Service)** का आदेश दे सकती है!',
+        '🛡️ **धारा 21 BNS 2023 (पुरानी IPC धारा 95) — तुच्छता का सिद्धांत (De Minimis Rule)**: कानून स्पष्ट करता है कि यदि कोई कार्य इतना मामूली है कि सामान्य समझ का कोई भी व्यक्ति उसकी शिकायत नहीं करेगा, तो वह कोई अपराध नहीं है। दोस्त का पेन लेना इसी श्रेणी में आता है क्योंकि इसमें स्थायी नुकसान पहुंचाने की आपराधिक मंशा (Mens Rea) नहीं होती।',
+      ],
+      intellectualAnalysis: 'चोरी सिद्ध करने हेतु 5 अनिवार्य तत्व चाहिए: (1) बेईमानी का इरादा, (2) चल संपत्ति, (3) कब्जे से बाहर करना, (4) सहमति का अभाव, (5) स्थान परिवर्तन। सामान्य पेन के मामले में धारा 21 BNS के तहत मुकदमा चलने योग्य नहीं होता, जब तक कि वह कोई अत्यंत कीमती विंटेज पेन न हो जिसे जानबूझकर हड़पने की नीयत से चुराया गया हो।',
+      action: 'सामान्य पेन के लिए पुलिस FIR दर्ज नहीं कर सकती (धारा 21 BNS)। कीमती वस्तु होने पर धारा 303(2) BNS लागू होगी।',
+    },
+    hinglish: {
+      title: 'Friend ka Pen churana ya Petty Theft (Theft vs De Minimis Rule)',
+      summary: 'Technically kisi ki movable property bina permission lena **Section 303(2) BNS 2023** (Old **Section 379 IPC**) ke under Theft (Chori) hai. Lekin Indian Law me ek classic doctrine lagti hai: **"De Minimis Non Curat Lex" (Law chhote mamlon par dhyan nahi deta)**.',
+      sections: [
+        '⚖️ **Section 303(2) BNS 2023 (Old IPC 379) — Theft**: Dishonest intention se bina consent property move karna theft hai. Maximum punishment: 3 saal jail ya fine.',
+        '🏛️ **BNS 2023 New Reform (Sec 303(2) Proviso)**: Agar stolen property ki value **₹5,000 se kam** hai aur offender first-timer hai, to court jail ke badle **Community Service** ka order de sakti hai!',
+        '🛡️ **Section 21 BNS 2023 (Old IPC 95) — Doctrine of Trifles**: "Jo harm itna slight ho ki normal insaan complaint na kare, wo crime nahi hota." Friend ka pen lena Section 21 BNS ke doctrine of trifles me cover hota hai kyunki isme felonious Mens Rea (permanent loss) nahi hota.',
+      ],
+      intellectualAnalysis: 'Theft ke 5 elements hote hain: (1) Dishonest intent, (2) Movable property, (3) Out of possession, (4) Lack of consent, (5) Movement. Normal pen ke case me Section 21 BNS complete legal shield deta hai. Par agar pen ₹25,000 ka Montblanc antique ho aur intentionally churaya gaya ho, to Section 303(2) BNS lag sakti hai!',
+      action: 'Normal pen ke liye koi FIR nahi hoti under Sec 21 BNS. High-value item hone par Section 303(2) BNS apply hota hai.',
+    },
+  },
+
+  // 2. Assault / Slapping someone
+  {
+    id: 'assault_slap',
+    patterns: [
+      /(slap|punch|hit|thappad|marpeet|beat.*someone|physical.*fight|assault.*me|slapped|mara|peeta|haath\s*uthaya)/i,
+      /(थप्पड़|मारपीट|हाथापाई|मारा|पीटा|चोट)/i,
+      /(thappad\s*mar|kisi\s*ko\s*mara|haath\s*uthaya)/i,
+    ],
+    incident: 'Physical Altercation, Slapping & Assault',
+    en: {
+      title: 'Physical Assault & Slapping (Voluntarily Causing Hurt vs Self-Defence)',
+      summary: 'Slapping or physically hitting someone constitutes Voluntarily Causing Hurt and Criminal Force under the Bharatiya Nyaya Sanhita 2023, subject to the statutory Right of Private Defence.',
+      sections: [
+        '⚖️ **Section 115(2) BNS 2023 (Old Section 323 IPC) — Simple Hurt**: Voluntarily causing bodily pain, disease, or infirmity. Punishment: Imprisonment up to 1 year, or fine up to ₹10,000, or both (Non-Cognizable, Bailable).',
+        '⚖️ **Section 131 BNS 2023 (Old Section 352 IPC) — Assault or Criminal Force**: Assault without grave provocation. Punishment: Imprisonment up to 3 months or fine up to ₹1,000.',
+        '⚖️ **Section 117 BNS 2023 (Old Section 325 IPC) — Grievous Hurt**: If the slap causes fracture, permanent disfigurement, or tooth dislocation. Punishment: Up to 7 years jail (Cognizable & Non-Bailable).',
+        '🛡️ **Sections 34–44 BNS 2023 (Old IPC 96–106) — Right of Private Defence**: Every citizen has a statutory right to defend their own body. However, the legal **Test of Proportionality** mandates that the defensive force cannot exceed what is strictly necessary to repel the imminent threat. Mere verbal provocation never legally justifies a physical slap.',
+      ],
+      intellectualAnalysis: 'Under the Doctrine of Grave and Sudden Provocation, liability can be mitigated if the accused was deprived of self-control by immediate, unprovoked acts. However, the provocation must not be self-sought or voluntary.',
+      action: 'If assaulted, dial 112, undergo a government Medico-Legal Case (MLC) examination within 24 hours, and file an NC/FIR under Section 115(2) BNS.',
+    },
+    hi: {
+      title: 'थप्पड़ मारना व शारीरिक हमला (चोट पहुंचाना बनाम आत्मरक्षा का अधिकार)',
+      summary: 'किसी को थप्पड़ मारना या चोट पहुंचाना BNS 2023 के तहत स्वेच्छा से चोट पहुंचाने का अपराध है, जिस पर आत्मरक्षा (Private Defence) के कड़े नियम लागू होते हैं।',
+      sections: [
+        '⚖️ **धारा 115(2) BNS 2023 (पुरानी IPC धारा 323) — साधारण चोट (Simple Hurt)**: स्वेच्छा से शारीरिक पीड़ा पहुंचाना। सज़ा: 1 वर्ष तक की जेल या ₹10,000 तक जुर्माना (असंज्ञेय, जमानती)।',
+        '⚖️ **धारा 131 BNS 2023 (पुरानी IPC धारा 352) — आपराधिक बल प्रयोग**: बिना गंभीर उकसावे के हमला करना। सज़ा: 3 माह तक जेल या ₹1,000 जुर्माना।',
+        '⚖️ **धारा 117 BNS 2023 (पुरानी IPC धारा 325) — गंभीर चोट (Grievous Hurt)**: यदि थप्पड़ से दांत टूट जाए या हड्डी में फ्रैक्चर आए। सज़ा: 7 वर्ष तक की कठोर जेल (संज्ञेय व गैर-जमानती)।',
+        '🛡️ **धाराएं 34–44 BNS 2023 (पुरानी IPC 96–106) — आत्मरक्षा का अधिकार (Private Defence)**: कानूनन हर व्यक्ति को अपने शरीर की रक्षा का अधिकार है, लेकिन **समानुपातिकता का सिद्धांत (Doctrine of Proportionality)** अनिवार्य है—हमले का जवाब केवल तात्कालिक खतरे को रोकने जितना ही हो सकता है। केवल गाली-गलौज के जवाब में हाथ उठाना कानूनन अपराध है।',
+      ],
+      intellectualAnalysis: 'गंभीर व तात्कालिक उकसावे (Grave & Sudden Provocation) के तहत सज़ा कम हो सकती है, यदि व्यक्ति का आत्म-नियंत्रण पूरी तरह छिन गया हो।',
+      action: 'मारपीट होने पर तुरंत 112 पर फोन करें, 24 घंटे में सरकारी अस्पताल से MLC बनवाएं और धारा 115(2) BNS में शिकायत दें।',
+    },
+    hinglish: {
+      title: 'Thappad marna ya Assault (Voluntarily Causing Hurt & Self Defence)',
+      summary: 'Kisi par haath uthana ya thappad marna BNS 2023 ke under Voluntarily Causing Hurt ka offense hai.',
+      sections: [
+        '⚖️ **Section 115(2) BNS 2023 (Old IPC 323) — Simple Hurt**: Pain ya swelling cause karna. Punishment: 1 saal tak jail ya ₹10,000 fine (Bailable).',
+        '⚖️ **Section 131 BNS 2023 (Old IPC 352) — Criminal Force**: Bina grave provocation ke attack. Punishment: 3 months jail.',
+        '⚖️ **Section 117 BNS 2023 (Old IPC 325) — Grievous Hurt**: Agar daant toot jaye ya fracture aaye to up to 7 years jail (Non-Bailable).',
+        '🛡️ **Sections 34–44 BNS 2023 (Old IPC 96–106) — Right of Private Defence**: Self-defence ka right hai par **Proportionality Rule** follow karna padta hai—force sirf threat rokne tak ho sakti hai. Sirf gaali sunkar thappad marna illegal assault hai.',
+      ],
+      intellectualAnalysis: 'Agar sudden aur unprovoked provocation tha to punishment reduce ho sakti hai under Indian criminal doctrines.',
+      action: 'Chot lagne par 112 call karein, hospital se MLC karwayein aur Section 115(2) BNS me complaint karein.',
+    },
+  },
+
+  // 3. Borrowed Money Not Returned / Cheating vs Debt
+  {
+    id: 'borrow_debt',
+    patterns: [
+      /(borrow|lent|udhar|debt|420|fraud).*(money|paisa|return|pay|back|laut)/i,
+      /(money|paisa|cash).*(borrow|not\s*return|not\s*pay|wapas|laut|fasa|cheat)/i,
+      /(उधार|पैसे\s*वापस|धोखा|कर्ज|420|पैसे.*भाग)/i,
+      /(paise.*laut|udhari|paisa.*fasa|420\s*ka\s*case)/i,
+    ],
+    incident: 'Money Borrowed and Not Returned (Civil Debt vs Criminal Cheating)',
+    en: {
+      title: 'Money Borrowed & Not Returned (Criminal Cheating vs Civil Debt Recovery)',
+      summary: 'Under Indian law, a critical jurisprudential divide exists between a mere Civil Breach of Contract and Criminal Cheating under the Bharatiya Nyaya Sanhita.',
+      sections: [
+        '⚖️ **Section 318(4) BNS 2023 (Old Section 420 IPC) — Criminal Cheating**: Dishonestly inducing delivery of property with fraudulent intent. Punishment: Up to 7 years imprisonment + fine (Cognizable & Non-Bailable).',
+        '⚖️ **Order 37 Code of Civil Procedure (CPC) — Summary Suit**: Expedited civil recovery of commercial debt and unpaid promissory notes within 3 years limitation.',
+        '⚖️ **Section 138 Negotiable Instruments Act**: If a cheque was issued that bounced. Punishment: Up to 2 years imprisonment + double the cheque amount.',
+      ],
+      intellectualAnalysis: '🏛️ **The "Test of Inception" (Supreme Court: Hridaya Ranjan Prasad Verma v. State of Bihar & S.W. Palanitkar)**: The Supreme Court decisively ruled that mere failure or financial inability to repay a debt is strictly a **Civil Dispute**. To sustain an FIR for Criminal Cheating (Section 318 BNS), the complainant must prove that the borrower harbored fraudulent intention (*mens rea*) **at the very inception** (the exact moment of taking the money). If the intent was originally honest, subsequent non-payment cannot be criminalized.',
+      action: 'Send a formal Statutory Demand Notice within 3 years. If cheque was dishonoured, initiate Section 138 NI Act proceedings within 30 days.',
+    },
+    hi: {
+      title: 'उधार लेकर पैसे न लौटाना (आपराधिक धोखाधड़ी बनाम सिविल कर्ज वसूली)',
+      summary: 'भारतीय कानून में सिविल संविदा भंग (Breach of Contract) और आपराधिक धोखाधड़ी (Cheating) के बीच एक स्पष्ट संवैधानिक व न्यायिक सीमा है।',
+      sections: [
+        '⚖️ **धारा 318(4) BNS 2023 (पुरानी IPC धारा 420) — धोखाधड़ी (Cheating)**: बेईमानी से संपत्ति प्राप्त करना। सज़ा: 7 वर्ष तक की जेल व जुर्माना (संज्ञेय, गैर-जमानती)।',
+        '⚖️ **ऑर्डर 37 सिविल प्रक्रिया संहिता (CPC) — समरी सूट**: कर्ज वसूली हेतु 3 वर्ष के भीतर त्वरित सिविल वाद।',
+        '⚖️ **धारा 138 पराक्रम्य लिखत अधिनियम (NI Act)**: यदि देनदार का चेक बाउंस हुआ हो। सज़ा: 2 साल तक की जेल व चेक राशि का दोगुना जुर्माना।',
+      ],
+      intellectualAnalysis: '🏛️ **सुप्रीम कोर्ट का "शुरुआती मंशा का सिद्धांत" (Test of Inception — हृदय रंजन प्रसाद वर्मा केस)**: सुप्रीम कोर्ट ने स्पष्ट किया कि केवल पैसा न लौटा पाना दीवानी विवाद (Civil Dispute) है, अपराध नहीं। धारा 318 BNS (पुरानी 420) के तहत FIR तभी टिक सकती है जब साबित हो कि उधार लेते समय पहली ही घड़ी से आरोपी की नीयत बेईमान थी।',
+      action: 'वकील के माध्यम से तत्काल कानूनी नोटिस (Legal Notice) भेजें। चेक बाउंस होने पर 30 दिन में धारा 138 की कानूनी प्रक्रिया शुरू करें।',
+    },
+    hinglish: {
+      title: 'Borrow kiya paisa wapas na karna (Civil Debt vs Sec 318 BNS 420)',
+      summary: 'Paisa wapas na aana automatically criminal offense nahi hota—ye Civil Dispute aur Criminal Cheating ke difference par depend karta hai.',
+      sections: [
+        '⚖️ **Section 318(4) BNS 2023 (Old IPC 420) — Cheating**: Fraudulent intent se paisa lena. Punishment: Up to 7 years jail (Non-Bailable).',
+        '⚖️ **Order 37 CPC — Summary Suit**: Civil Court me fast-track money recovery lawsuit.',
+        '⚖️ **Section 138 NI Act**: Agar cheque bounce hua to 2 saal tak ki jail aur double penalty.',
+      ],
+      intellectualAnalysis: '🏛️ **Supreme Court Test of Inception (Hridaya Ranjan Case)**: Agar borrowing ke waqt borrower ka intention honest tha par baad me financial crisis hui, to ye strictly Civil Matter hai. FIR tabhi valid hoti hai jab prove ho ki starting se hi dhokha dene ki planning thi.',
+      action: 'Pehle formal Legal Demand Notice send karein. Check Legal Notice Generator on our platform.',
+    },
+  },
+
+  // 4. Taking Photos Without Consent / Voyeurism
+  {
+    id: 'photo_voyeurism',
+    patterns: [
+      /(photo|video|camera|record|voyeur).*(consent|permission|secret|hidden|bina|without)/i,
+      /(बिना\s*अनुमति\s*फोटो|गुप्त\s*वीडियो|निजता|फोटो\s*खींच|प्राइवेसी)/i,
+      /(bina\s*permission\s*photo|hidden\s*camera|secret\s*video|photo\s*viral)/i,
+    ],
+    incident: 'Taking Photos/Videos Without Consent & Voyeurism',
+    en: {
+      title: 'Taking Photos/Videos Without Consent (Voyeurism & Privacy Rights)',
+      summary: 'Capturing or circulating intimate or non-consensual images violates constitutional privacy and statutory penal provisions.',
+      sections: [
+        '⚖️ **Section 77 BNS 2023 (Old Section 354C IPC) — Voyeurism**: Capturing, viewing, or distributing images of a woman in private circumstances where she has reasonable expectation of privacy. 1st conviction: 1 to 3 years imprisonment (Bailable); 2nd conviction: 3 to 7 years imprisonment (Non-Bailable).',
+        '⚖️ **Section 66E Information Technology Act 2000 — Privacy Violation**: Intentionally capturing or transmitting images of private body parts without consent. Punishment: Up to 3 years imprisonment or fine up to ₹2 Lakhs.',
+        '⚖️ **Section 356 BNS 2023 (Old Section 499 IPC) — Defamation**: If photos are doctored, weaponized, or circulated to destroy social reputation.',
+      ],
+      intellectualAnalysis: '🏛️ **Constitutional Doctrine: Justice K.S. Puttaswamy v. Union of India (2017)**: The 9-judge Constitution Bench held that bodily autonomy and informational privacy are inalienable Fundamental Rights under **Article 21**. Under Rule 3(2)(b) of the IT Rules 2021, social media platforms are statutorily mandated to remove non-consensual intimate imagery within **24 hours** of complaint.',
+      action: 'Preserve digital screenshots and URLs. Dial 1930 Cyber Helpline and register complaint on cybercrime.gov.in and Women Helpline 181.',
+    },
+    hi: {
+      title: 'बिना सहमति फोटो/वीडियो लेना (वॉयरिज्म व निजता का अधिकार)',
+      summary: 'किसी व्यक्ति की अनुमति के बिना फोटो खींचना या वीडियो बनाना संवैधानिक निजता और आपराधिक कानूनों का गंभीर उल्लंघन है।',
+      sections: [
+        '⚖️ **धारा 77 BNS 2023 (पुरानी IPC धारा 354C) — वॉयरिज्म (दृश्यरतिकता)**: महिला की निजी पलों में बिना सहमति फोटो खींचना या शेयर करना। पहली बार: 1 से 3 साल जेल (जमानती); दूसरी बार: 3 से 7 साल जेल (गैर-जमानती)।',
+        '⚖️ **धारा 66E सूचना प्रौद्योगिकी अधिनियम (IT Act)**: सहमति के बिना निजी अंगों की तस्वीरें प्रसारित करना। सज़ा: 3 साल तक की जेल या ₹2 लाख जुर्माना।',
+        '⚖️ **धारा 356 BNS 2023 (पुरानी IPC 499) — मानहानि**: यदि तस्वीरों का इस्तेमाल बदनामी करने या ब्लैकमेल करने हेतु किया जाए।',
+      ],
+      intellectualAnalysis: '🏛️ **पुट्टास्वामी वाद (2017)**: सुप्रीम कोर्ट ने माना कि निजता संविधान के अनुच्छेद 21 के तहत मौलिक अधिकार है। आईटी रूल्स 2021 (नियम 3(2)(b)) के अनुसार सोशल मीडिया प्लेटफॉर्म को शिकायत मिलने के 24 घंटे के भीतर आपत्तिजनक सामग्री हटानी होगी।',
+      action: 'डिजिटल स्क्रीनशॉट और यूआरएल सुरक्षित रखें। 1930 साइबर हेल्पलाइन और cybercrime.gov.in पर तत्काल रिपोर्ट करें।',
+    },
+    hinglish: {
+      title: 'Bina Permission Photo/Video lena (Voyeurism & Section 77 BNS)',
+      summary: 'Kisi ki bina consent photo lena ya circulate karna Article 21 Privacy aur BNS ke tehat punishable offense hai.',
+      sections: [
+        '⚖️ **Section 77 BNS 2023 (Old IPC 354C) — Voyeurism**: Private space me bina permission women ki photo/video lena. 1st offence: 1-3 years jail; Repeat offence: 3-7 years jail (Non-Bailable).',
+        '⚖️ **Section 66E IT Act — Bodily Privacy**: Private images capture ya forward karna. 3 saal tak jail / ₹2 Lakh fine.',
+        '⚖️ **IT Rules 2021 (24-Hour Takedown Rule)**: Social media platforms 24 ghante ke andar content remove karne ke liye legally bound hain.',
+      ],
+      intellectualAnalysis: 'Puttaswamy judgment ke mutabik informational aur bodily privacy Fundamental Right hai Article 21 ke tehat.',
+      action: 'Screenshots aur links save karein. 1930 Cyber helpline par call karein aur cybercrime.gov.in par FIR darj karayein.',
+    },
+  },
+
+  // 5. Abuse, Insult & Defamation
+  {
+    id: 'abuse_defamation',
+    patterns: [
+      /(gaali|abuse|insult|defamation|defame|badnaam|verbal\s*threat|badnaami|apman)/i,
+      /(गाली|अपमान|बदनाम|मानहानि|अपमानजनक|धमकी)/i,
+      /(gaali\s*di|badnaam\s*kiya|defamation\s*case|apmanit\s*kiya)/i,
+    ],
+    incident: 'Verbal Abuse, Insult & Criminal Defamation',
+    en: {
+      title: 'Verbal Abuse, Public Insult & Criminal Defamation (BNS 352 & 356)',
+      summary: 'Hurls of abusive words or false allegations that damage personal reputation are actionable under both criminal and tort law.',
+      sections: [
+        '⚖️ **Section 352 BNS 2023 (Old Section 504 IPC) — Intentional Insult**: Provoking breach of public peace or provoking someone to commit an offense. Punishment: Imprisonment up to 2 years or fine or both.',
+        '⚖️ **Section 356 BNS 2023 (Old Section 499/500 IPC) — Criminal Defamation**: Making or publishing defamatory imputations knowing it harms reputation. Punishment: Simple imprisonment up to 2 years, or fine, or Community Service.',
+        '⚖️ **Section 79 BNS 2023 (Old Section 509 IPC)**: Word, gesture, or sound intended to insult the modesty of a woman. Punishment: Up to 3 years imprisonment (Cognizable).',
+      ],
+      intellectualAnalysis: 'Constitutional Balancing: Article 19(1)(a) (Freedom of Speech) is subject to Article 19(2) Reasonable Restrictions. Under the **First Exception to Section 356 BNS**, an imputation of truth made for the public good is an absolute legal defense against criminal defamation.',
+      action: 'Preserve audio recordings, WhatsApp messages, or witness statements. Send a formal Cease & Desist Legal Notice demanding unconditional apology.',
+    },
+    hi: {
+      title: 'गाली-गलौज, सार्वजनिक अपमान व आपराधिक मानहानि (BNS 352 व 356)',
+      summary: 'गाली देना, उकसाना या झूठे आरोप लगाकर प्रतिष्ठा को नुकसान पहुंचाना कानूनन दंडनीय अपराध है।',
+      sections: [
+        '⚖️ **धारा 352 BNS 2023 (पुरानी IPC धारा 504) — जानबूझकर अपमान**: शांति भंग करने के इरादे से अपमानित करना। सज़ा: 2 साल तक की जेल या जुर्माना या दोनों।',
+        '⚖️ **धारा 356 BNS 2023 (पुरानी IPC 499/500) — आपराधिक मानहानि**: किसी की छवि धूमिल करने वाले बयान प्रकाशित करना। सज़ा: 2 साल तक साधारण कारावास या सामुदायिक सेवा।',
+        '⚖️ **धारा 79 BNS 2023 (पुरानी IPC 509)**: किसी महिला की मर्यादा को ठेस पहुंचाने वाले शब्द या इशारे करना। सज़ा: 3 साल तक की जेल (संज्ञेय)।',
+      ],
+      intellectualAnalysis: 'संविधान के अनुच्छेद 19(1)(a) का वाक् स्वातंत्र्य असीमित नहीं है। धारा 356 BNS के पहले अपवाद के तहत, लोककल्याण (Public Good) के लिए बोला गया सत्य मानहानि नहीं माना जाता।',
+      action: 'ऑडियो रिकॉर्डिंग या चैट सबूत सहेजें और वकील के जरिए मानहानि का कानूनी नोटिस (Legal Notice) भेजें।',
+    },
+    hinglish: {
+      title: 'Gaali Galoch aur Criminal Defamation (BNS 352 & 356)',
+      summary: 'Publicly gali dena ya false allegations lagana BNS ke tehat punishable criminal act hai.',
+      sections: [
+        '⚖️ **Section 352 BNS 2023 (Old IPC 504) — Intentional Insult**: Peace disrupt karne ke liye provoke karna. 2 years jail.',
+        '⚖️ **Section 356 BNS 2023 (Old IPC 499) — Criminal Defamation**: Image kharab karne wale jhoothe bayaan. 2 years jail ya Community Service.',
+        '⚖️ **Section 79 BNS 2023 (Old IPC 509)**: Women modesty ke khilaf abusive language use karna (Cognizable crime).',
+      ],
+      intellectualAnalysis: 'Article 19(1)(a) Free Speech vs Reputation Protection. Agar koi statement public good ke liye sach hai, to defamation nahi hota.',
+      action: 'Audio/text proof preserve karein aur Cease & Desist Legal Notice send karein.',
+    },
+  },
+
+  // 6. Rash Driving & Accidents
+  {
+    id: 'rash_driving',
+    patterns: [
+      /(rash\s*driving|accident|car\s*hit|bike\s*crash|road\s*accident|speeding|hit\s*and\s*run|gadi\s*thok)/i,
+      /(सड़क\s*दुर्घटना|लापरवाही\s*से\s*गाड़ी|एक्सीडेंट|गाड़ी\s*भिड़ंत|हिट\s*एंड\s*रन)/i,
+      /(accident\s*ho\s*gaya|gadi\s*se\s*chot|rash\s*drive|hit\s*run)/i,
+    ],
+    incident: 'Rash Driving, Vehicular Accident & Hit and Run',
+    en: {
+      title: 'Rash Driving & Vehicular Accidents (BNS 281 & Section 106)',
+      summary: 'Governed by the Bharatiya Nyaya Sanhita 2023 and the Motor Vehicles Act 1988.',
+      sections: [
+        '⚖️ **Section 281 BNS 2023 (Old Section 279 IPC) — Rash Driving**: Driving in a rash or negligent manner endangering human life. Punishment: Up to 6 months imprisonment or fine up to ₹1,000.',
+        '⚖️ **Section 125 BNS 2023 (Old Section 337/338 IPC) — Endangering Life or Grievous Hurt**: Causing hurt or grievous hurt by rash/negligent act. Punishment: Up to 3 years imprisonment.',
+        '⚖️ **Section 106(1) BNS 2023 (Old Section 304A IPC) — Death by Negligence**: Causing death not amounting to culpable homicide. Punishment: Up to 5 years imprisonment + fine.',
+        '⚖️ **Section 106(2) BNS 2023 — Hit and Run Reform**: Escaping the scene without reporting to police or magistrate immediately. Punishment: Up to 10 years imprisonment + fine.',
+      ],
+      intellectualAnalysis: 'Jurisprudence: The doctrine of **Res Ipsa Loquitur** (the thing speaks for itself) is often invoked in vehicular negligence. Compensation is adjudicated by the Motor Accident Claims Tribunal (MACT) regardless of criminal conviction under Section 166 of the MV Act.',
+      action: 'Dial 112 immediately. Note the offending vehicle number plate, photograph skid marks, and file an FIR under Sections 281/125 BNS.',
+    },
+    hi: {
+      title: 'सड़क दुर्घटना व लापरवाही से वाहन चलाना (BNS 281 व धारा 106)',
+      summary: 'भारतीय न्याय संहिता 2023 और मोटर वाहन अधिनियम (MV Act) के तहत तेज या लापरवाह वाहन चलाना गैरकानूनी है।',
+      sections: [
+        '⚖️ **धारा 281 BNS 2023 (पुरानी IPC धारा 279) — लापरवाही से वाहन चलाना**: जनजीवन को खतरे में डालना। सज़ा: 6 माह तक की जेल या जुर्माना।',
+        '⚖️ **धारा 125 BNS 2023 (पुरानी IPC 338) — गंभीर चोट पहुंचाना**: लापरवाही से किसी की जान जोखिम में डालना या चोटिल करना। सज़ा: 3 साल तक की जेल।',
+        '⚖️ **धारा 106(1) BNS 2023 (पुरानी IPC 304A) — लापरवाही से मृत्यु**: गैर-इरादतन मौत। सज़ा: 5 वर्ष तक जेल।',
+        '⚖️ **धारा 106(2) BNS 2023 — हिट एंड रन का कड़ा कानून**: दुर्घटना के बाद बिना पुलिस को सूचित किए भागना। सज़ा: 10 वर्ष तक की जेल व जुर्माना।',
+      ],
+      intellectualAnalysis: 'आपराधिक मुकदमे के साथ-साथ पीड़ित या परिवार को मोटर दुर्घटना दावा अधिकरण (MACT) से असीमित मुआवजे का कानूनी अधिकार प्राप्त है।',
+      action: '112 पर कॉल करें, वाहन का नंबर नोट करें, और MACT क्लेम हेतु पुलिस की विस्तृत दुर्घटना रिपोर्ट (DAR) प्राप्त करें।',
+    },
+    hinglish: {
+      title: 'Rash Driving aur Accident Law (BNS 281 & Section 106)',
+      summary: 'BNS 2023 aur Motor Vehicles Act ke tehat reckless driving par strict criminal aur compensation provisions hain.',
+      sections: [
+        '⚖️ **Section 281 BNS 2023 (Old IPC 279) — Rash Driving**: 6 months tak jail ya fine.',
+        '⚖️ **Section 125 BNS 2023 (Old IPC 338) — Causing Hurt**: Up to 3 years imprisonment.',
+        '⚖️ **Section 106(1) BNS 2023 (Old IPC 304A) — Negligent Death**: 5 years tak jail.',
+        '⚖️ **Section 106(2) BNS 2023 — Hit and Run**: Spot se bhagna bina police report ke—Up to 10 years jail.',
+      ],
+      intellectualAnalysis: 'Criminal prosecution ke alawa MACT Court se accident compensation lene ka statutory right hota hai.',
+      action: '112 par call karein, vehicle number photograph karein aur FIR copy lekar MACT claim initiate karein.',
+    },
+  },
+
+  // 7. Landlord Forcefully Locking Flat
+  {
+    id: 'landlord_lock',
+    patterns: [
+      /landlord.*lock/i, /makan\s*malik.*tala/i, /room\s*locked/i, /evict.*without\s*notice/i,
+      /मकान\s*मालिक.*ताला/i, /कमरा\s*बंद/i, /जबरन\s*निकाल/i,
+    ],
     incident: 'Landlord Forcefully Locking Tenant / Dispossession',
     en: {
       title: 'Landlord Forcefully Locking Flat & Illegal Eviction',
+      summary: 'Under the Constitution and the Transfer of Property Act, peaceful possession cannot be disturbed without due process of law.',
       sections: [
-        'Section 126 BNS (Old IPC 341): Wrongful Restraint — Up to 1 month jail or ₹5,000 fine (Cognizable).',
-        'Section 329 BNS (Old IPC 441/448): Criminal Trespass — Up to 1 year jail or ₹5,000 fine.',
-        'Section 316 BNS (Old IPC 405/406): Criminal Breach of Trust for seizing tenant goods — Up to 5 years jail (Non-Bailable).',
-        'Section 108 Transfer of Property Act: Tenant\'s civil right to peaceful possession.',
+        '⚖️ **Section 126 BNS 2023 (Old IPC 341) — Wrongful Restraint**: Obstructing tenant from entering their leased home. Punishment: Up to 1 month jail or ₹5,000 fine (Cognizable).',
+        '⚖️ **Section 329 BNS 2023 (Old IPC 448) — Criminal Trespass**: Entering without permission. Punishment: Up to 1 year jail.',
+        '⚖️ **Section 316 BNS 2023 (Old IPC 406) — Criminal Breach of Trust**: Seizing tenant luggage or furniture. Punishment: Up to 5 years jail (Non-Bailable).',
+        '🏛️ **Section 108 Transfer of Property Act**: Right to quiet and peaceful enjoyment.',
       ],
-      precedent: 'Bishan Das v. State of Punjab (1961): Forcible dispossession without court decree is strictly illegal.',
-      action: 'Call 112 immediately, take photos/videos of the padlock, and file complaint under Section 126 BNS.',
+      intellectualAnalysis: 'Precedent: Bishan Das v. State of Punjab (1961 2 SCR 69) — The Supreme Court Constitution Bench held that landlords cannot take the law into their own hands. Even if the lease expired, physical lockout is criminal dispossession.',
+      action: 'Call 112 immediately, record video proof of the padlock, and file complaint under Section 126 BNS.',
     },
     hi: {
       title: 'मकान मालिक द्वारा फ्लैट पर ताला लगाना व अवैध बेदखली',
+      summary: 'मकान मालिक बिना कोर्ट के आदेश के किरायेदार का सामान बाहर नहीं फेंक सकता और न ही ताला लगा सकता है।',
       sections: [
-        'धारा 126 BNS (पुरानी IPC 341): गलत तरीके से रोकना (Wrongful Restraint) — 1 माह जेल या ₹5,000 जुर्माना (संज्ञेय अपराध)।',
-        'धारा 329 BNS (पुरानी IPC 448): आपराधिक अनधिकार प्रवेश (Criminal Trespass) — 1 साल तक की जेल।',
-        'धारा 316 BNS (पुरानी IPC 406): किरायेदार के सामान पर अमानत में खयानत — 5 साल तक जेल (गैर-जमानती)।',
-        'ट्रांसफर ऑफ प्रॉपर्टी एक्ट धारा 108: किरायेदार का शांतिपूर्ण कब्जे का अधिकार।',
+        '⚖️ **धारा 126 BNS (पुरानी IPC 341) — गलत तरीके से रोकना**: 1 माह जेल या ₹5,000 जुर्माना (संज्ञेय अपराध)।',
+        '⚖️ **धारा 329 BNS (पुरानी IPC 448) — आपराधिक अतिचार (Trespass)**: 1 साल तक की जेल।',
+        '⚖️ **धारा 316 BNS (पुरानी IPC 406) — सामान ज़ब्त करने पर अमानत में खयानत**: 5 साल तक जेल (गैर-जमानती)।',
       ],
-      precedent: 'बिशन दास बनाम पंजाब राज्य (1961): बिना कोर्ट आदेश के ताला लगाना या बेदखल करना कानूनन अपराध है।',
-      action: 'तुरंत 112 पर पुलिस बुलाएं, ताले की वीडियो बनाएं और धारा 126 BNS के तहत लिखित तहरीर दें।',
+      intellectualAnalysis: 'बिशन दास बनाम पंजाब राज्य (1961): सुप्रीम कोर्ट ने कहा कि कानून के राज में जबरन बेदखली पूरी तरह गैरकानूनी है।',
+      action: '112 पर पुलिस बुलाएं, ताले की वीडियो बनाएं और धारा 126 BNS के तहत लिखित तहरीर दें।',
     },
     hinglish: {
-      title: 'Landlord ka flat par tala lagana aur illegal eviction',
+      title: 'Landlord ka Flat par Tala lagana aur Illegal Eviction',
+      summary: 'Rent Control laws aur Transfer of Property Act ke tehat landlord forcefully lock nahi laga sakta.',
       sections: [
-        'Section 126 BNS (IPC 341): Wrongful Restraint — 1 month jail / ₹5,000 fine (Police FIR mandatory).',
-        'Section 329 BNS (IPC 448): Criminal Trespass — 1 year jail.',
-        'Section 316 BNS (IPC 406): Criminal Breach of Trust for holding luggage — 5 years jail (Non-Bailable).',
-        'Transfer of Property Act Sec 108: Peaceful enjoyment right.',
+        '⚖️ **Section 126 BNS (Old IPC 341) — Wrongful Restraint**: 1 month jail / ₹5,000 fine (Police FIR mandatory).',
+        '⚖️ **Section 329 BNS (Old IPC 448) — Criminal Trespass**: 1 year jail.',
+        '⚖️ **Section 316 BNS (Old IPC 406) — Luggage hold karna**: 5 years jail (Non-Bailable).',
       ],
-      precedent: 'Bishan Das Case (1961): Landlord legally force use nahi kar sakta bina court eviction order ke.',
+      intellectualAnalysis: 'Bishan Das Case (1961): Landlord legally force use nahi kar sakta bina competent court order ke.',
       action: '112 par call karein, lock ki video banayein aur police station me Section 126 BNS me complaint dein.',
     },
   },
+
+  // 8. Online Financial Fraud
   {
-    patterns: [/online\s*(fraud|scam|thagi)/i, /upi\s*(scam|fraud)/i, /otp\s*(fraud|scam)/i, /cyber\s*crime\s*section/i],
+    id: 'cyber_fraud',
+    patterns: [
+      /online\s*(fraud|scam|thagi)/i, /upi\s*(scam|fraud)/i, /otp\s*(fraud|scam)/i, /cyber\s*crime\s*section/i,
+      /ऑनलाइन\s*(ठगी|फ्रॉड)/i, /ओटीपी\s*स्कैम/i,
+    ],
     incident: 'Online Financial Fraud, UPI & OTP Scams',
     en: {
       title: 'Online Financial Fraud & Cyber Impersonation',
+      summary: 'Regulated under the Information Technology Act 2000 and Section 318 of BNS 2023.',
       sections: [
-        'Section 66D IT Act: Cheating by personation using computer/phone — Up to 3 years imprisonment + ₹1,00,000 fine (Non-Bailable).',
-        'Section 318(4) BNS (Old IPC 420): Cheating & dishonestly inducing delivery of property — Up to 7 years jail.',
-        'Section 66C IT Act: Identity Theft using OTP or password — Up to 3 years jail.',
+        '⚖️ **Section 66D IT Act — Cheating by Personation**: Using computer/phone to defraud. Punishment: Up to 3 years imprisonment + ₹1,00,000 fine (Non-Bailable).',
+        '⚖️ **Section 318(4) BNS 2023 (Old IPC 420) — Cheating**: Inducing delivery of property. Up to 7 years imprisonment.',
+        '⚖️ **Section 66C IT Act — Identity Theft**: Misusing OTPs or passwords. Up to 3 years jail.',
       ],
-      precedent: 'K.S. Puttaswamy (2017) & RBI Zero-Liability Circular: Report within 3 days for full bank refund.',
-      action: 'Dial 1930 Cyber Helpline within 2 hours to freeze recipient bank account, and lodge complaint on cybercrime.gov.in.',
+      intellectualAnalysis: 'RBI Zero-Liability Circular: If an unauthorized electronic transaction is reported within 3 days, the customer has zero liability and the bank must reverse the lost funds.',
+      action: 'Call 1930 Cyber Helpline within the golden hour (2 hours) to freeze the recipient bank wallet, and file on cybercrime.gov.in.',
     },
     hi: {
       title: 'ऑनलाइन वित्तीय ठगी, यूपीआई व ओटीपी फ्रॉड',
+      summary: 'साइबर ठगी के मामलों में त्वरित शिकायत करने पर बैंक खाते फ्रीज किए जा सकते हैं।',
       sections: [
-        'आईटी एक्ट धारा 66D: कंप्यूटर/फोन के जरिए पहचान छिपाकर धोखाधड़ी — 3 साल जेल व ₹1,00,000 जुर्माना (गैर-जमानती)।',
-        'धारा 318(4) BNS (पुरानी IPC 420): छल व बेईमानी से संपत्ति प्राप्त करना — 7 साल तक की जेल।',
-        'आईटी एक्ट धारा 66C: पासवर्ड या ओटीपी की चोरी — 3 साल तक जेल।',
+        '⚖️ **आईटी एक्ट धारा 66D — डिजिटल प्रतिरूपण द्वारा धोखाधड़ी**: 3 साल जेल व ₹1,00,000 जुर्माना (गैर-जमानती)।',
+        '⚖️ **धारा 318(4) BNS (पुरानी IPC 420) — छल व धोखाधड़ी**: 7 साल तक की जेल।',
+        '⚖️ **आईटी एक्ट धारा 66C — पहचान व पासवर्ड की चोरी**: 3 साल तक जेल।',
       ],
-      precedent: 'आरबीआई सर्कुलर: 3 दिनों के भीतर शिकायत करने पर बैंक को पूरी राशि वापस करनी होती है।',
+      intellectualAnalysis: 'आरबीआई जीरो-लायबिलिटी सर्कुलर: 3 दिनों के भीतर बैंक को सूचित करने पर उपभोक्ता की देयता शून्य होती है।',
       action: 'ठगी होते ही 2 घंटे के अंदर 1930 पर कॉल करें और cybercrime.gov.in पर पावती दर्ज करें।',
     },
     hinglish: {
       title: 'Online Financial Fraud & Cyber Scam Sections',
+      summary: 'IT Act 2000 aur BNS ke under rapid action se paisa recover ho sakta hai.',
       sections: [
-        'Section 66D IT Act: Cheating by personation using digital devices — 3 years jail (Non-Bailable).',
-        'Section 318(4) BNS (IPC 420): Cheating — Up to 7 years imprisonment.',
-        'Section 66C IT Act: Identity theft & OTP fraud — 3 years jail.',
+        '⚖️ **Section 66D IT Act — Cheating by personation**: 3 years jail (Non-Bailable).',
+        '⚖️ **Section 318(4) BNS (Old IPC 420) — Cheating**: Up to 7 years imprisonment.',
+        '⚖️ **Section 66C IT Act — OTP & Identity Theft**: 3 years jail.',
       ],
-      precedent: 'RBI Zero Liability Policy: 3 din me report karne par bank se refund milta hai.',
+      intellectualAnalysis: 'RBI Zero Liability Policy ke tehat 3 din me report karne par bank se refund milta hai.',
       action: '1930 helpline par turant call karein aur cybercrime.gov.in par complaint receipt download karein.',
-    },
-  },
-  {
-    patterns: [/assault/i, /beat.*me/i, /marpeet/i, /road\s*rage/i, /threat.*kill/i, /jaan\s*se\s*marne/i],
-    incident: 'Physical Assault, Road Rage & Threats',
-    en: {
-      title: 'Physical Assault, Road Rage & Criminal Threats',
-      sections: [
-        'Section 115 BNS (Old IPC 323): Voluntarily causing hurt — Up to 1 year jail or ₹10,000 fine.',
-        'Section 117 BNS (Old IPC 325): Grievous hurt (fracture, tooth loss) — Up to 7 years jail (Non-Bailable).',
-        'Section 351 BNS (Old IPC 506): Criminal Intimidation / death threat — Up to 7 years jail.',
-        'Section 324 BNS (Old IPC 427): Mischief causing damage to vehicle — Up to 1 year jail.',
-      ],
-      precedent: 'Lalita Kumari (2014): Immediate FIR registration and government Medico-Legal Case (MLC) examination.',
-      action: 'Call 112, take video of vehicle number, and get an MLC test done at a government hospital immediately.',
-    },
-    hi: {
-      title: 'मारपीट, सड़क पर झगड़ा व आपराधिक धमकी',
-      sections: [
-        'धारा 115 BNS (पुरानी IPC 323): स्वेच्छा से चोट पहुंचाना — 1 साल तक जेल या ₹10,000 जुर्माना।',
-        'धारा 117 BNS (पुरानी IPC 325): गंभीर चोट (हड्डी टूटना) — 7 साल तक कठोर कारावास (गैर-जमानती)।',
-        'धारा 351 BNS (पुरानी IPC 506): जान से मारने की धमकी देना — 7 साल तक जेल।',
-        'धारा 324 BNS (पुरानी IPC 427): गाड़ी या संपत्ति में तोड़फोड़ करना — 1 साल तक जेल।',
-      ],
-      precedent: 'ललिता कुमारी केस (2014): चोट लगने पर पुलिस को तुरंत FIR दर्ज कर सरकारी अस्पताल में मेडिकल (MLC) कराना होगा।',
-      action: '112 पर फोन करें, हमलावर की गाड़ी का नंबर नोट करें और सरकारी अस्पताल से तुरंत MLC रिपोर्ट बनवाएं।',
-    },
-    hinglish: {
-      title: 'Physical Assault, Road Rage & Criminal Intimidation',
-      sections: [
-        'Section 115 BNS (IPC 323): Simple hurt — 1 year jail / ₹10,000 fine.',
-        'Section 117 BNS (IPC 325): Grievous hurt / fracture — 7 years jail (Non-Bailable).',
-        'Section 351 BNS (IPC 506): Threatening to kill — Up to 7 years jail.',
-        'Section 324 BNS (IPC 427): Vehicle damage — 1 year jail.',
-      ],
-      precedent: 'Lalita Kumari Ruling: Police ko turant FIR karke government hospital me MLC karana zaroori hai.',
-      action: '112 dial karein, attacker ki photo/video lein aur government hospital se MLC certificate banwayein.',
     },
   },
 ];
 
-// ─── Vernacular FAQ Database ────────────────────────────────────
+// ─── Vernacular FAQs ────────────────────────────────────────────
 const VERNACULAR_FAQS = [
   {
     patterns: [
-      /how\s+(do|can|to)\s+(i\s+)?(book|schedule)/i,
-      /book\s+a?\s*(consultation|appointment)/i,
-      /वकील\s*(कैसे|कहाँ)\s*(बुक|ढूंढें|मिलेगा)/i,
-      /vakil\s*(kaise|kahan)\s*(book|milega|dhoondhe)/i,
+      /how\s*to\s*book/i,
+      /booking\s*process/i,
+      /वकील\s*(कैसे|कहाँ)\s*बुक/i,
+      /booking\s*kaise/i,
+      /hire\s*lawyer/i,
     ],
     answer: {
-      en: 'To book a consultation:\n\n1. Go to **Find Advocates** from the sidebar\n2. Browse advocates by practice area or name\n3. Click **Book Consultation**\n4. Select your preferred date & time slot\n5. Confirm and complete payment securely via Escrow!\n\nYou\'ll receive instant confirmation. 📅',
-      hi: 'वकील से परामर्श बुक करने का तरीका:\n\n1. साइडबार में **Find Advocates (वकील खोजें)** पर जाएं\n2. अपनी कानूनी समस्या (Property, Criminal, Family आदि) के अनुसार वकील चुनें\n3. वकील की प्रोफ़ाइल पर **Book Consultation** पर क्लिक करें\n4. अपनी सुविधानुसार तारीख और समय (Slot) चुनें\n5. फीस का भुगतान करें (राशि एस्क्रो में सुरक्षित रहेगी)\n\nबुकिंग होते ही आपको पुष्टि संदेश मिल जाएगा! 📅',
-      hinglish: 'Advocate book karne ka simple tarika:\n\n1. Sidebar me **Find Advocates** par click karein\n2. Practice area ya location se verified lawyer choose karein\n3. Profile open karke **Book Consultation** select karein\n4. Date aur time slot select karke booking confirm karein\n5. Payment escrow me safe rehti hai aur consultation ke baad hi transfer hoti hai! 📅',
+      en: 'To consult an advocate on LegalConnect:\n\n1. Go to **Find Advocates**\n2. Filter by practice area, rating, or consultation fee\n3. Select your preferred date & time slot\n4. Complete secure escrow payment — your funds are released only after consultation!\n5. Join the secure video meeting from your dashboard at the scheduled time.',
+      hi: 'LegalConnect पर वकील से परामर्श बुक करने की प्रक्रिया:\n\n1. **"वकील खोजें" (Find Advocates)** सेक्शन पर जाएं\n2. विशेषता (जैसे चेक बाउंस, संपत्ति, परिवार) और फीस के आधार पर वकील चुनें\n3. उपलब्ध तारीख और समय का स्लॉट चुनें\n4. सुरक्षित एस्क्रो पेमेंट करें — परामर्श पूरा होने तक आपकी राशि सुरक्षित रहती है!\n5. तय समय पर डैशबोर्ड से सीधे वीडियो कॉल जॉइन करें।',
+      hinglish: 'LegalConnect par advocate book karne ka simple process:\n\n1. **Find Advocates** par click karein\n2. Category (Cheque, Property, Divorce) filter karein\n3. Available date aur time slot choose karein\n4. Secure Escrow payment karein (paisa consult hone ke baad hi advocate ko jata hai)\n5. Scheduled time par video meeting join karein.',
     },
     navKey: 'advocates',
   },
   {
     patterns: [
-      /how\s+(do|can|to)\s+(i\s+)?(track|check|see)\s+(my\s+)?case/i,
-      /case\s*status/i,
-      /केस\s*(स्टेटस|ट्रैक|कहाँ)/i,
-      /mera\s*case\s*(status|update|kaise\s*dekhe)/i,
+      /track.*case/i,
+      /hearing\s*date/i,
+      /केस\s*ट्रैक/i,
+      /hearing\s*kab/i,
+      /case\s*progress/i,
     ],
     answer: {
-      en: 'To track your legal case:\n\n1. Click **My Cases** from the sidebar\n2. Select your active case to open the full workspace\n3. Track timeline, next court hearing dates, filed petitions, and advocate notes in real-time! 📋',
-      hi: 'अपने केस का स्टेटस ट्रैक करने के लिए:\n\n1. साइडबार से **My Cases (मेरे केस)** पर क्लिक करें\n2. अपने केस पर क्लिक करके केस वर्कस्पेस खोलें\n3. वहाँ अगली सुनवाई की तारीख, कोर्ट की कार्यवाही, अपलोड किए गए दस्तावेज़ और वकील के नोट्स देखें! 📋',
-      hinglish: 'Mera Case track karne ke liye:\n\n1. Sidebar se **My Cases** par click karein\n2. Apne case ko select karke workspace open karein\n3. Agli hearing date, case stage aur advocate updates real-time me dekhein! 📋',
+      en: 'You can monitor your case timeline, upload evidence documents, and review the next hearing date directly inside **My Cases**.',
+      hi: 'आप अपने केस की प्रगति, अगली सुनवाई की तारीख, और आवश्यक अदालती दस्तावेज़ **"मेरे केस" (My Cases)** सेक्शन में आसानी से देख सकते हैं।',
+      hinglish: 'Apne case ki latest hearing date aur progress dekhne ke liye **My Cases** section open karein.',
     },
     navKey: 'cases',
   },
   {
     patterns: [
-      /how\s+(do|can|to)\s+(i\s+)?pay/i,
       /escrow/i,
-      /फीस\s*(कैसे|कितनी|एस्क्रो)/i,
-      /fees\s*(kaise|kitni|escrow|refund)/i,
+      /payment\s*safe/i,
+      /refund\s*policy/i,
+      /एस्क्रो/i,
+      /पैसा\s*सुरक्षित/i,
+      /paisa\s*safe/i,
     ],
     answer: {
-      en: 'LegalConnect uses a **Secure Escrow Payment System**:\n\n1. When booking, your payment is held safely in escrow\n2. Funds are released to the advocate ONLY after the consultation is completed\n3. If an appointment is cancelled beforehand, you receive a full refund!\n\n100% transparent and safe. 💳',
-      hi: 'LegalConnect **सुरक्षित एस्क्रो भुगतान (Escrow System)** का उपयोग करता है:\n\n1. जब आप परामर्श बुक करते हैं, तो आपकी फीस सीधे वकील को न जाकर एस्क्रो में सुरक्षित रहती है।\n2. परामर्श (Consultation) सफलतापूर्वक पूरा होने के बाद ही राशि वकील को रिलीज होती है।\n3. यदि सेशन रद्द होता है, तो पूरा रिफंड आपके खाते में वापस आ जाता है।\n\nपूरी तरह सुरक्षित व पारदर्शी! 💳',
-      hinglish: 'LegalConnect ka **Secure Escrow System**:\n\n1. Booking ke time aapke paise Escrow account me safe rehte hain.\n2. Consultation successful hone ke baad hi advocate ko payment release hoti hai.\n3. Agar session cancel ho jaye to pura refund milta hai.\n\nAapke paise 100% safe hain! 💳',
+      en: 'LegalConnect uses a **Bank-Grade Escrow System**. Your payment is held safely until the consultation is verified as completed. If an advocate misses the call, you receive a 100% instant refund.',
+      hi: 'LegalConnect पर आपका भुगतान **सुरक्षित एस्क्रो (Escrow)** में रहता है। जब तक वीडियो परामर्श सफलतापूर्वक पूरा नहीं होता, वकील को राशि नहीं दी जाती। यदि वकील उपस्थित नहीं होते, तो पूरी फीस स्वतः रिफंड हो जाती है।',
+      hinglish: 'Aapka payment **Escrow Account** me 100% safe rehta hai. Consultation complete hone ke baad hi release hota hai. Advocate absent ho to instant full refund milta hai.',
     },
     navKey: 'consultations',
   },
@@ -835,6 +1068,7 @@ const NAV_ROUTES = {
     clients:       { path: '/advocate/clients',       labelEn: 'Clients',          labelHi: 'क्लाइंट्स',         icon: '👥', desc: 'View your client directory' },
     cases:         { path: '/advocate/cases',         labelEn: 'Cases',            labelHi: 'केस मैनेजमेंट',     icon: '📋', desc: 'Track and update case progress' },
     notices:       { path: '/advocate/legal-notice',  labelEn: 'Notice Drafts',    labelHi: 'नोटिस ड्राफ्ट्स',   icon: '📝', desc: 'Generate court-ready statutory notices' },
+    resources:     { path: '/legal-resources',        labelEn: 'Landmark Cases & Study', labelHi: 'ऐतिहासिक केस व धाराएं', icon: '🏛️', desc: 'Supreme Court landmark judgments & statutory guides' },
     messages:      { path: '/advocate/messages',      labelEn: 'Messages',         labelHi: 'संदेश',             icon: '💬', desc: 'Communicate with clients' },
     availability:  { path: '/advocate/availability',  labelEn: 'Availability',     labelHi: 'समय सारिणी',       icon: '🕐', desc: 'Set your consultation schedule' },
     earnings:      { path: '/advocate/earnings',      labelEn: 'Earnings',         labelHi: 'कमाई व भुगतान',     icon: '💰', desc: 'Track payments and payouts' },
@@ -866,10 +1100,116 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
   let type = 'text';
   let intent = INTENTS.UNKNOWN;
 
-  // 1. Check Landmark Supreme Court Cases match
   const lowerText = text.toLowerCase();
-  
-  // A. Check for specific Landmark Case
+
+  // 1. Check Applied Sections & Situational Guide (Theft, Slap, Debt, Photo, Defamation, Accidents, etc.)
+  for (const s of APPLIED_SECTIONS_DB) {
+    if (s.patterns.some((p) => p.test(text))) {
+      intent = INTENTS.APPLIED_SECTIONS;
+      type = 'applied_sections';
+      const info = s[lang] || s.en;
+
+      if (lang === 'hi') {
+        response = `📚 **विधिक विश्लेषण व लागू धाराएं (Statutory Jurisprudence):**\n` +
+          `*विषय: ${info.title}*\n\n` +
+          `${info.summary}\n\n` +
+          `📌 **विस्तृत विधिक धाराएं (BNS 2023 व विशेष कानून):**\n` +
+          info.sections.map((sec) => `• ${sec}`).join('\n') + `\n\n` +
+          `⚖️ **न्यायशास्त्रीय सिद्धांत व विश्लेषण (Jurisprudence):**\n${info.intellectualAnalysis}\n\n` +
+          `✅ **व्यावहारिक कानूनी कदम (Action Plan):**\n${info.action}`;
+        suggestions = ['वकील से सलाह लें', 'और धाराएं देखें', 'ऐतिहासिक सुप्रीम कोर्ट केस'];
+      } else if (lang === 'hinglish') {
+        response = `📚 **Applicable Legal Sections & Jurisprudence Guide:**\n` +
+          `*Topic: ${info.title}*\n\n` +
+          `${info.summary}\n\n` +
+          `📌 **Statutory Sections (BNS 2023 & IPC Comparison):**\n` +
+          info.sections.map((sec) => `• ${sec}`).join('\n') + `\n\n` +
+          `⚖️ **Legal Doctrine & Intellectual Jurisprudence:**\n${info.intellectualAnalysis}\n\n` +
+          `✅ **Practical Action Plan:**\n${info.action}`;
+        suggestions = ['Consult advocate for this', 'View Landmark Cases', 'Explore all sections'];
+      } else {
+        response = `📚 **Applicable Statutory Sections & Jurisprudential Analysis:**\n` +
+          `*Topic: ${info.title}*\n\n` +
+          `${info.summary}\n\n` +
+          `📌 **Statutory Enactments (New BNS 2023 vs IPC):**\n` +
+          info.sections.map((sec) => `• ${sec}`).join('\n') + `\n\n` +
+          `⚖️ **Jurisprudential Doctrine & Intellectual Analysis:**\n${info.intellectualAnalysis}\n\n` +
+          `✅ **Actionable Citizen Verdict:**\n${info.action}`;
+        suggestions = ['Consult a specialist lawyer', 'Explore Landmark Cases', 'Open Legal Study Hub'];
+      }
+
+      navLinks = [
+        {
+          path: '/legal-resources',
+          label: lang === 'hi' ? '📚 पूरा विधिक अध्ययन हब खोलें' : '📚 Open Legal Resources Hub',
+          icon: '📚',
+          desc: 'Study side-by-side BNS vs IPC section tables, punishments & doctrines',
+        },
+        {
+          path: routes.advocates?.path,
+          label: lang === 'hi' ? '🔍 संबंधित विशेषज्ञ वकील खोजें' : '🔍 Find Specialist Advocates',
+          icon: '🔍',
+          desc: 'Consult Bar Council verified legal professionals',
+        },
+      ];
+
+      return { response, suggestions, navLinks, quickActions: [], type, intent, lang, timestamp: new Date().toISOString() };
+    }
+  }
+
+  // 2. Check General Section Query ("what section applied on me", "which section", "konsi dhara lagegi")
+  if (/\b(what\s*section|which\s*section|konsi\s*dhara|kon\s*si\s*dhara|dhara\s*lagegi|sections?\s*applied|what\s*if\s*i)\b/i.test(text)) {
+    intent = INTENTS.APPLIED_SECTIONS;
+    type = 'applied_sections';
+
+    if (lang === 'hi') {
+      response = `⚖️ **भारतीय कानून में धाराओं के निर्धारण का बौद्धिक ढांचा (Statutory Analytical Rubric):**\n\n` +
+        `किसी भी कृत्य पर कौन सी धारा लगेगी, यह भारतीय न्यायशास्त्र में निम्नलिखित 4 मुख्य स्तंभों पर निर्भर करता है:\n\n` +
+        `1. **Actus Reus (भौतिक कृत्य)**: क्या कोई कानूनन निषिद्ध कार्य किया गया या कानूनी कर्तव्य का लोप हुआ?\n` +
+        `2. **Mens Rea (आपराधिक मंशा)**: क्या वह कार्य बेईमानी, कपट, दुर्भावना या घोर लापरवाही से किया गया? (अपवाद: धारा 21 BNS तुच्छता सिद्धांत व आत्मरक्षा)।\n` +
+        `3. **अपराध का वर्गीकरण (Classification)**:\n` +
+        `   • **संज्ञेय (Cognizable)**: गंभीर अपराध, पुलिस बिना वारंट तुरंत FIR दर्ज करती है (धारा 173 BNSS)।\n` +
+        `   • **असंज्ञेय (Non-Cognizable)**: साधारण मामले (NC Report), केवल मजिस्ट्रेट के आदेश से जांच।\n` +
+        `4. **BNS 2023 बनाम IPC 1860**: 1 जुलाई 2024 से भारतीय न्याय संहिता (BNS) प्रभावी है।\n\n` +
+        `💡 *आप किसी भी विशिष्ट घटना (जैसे: चोरी, मारपीट, चेक बाउंस, या साइबर ठगी) के बारे में सीधे पूछ सकते हैं, या हमारे लीगल रिसोर्सेज हब पर पूरा तुलनात्मक चार्ट देखें!*`;
+      suggestions = ['दोस्त का पेन चुराना', 'थप्पड़ मारना', 'चेक बाउंस धारा', 'ऐतिहासिक केस हब'];
+    } else if (lang === 'hinglish') {
+      response = `⚖️ **Which Section Applies? Intellectual Legal Framework:**\n\n` +
+        `Indian Law me kisi bhi action par kaunsi dhara lagegi, wo 4 core legal pillars par decide hota hai:\n\n` +
+        `1. **Actus Reus (The Physical Act)**: Kya koi physically prohibited act kiya gaya?\n` +
+        `2. **Mens Rea (The Mental State)**: Kya dishonest intention ya criminal knowledge thi? (Section 21 BNS Trifles Rule aur Self-Defence exceptions apply hote hain).\n` +
+        `3. **Cognizable vs Non-Cognizable**:\n` +
+        `   • **Cognizable**: Serious crime jisme police direct FIR likhti hai.\n` +
+        `   • **Non-Cognizable**: Simple dispute jisme Magistrate order required hota hai.\n` +
+        `4. **New BNS 2023 Framework**: 1 July 2024 se puraane IPC ke sections naye BNS sections me convert ho chuke hain.\n\n` +
+        `💡 *Aap kisi bhi specific incident (e.g. stealing pen, slapping, loan recovery, voyeurism) ke bare me detail me pooch sakte hain!*`;
+      suggestions = ['Stealing a friend pen', 'Slapping someone', 'Cheque bounce Sec 138', 'Landmark Cases'];
+    } else {
+      response = `⚖️ **Statutory Section Determination Framework (Actus Reus & Mens Rea):**\n\n` +
+        `In Indian criminal jurisprudence, determining the applicable statutory section involves an intellectual evaluation of four essential legal pillars:\n\n` +
+        `1. **Actus Reus (Prohibited Physical Conduct)**: Has an overt physical act or statutory omission occurred?\n` +
+        `2. **Mens Rea (Culpable Mental State)**: Did the actor harbor malicious intention (*animus furandi*), dishonest knowledge, or gross negligence? (Note: Section 21 BNS eliminates liability for trivialities).\n` +
+        `3. **Procedural Classification**:\n` +
+        `   • **Cognizable vs Non-Cognizable**: Mandates police FIR under BNSS Section 173 vs Magistrate-directed NC report.\n` +
+        `   • **Bailable vs Non-Bailable**: Right of bail under BNSS Sec 478 vs judicial discretion under Sec 480.\n` +
+        `4. **Statutory Transition (BNS 2023 vs IPC 1860)**: India transitioned to the Bharatiya Nyaya Sanhita on July 1, 2024.\n\n` +
+        `💡 *Type any specific scenario (e.g., "what section if I steal a friend\'s pen", "what section if I slap someone", "debt not paid") for an exhaustive jurisprudential breakdown!*`;
+      suggestions = ['Stealing a friend pen', 'Slapping someone', 'Online fraud section', 'Landmark Cases'];
+    }
+
+    navLinks = [
+      {
+        path: '/legal-resources',
+        label: lang === 'hi' ? '📚 पूरा विधिक अध्ययन हब खोलें' : '📚 Open Legal Resources Hub',
+        icon: '📚',
+        desc: 'Explore comprehensive section comparison charts and study guides',
+      },
+    ];
+
+    return { response, suggestions, navLinks, quickActions: [], type, intent, lang, timestamp: new Date().toISOString() };
+  }
+
+  // 3. Check Landmark Supreme Court Cases match
   for (const c of LANDMARK_CASES_DB) {
     if (c.patterns.some((p) => p.test(text))) {
       intent = INTENTS.LANDMARK_CASES;
@@ -879,7 +1219,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
       if (lang === 'hi') {
         response = `🏛️ **ऐतिहासिक सुप्रीम कोर्ट वाद — ${c.title}**\n*विषय: ${c.topic}*\n\n` +
           `📌 **मुख्य निष्कर्ष:** ${info.headline}\n\n` +
-          `⚖️ **फैसला व कानूनी सिद्धांत:**\n${info.ruling}\n\n` +
+          `⚖️ **फैसला व कानूनी सिद्धांत (Ratio Decidendi):**\n${info.ruling}\n\n` +
           `💡 **आप इसका उपयोग कैसे कर सकते हैं:**\n${info.howToCite}\n\n` +
           `*विस्तृत विधिक अध्ययन के लिए हमारे Resources हब पर जाएं!*`;
         suggestions = ['और ऐतिहासिक केस देखें', 'अर्नेश कुमार जजमेंट', 'वकील से परामर्श करें'];
@@ -912,7 +1252,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
     }
   }
 
-  // B. General Landmark Cases query ("famous cases", "landmark cases", "aitihasik faisle")
+  // 4. General Landmark Cases query ("famous cases", "landmark cases", "aitihasik faisle")
   if (/\b(famous\s*cases?|landmark\s*cases?|supreme\s*court\s*(cases?|judgments?|verdicts?)|aitihasik\s*(case|faisle)|top\s*cases?)\b/i.test(text)) {
     intent = INTENTS.LANDMARK_CASES;
     type = 'landmark_case';
@@ -958,50 +1298,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
     return { response, suggestions, navLinks, quickActions: [], type, intent, lang, timestamp: new Date().toISOString() };
   }
 
-  // 2. Check Applied Sections by Incident
-  for (const s of APPLIED_SECTIONS_DB) {
-    if (s.patterns.some((p) => p.test(text))) {
-      intent = INTENTS.APPLIED_SECTIONS;
-      type = 'applied_sections';
-      const info = s[lang] || s.en;
-
-      if (lang === 'hi') {
-        response = `📚 **लागू होने वाली विधिक धाराएं (Statutory Sections Study):**\n*घटना: ${info.title}*\n\n` +
-          `📌 **लागू धाराएं (BNS 2023 व विशेष कानून):**\n` +
-          info.sections.map((sec) => `• ${sec}`).join('\n') + `\n\n` +
-          `🏛️ **संबंधित सुप्रीम कोर्ट निर्णय:**\n${info.precedent}\n\n` +
-          `✅ **तत्काल कानूनी कदम (Action Plan):**\n${info.action}`;
-        suggestions = ['संबंधित वकील से परामर्श करें', 'विधिक नोटिस जनरेटर', 'और धाराएं देखें'];
-      } else if (lang === 'hinglish') {
-        response = `📚 **Applicable Legal Sections & Dhara Guide:**\n*Scenario: ${info.title}*\n\n` +
-          `📌 **Applicable Sections (BNS 2023 & Special Acts):**\n` +
-          info.sections.map((sec) => `• ${sec}`).join('\n') + `\n\n` +
-          `🏛️ **Connected Landmark Precedent:**\n${info.precedent}\n\n` +
-          `✅ **Immediate Action Steps:**\n${info.action}`;
-        suggestions = ['Find an advocate for this', 'Generate legal notice', 'View more sections'];
-      } else {
-        response = `📚 **Applicable Statutory Sections Study Guide:**\n*Scenario: ${info.title}*\n\n` +
-          `📌 **Statutory Sections (New BNS 2023 & Special Acts):**\n` +
-          info.sections.map((sec) => `• ${sec}`).join('\n') + `\n\n` +
-          `🏛️ **Connected Supreme Court Precedent:**\n${info.precedent}\n\n` +
-          `✅ **Immediate Citizen Action Plan:**\n${info.action}`;
-        suggestions = ['Consult a specialist lawyer', 'Generate statutory notice', 'Legal Study Hub'];
-      }
-
-      navLinks = [
-        {
-          path: '/legal-resources',
-          label: lang === 'hi' ? '📚 पूरा विधिक अध्ययन हब' : '📚 Full Legal Study Hub',
-          icon: '📚',
-          desc: 'View comprehensive section tables, bailable status & punishments',
-        },
-      ];
-
-      return { response, suggestions, navLinks, quickActions: [], type, intent, lang, timestamp: new Date().toISOString() };
-    }
-  }
-
-  // 3. Check Nyaya Kosh (Legal Glossary) match
+  // 5. Check Nyaya Kosh (Legal Glossary) match
   for (const [key, termObj] of Object.entries(NYAYA_KOSH)) {
     if (lowerText.includes(key) && (GLOSSARY_PATTERNS.some((p) => p.test(text)) || lowerText.length < 35)) {
       intent = INTENTS.GLOSSARY;
@@ -1038,32 +1335,32 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
     }
   }
 
-  // 2. Greetings
+  // 6. Greetings
   if (GREETING_PATTERNS.some((p) => p.test(text))) {
     intent = INTENTS.GREETING;
     if (lang === 'hi') {
-      response = `नमस्ते ${name}! 🙏 मैं **LexBot** हूँ, आपका LegalConnect कानूनी सहायक।\n\nमैं आपको कानूनी सलाह समझने, भारत के कानूनों (BNS, NI Act, Rent Act) के अनुसार मार्गदर्शन देने, और सत्यापित वकील खोजने में मदद कर सकता हूँ।\n\nआज मैं आपकी क्या सहायता करूँ?`;
-      suggestions = ['चेक बाउंस सलाह', 'मकान मालिक विवाद', 'वकील कैसे खोजें?', 'कानूनी शब्दकोश'];
+      response = `नमस्ते ${name}! 🙏 मैं **LexBot** हूँ, आपका LegalConnect विधिक सहायक।\n\nमैं आपको भारतीय कानूनों (BNS 2023, NI Act, IT Act), ऐतिहासिक सुप्रीम कोर्ट फैसलों और आपके अधिकारों को समझाने में मदद कर सकता हूँ।\n\nआज मैं आपकी क्या सहायता करूँ?`;
+      suggestions = ['🏛️ ऐतिहासिक केस', '📚 कौन सी धारा लगेगी?', 'चेक बाउंस सलाह', 'वकील खोजें'];
       quickActions = [
+        { label: '🏛️ ऐतिहासिक केस', path: '/legal-resources' },
         { label: '🔍 वकील खोजें', path: routes.advocates?.path },
         { label: '📋 मेरे केस', path: routes.cases?.path },
-        { label: '📅 परामर्श (Slots)', path: routes.consultations?.path },
       ];
     } else if (lang === 'hinglish') {
-      response = `Namaste ${name}! 🙏 Main hoon **LexBot**, aapka LegalConnect legal assistant.\n\nAap yahan Indian legal procedures (Cheque bounce, property, cyber fraud, divorce) samajh sakte hain aur verified advocates se direct consult kar sakte hain.\n\nBataiye, aaj kis matter me help chahiye?`;
-      suggestions = ['Cheque bounce advice', 'Property dispute', 'Vakil kaise book kare?', 'Nyaya Kosh'];
+      response = `Namaste ${name}! 🙏 Main hoon **LexBot**, aapka LegalConnect legal assistant.\n\nAap yahan Indian legal procedures, applicable statutory sections (BNS vs IPC) aur Supreme Court landmark judgments jaan sakte hain.\n\nBataiye, aaj kis matter me help chahiye?`;
+      suggestions = ['🏛️ Landmark Cases', '📚 Which Section Applies?', 'Cheque bounce advice', 'Property dispute'];
       quickActions = [
+        { label: '🏛️ Landmark Cases', path: '/legal-resources' },
         { label: '🔍 Find Advocates', path: routes.advocates?.path },
         { label: '📋 My Cases', path: routes.cases?.path },
-        { label: '📅 Consultations', path: routes.consultations?.path },
       ];
     } else {
-      response = `Hello ${name}! 👋 I'm **LexBot**, your multilingual LegalConnect assistant.\n\nI can help you navigate Indian legal procedures, explain statutory rights under Indian Law, and connect you with verified advocates. How can I assist you today?`;
-      suggestions = ['Book a consultation', 'Track my case', 'Cheque bounce advice', 'Legal Glossary'];
+      response = `Hello ${name}! 👋 I'm **LexBot**, your multilingual LegalConnect assistant.\n\nI can help you navigate Indian legal statutes (BNS 2023, IPC), analyze applied sections for real-world scenarios, explain landmark Supreme Court judgments, and connect you with verified advocates. How can I assist you today?`;
+      suggestions = ['🏛️ Landmark Cases', '📚 Which Section Applies?', 'Cheque bounce advice', 'Legal Glossary'];
       quickActions = [
+        { label: '🏛️ Landmark Cases', path: '/legal-resources' },
         { label: '🔍 Find Advocates', path: routes.advocates?.path },
         { label: '📋 My Cases', path: routes.cases?.path },
-        { label: '📅 Consultations', path: routes.consultations?.path },
       ];
     }
 
@@ -1079,7 +1376,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
     };
   }
 
-  // 3. Farewells
+  // 7. Farewells
   if (FAREWELL_PATTERNS.some((p) => p.test(text))) {
     intent = INTENTS.FAREWELL;
     if (lang === 'hi') {
@@ -1092,7 +1389,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
     return { response, suggestions: ['Namaste', 'Help'], navLinks: [], quickActions: [], type: 'text', intent, lang, timestamp: new Date().toISOString() };
   }
 
-  // 4. Check FAQs (Booking, Cases, Payment, Escrow)
+  // 8. Check FAQs (Booking, Cases, Payment, Escrow)
   for (const faq of VERNACULAR_FAQS) {
     if (faq.patterns.some((p) => p.test(text))) {
       intent = INTENTS.HELP;
@@ -1112,7 +1409,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
     }
   }
 
-  // 5. Practice Area & Citizen Remedies Matching
+  // 9. Practice Area & Citizen Remedies Matching
   for (const [area, keywords] of Object.entries(PRACTICE_AREAS)) {
     if (keywords.some((kw) => lowerText.includes(kw))) {
       intent = INTENTS.LEGAL_QUERY;
@@ -1150,7 +1447,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
     }
   }
 
-  // 6. Navigation keywords
+  // 10. Navigation keywords
   if (BOOKING_PATTERNS.some((p) => p.test(text))) {
     intent = INTENTS.BOOKING;
     const r = routes.advocates || routes.consultations;
@@ -1179,36 +1476,45 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
     return { response, suggestions: ['My Cases', 'Help'], navLinks, quickActions: [], type: 'nav', intent, lang, timestamp: new Date().toISOString() };
   }
 
-  // 7. Default Fallback
+  // 11. Default Intellectual Fallback
   if (lang === 'hi') {
-    response = `नमस्ते ${name}, मैं आपके सवाल को पूरी तरह समझ नहीं पाया। 🤔\n\nमैं इन विषयों में आपकी सहायता कर सकता हूँ:\n` +
-      '• **कानूनी सलाह**: चेक बाउंस (138 NI Act), किरायेदार-मकान मालिक विवाद, तलाक, साइबर ठगी\n' +
-      '• **कानूनी शब्दकोश (Nyaya Kosh)**: स्टे ऑर्डर, ज़मानत, कैविएट, एफआईआर का मतलब\n' +
-      '• **प्लेटफ़ॉर्म सहायता**: वकील कैसे बुक करें, केस कैसे ट्रैक करें, फीस व एस्क्रो\n\n' +
-      'नीचे दिए गए विकल्पों पर क्लिक करें या अपना सवाल स्पष्ट रूप से लिखें!';
-    suggestions = ['चेक बाउंस सलाह', 'मकान मालिक विवाद', 'स्टे आर्डर क्या है?', 'वकील खोजें'];
+    response = `नमस्ते ${name}, मैं आपके कानूनी प्रश्न का विश्लेषण करने के लिए तत्पर हूँ। ⚖️\n\n` +
+      `आप मुझसे भारतीय कानूनों (BNS 2023 / IPC), परिस्थितियों पर लागू विधिक धाराओं और सुप्रीम कोर्ट के निर्णयों के बारे में पूछ सकते हैं:\n` +
+      `• **लागू धाराएं (Applied Sections)**: "दोस्त का पेन चुराने पर कौन सी धारा लगेगी?", "थप्पड़ मारने पर क्या सज़ा है?", "उधार न चुकाने पर क्या करें?"\n` +
+      `• **ऐतिहासिक केस (Landmark Cases)**: अर्नेश कुमार (गिरफ्तारी नियम), डी.के. बसु (हिरासत अधिकार), पुट्टास्वामी (प्राइवेसी)\n` +
+      `• **सामान्य कानूनी सहायता**: चेक बाउंस (138 NI Act), किरायेदार-मकान मालिक विवाद, तलाक, साइबर ठगी\n\n` +
+      `नीचे दिए गए सुझावों में से किसी एक पर क्लिक करें या अपना कानूनी प्रश्न विस्तार से लिखें!`;
+    suggestions = ['दोस्त का पेन चुराना', '🏛️ ऐतिहासिक केस', 'थप्पड़ मारने पर धारा', 'वकील खोजें'];
   } else if (lang === 'hinglish') {
-    response = `Hello ${name}, main aapka query properly nahi samajh paya. 🤔\n\nAap mujhse ye sab pooch sakte hain:\n` +
-      '• **Legal advice**: Cheque bounce, tenant dispute, domestic violence, online fraud\n' +
-      '• **Nyaya Kosh**: Meaning of Injunction/Stay order, Bail, Caveat, FIR\n' +
-      '• **Platform help**: How to book advocate, case status, fees\n\n' +
-      'Niche diye gaye quick links use karein ya dobara poochhein!';
-    suggestions = ['Cheque bounce advice', 'Tenant problem', 'Meaning of Stay Order', 'Find advocate'];
+    response = `Hello ${name}! LexBot AI legal intelligence ready hai aapki help ke liye. ⚖️\n\nAap mujhse kisi bhi legal scenario par applicable sections aur doctrines pooch sakte hain:\n` +
+      `• **Applied Sections**: "What section if I steal my friend's pen?", "What if I slap someone?", "Borrowed money not returning"\n` +
+      `• **Landmark Supreme Court Cases**: Arnesh Kumar (Notice 41A), D.K. Basu (Arrest guidelines), Puttaswamy (Right to Privacy)\n` +
+      `• **Everyday Law**: Cheque bounce Sec 138, Landlord dispute, Online cyber fraud\n\n` +
+      `Niche diye gaye quick chips click karein ya apna sawal poochhein!`;
+    suggestions = ['Stealing a friend pen', '🏛️ Landmark Cases', 'Slapping someone', 'Cheque bounce advice'];
   } else {
-    response = `I'm not quite sure I understood that, ${name}. 🤔\n\nHere is what I can assist with:\n` +
-      '• **Legal topics**: Cheque bounce (Sec 138), Landlord-tenant disputes, Criminal & Bail, Consumer disputes\n' +
-      '• **Nyaya Kosh (Glossary)**: Meaning of Injunction, Bail, Caveat, Cognizable offenses\n' +
-      '• **Platform guidance**: Book an advocate, check case status, secure escrow payment\n\n' +
-      'Try clicking one of the suggestions below!';
-    suggestions = ['Cheque bounce advice', 'Tenant dispute', 'Legal Glossary', 'Find an advocate'];
+    response = `Hello ${name}! I am LexBot, your AI legal tutor and statutory jurisprudence engine. ⚖️\n\nYou can query me regarding any real-world incident to learn the precise statutory sections under the Bharatiya Nyaya Sanhita (BNS 2023) & IPC:\n` +
+      `• **Applied Statutory Scenarios**: "What section applied if I steal my friend\'s pen?", "What if I slap someone?", "Friend borrowed money and won\'t return"\n` +
+      `• **Landmark Supreme Court Precedents**: Arnesh Kumar (Arrest guidelines), D.K. Basu (Custodial rights), Puttaswamy (Right to Privacy)\n` +
+      `• **Civil & Criminal Remedies**: Section 138 Cheque Bounce, Landlord lockouts, Cyber fraud, Consumer disputes\n\n` +
+      `Try asking any incident or click one of the intellectual suggestions below!`;
+    suggestions = ['Stealing a friend pen', '🏛️ Landmark Cases', 'Slapping someone', 'Find an advocate'];
   }
 
-  navLinks = [routes.advocates, routes.cases].filter(Boolean).map((r) => ({
-    path: r.path,
-    label: lang === 'hi' ? r.labelHi : r.labelEn,
-    icon: r.icon,
-    desc: r.desc,
-  }));
+  navLinks = [
+    {
+      path: '/legal-resources',
+      label: lang === 'hi' ? '🏛️ ऐतिहासिक केस व धाराएं हब' : '🏛️ Landmark Cases & Sections Hub',
+      icon: '🏛️',
+      desc: 'Explore comprehensive Supreme Court case briefs and BNS vs IPC tables',
+    },
+    {
+      path: routes.advocates?.path,
+      label: lang === 'hi' ? '🔍 विशेषज्ञ वकील खोजें' : '🔍 Find Specialist Advocates',
+      icon: '🔍',
+      desc: 'Consult verified Bar Council advocates',
+    },
+  ].filter(Boolean);
 
   return {
     response,
