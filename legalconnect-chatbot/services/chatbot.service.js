@@ -1271,8 +1271,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
         `3. **अपराध का वर्गीकरण (Classification)**:\n` +
         `   • **संज्ञेय (Cognizable)**: गंभीर अपराध, पुलिस बिना वारंट तुरंत FIR दर्ज करती है (धारा 173 BNSS)।\n` +
         `   • **असंज्ञेय (Non-Cognizable)**: साधारण मामले (NC Report), केवल मजिस्ट्रेट के आदेश से जांच।\n` +
-        `4. **BNS 2023 बनाम IPC 1860**: 1 जुलाई 2024 से भारतीय न्याय संहिता (BNS) प्रभावी है।\n\n` +
-        `💡 *आप किसी भी विशिष्ट घटना (जैसे: चोरी, मारपीट, चेक बाउंस, या साइबर ठगी) के बारे में सीधे पूछ सकते हैं, या हमारे लीगल रिसोर्सेज हब पर पूरा तुलनात्मक चार्ट देखें!*`;
+        `4. **BNS 2023 बनाम IPC 1860**: 1 जुलाई 2024 से भारतीय न्याय संहिता (BNS) प्रभावी है।`;
       suggestions = ['दोस्त का पेन चुराना', 'थप्पड़ मारना', 'चेक बाउंस धारा', 'ऐतिहासिक केस हब'];
     } else if (lang === 'hinglish') {
       response = `⚖️ **Which Section Applies? Intellectual Legal Framework:**\n\n` +
@@ -1282,8 +1281,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
         `3. **Cognizable vs Non-Cognizable**:\n` +
         `   • **Cognizable**: Serious crime jisme police direct FIR likhti hai.\n` +
         `   • **Non-Cognizable**: Simple dispute jisme Magistrate order required hota hai.\n` +
-        `4. **New BNS 2023 Framework**: 1 July 2024 se puraane IPC ke sections naye BNS sections me convert ho chuke hain.\n\n` +
-        `💡 *Aap kisi bhi specific incident (e.g. stealing pen, slapping, loan recovery, voyeurism) ke bare me detail me pooch sakte hain!*`;
+        `4. **New BNS 2023 Framework**: 1 July 2024 se puraane IPC ke sections naye BNS sections me convert ho chuke hain.`;
       suggestions = ['Stealing a friend pen', 'Slapping someone', 'Cheque bounce Sec 138', 'Landmark Cases'];
     } else {
       response = `⚖️ **Statutory Section Determination Framework (Actus Reus & Mens Rea):**\n\n` +
@@ -1293,8 +1291,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
         `3. **Procedural Classification**:\n` +
         `   • **Cognizable vs Non-Cognizable**: Mandates police FIR under BNSS Section 173 vs Magistrate-directed NC report.\n` +
         `   • **Bailable vs Non-Bailable**: Right of bail under BNSS Sec 478 vs judicial discretion under Sec 480.\n` +
-        `4. **Statutory Transition (BNS 2023 vs IPC 1860)**: India transitioned to the Bharatiya Nyaya Sanhita on July 1, 2024.\n\n` +
-        `💡 *Type any specific scenario (e.g., "what section if I steal a friend\'s pen", "what section if I slap someone", "debt not paid") for an exhaustive jurisprudential breakdown!*`;
+        `4. **Statutory Transition (BNS 2023 vs IPC 1860)**: India transitioned to the Bharatiya Nyaya Sanhita on July 1, 2024.`;
       suggestions = ['Stealing a friend pen', 'Slapping someone', 'Online fraud section', 'Landmark Cases'];
     }
 
@@ -1364,8 +1361,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
         `2. **डी.के. बसु बनाम प. बंगाल (1997)**: पुलिस हिरासत में प्रताड़ना रोकने हेतु 11 अनिवार्य नियम।\n` +
         `3. **के.एस. पुट्टास्वामी बनाम भारत संघ (2017)**: निजता का अधिकार (Right to Privacy) एक मौलिक अधिकार है।\n` +
         `4. **विशाखा बनाम राजस्थान राज्य (1997)**: कार्यस्थल पर महिलाओं के यौन उत्पीड़न की रोकथाम (POSH Guidelines)।\n` +
-        `5. **केशवानंद भारती बनाम केरल राज्य (1973)**: संविधान का मूल ढांचा सिद्धांत (Basic Structure Doctrine)।\n\n` +
-        `*किसी भी केस का नाम लिखकर पूछें, या नीचे दिए गए लिंक से पूरा स्टडी हब खोलें!*`;
+        `5. **केशवानंद भारती बनाम केरल राज्य (1973)**: संविधान का मूल ढांचा सिद्धांत (Basic Structure Doctrine)।`;
       suggestions = ['अर्नेश कुमार केस समझाओ', 'डी.के. बसु के 11 नियम', 'पुट्टास्वामी प्राइवेसी केस'];
     } else if (lang === 'hinglish') {
       response = `🏛️ **India ke Top Landmark Supreme Court Cases:**\n\n` +
@@ -1373,8 +1369,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
         `2. **D.K. Basu v. State of West Bengal (1997)**: 11 golden rules against custodial torture and secret police detention.\n` +
         `3. **K.S. Puttaswamy v. UOI (2017)**: Right to Privacy is a Fundamental Right under Article 21.\n` +
         `4. **Vishaka v. State of Rajasthan (1997)**: Workplace sexual harassment prevention (POSH).\n` +
-        `5. **Kesavananda Bharati (1973)**: Parliament cannot destroy Basic Structure of Constitution.\n\n` +
-        `*Kisi bhi case ka naam type karein to explain or click the hub link!*`;
+        `5. **Kesavananda Bharati (1973)**: Parliament cannot destroy Basic Structure of Constitution.`;
       suggestions = ['Explain Arnesh Kumar case', 'D.K. Basu guidelines', 'Puttaswamy privacy ruling'];
     } else {
       response = `🏛️ **Top Landmark Supreme Court Judgments of India:**\n\n` +
@@ -1382,8 +1377,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
         `2. **D.K. Basu v. State of West Bengal (1997)**: 11 golden rules protecting arrestees from custodial torture and secret lockup.\n` +
         `3. **Justice K.S. Puttaswamy v. UOI (2017)**: Right to Privacy affirmed as a Fundamental Right under Article 21.\n` +
         `4. **Vishaka v. State of Rajasthan (1997)**: Established mandatory Internal Complaints Committees (ICC) under POSH.\n` +
-        `5. **Kesavananda Bharati (1973)**: Formulated the inviolable Basic Structure Doctrine of the Constitution.\n\n` +
-        `*Type any case name to get a detailed brief, or click the hub link below!*`;
+        `5. **Kesavananda Bharati (1973)**: Formulated the inviolable Basic Structure Doctrine of the Constitution.`;
       suggestions = ['Explain Arnesh Kumar', 'D.K. Basu 11 arrest rules', 'Puttaswamy privacy case'];
     }
 
@@ -1633,28 +1627,15 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
     return { response, suggestions, navLinks, quickActions: [], type, intent, lang, timestamp: new Date().toISOString() };
   }
 
-  // 11. Default Intellectual Fallback
+  // 11. Default Fallback
   if (lang === 'hi') {
-    response = `नमस्ते ${name}, मैं आपके कानूनी प्रश्न का विश्लेषण करने के लिए तत्पर हूँ। ⚖️\n\n` +
-      `आप मुझसे भारतीय कानूनों (BNS 2023 / IPC), परिस्थितियों पर लागू विधिक धाराओं और सुप्रीम कोर्ट के निर्णयों के बारे में पूछ सकते हैं:\n` +
-      `• **लागू धाराएं (Applied Sections)**: "दोस्त का पेन चुराने पर कौन सी धारा लगेगी?", "थप्पड़ मारने पर क्या सज़ा है?", "उधार न चुकाने पर क्या करें?"\n` +
-      `• **ऐतिहासिक केस (Landmark Cases)**: अर्नेश कुमार (गिरफ्तारी नियम), डी.के. बसु (हिरासत अधिकार), पुट्टास्वामी (प्राइवेसी)\n` +
-      `• **सामान्य कानूनी सहायता**: चेक बाउंस (138 NI Act), किरायेदार-मकान मालिक विवाद, तलाक, साइबर ठगी\n\n` +
-      `नीचे दिए गए सुझावों में से किसी एक पर क्लिक करें या अपना कानूनी प्रश्न विस्तार से लिखें!`;
+    response = `नमस्ते ${name}! 🙏 मैं LexBot हूँ, आपका विधिक सहायक।\n\nआप मुझसे भारतीय कानूनों (BNS 2023 / IPC), परिस्थितियों पर लागू धाराओं और कानूनी प्रक्रियाओं के बारे में सीधे पूछ सकते हैं।`;
     suggestions = ['दोस्त का पेन चुराना', '🏛️ ऐतिहासिक केस', 'थप्पड़ मारने पर धारा', 'वकील खोजें'];
   } else if (lang === 'hinglish') {
-    response = `Hello ${name}! LexBot AI legal intelligence ready hai aapki help ke liye. ⚖️\n\nAap mujhse kisi bhi legal scenario par applicable sections aur doctrines pooch sakte hain:\n` +
-      `• **Applied Sections**: "What section if I steal my friend's pen?", "What if I slap someone?", "Borrowed money not returning"\n` +
-      `• **Landmark Supreme Court Cases**: Arnesh Kumar (Notice 41A), D.K. Basu (Arrest guidelines), Puttaswamy (Right to Privacy)\n` +
-      `• **Everyday Law**: Cheque bounce Sec 138, Landlord dispute, Online cyber fraud\n\n` +
-      `Niche diye gaye quick chips click karein ya apna sawal poochhein!`;
+    response = `Hello ${name}! Main hoon LexBot, aapka AI legal assistant.\n\nAap mujhse kisi bhi legal incident, applicable IPC/BNS sections aur court procedures ke bare me pooch sakte hain.`;
     suggestions = ['Stealing a friend pen', '🏛️ Landmark Cases', 'Slapping someone', 'Cheque bounce advice'];
   } else {
-    response = `Hello ${name}! I am LexBot, your AI legal tutor and statutory jurisprudence engine. ⚖️\n\nYou can query me regarding any real-world incident to learn the precise statutory sections under the Bharatiya Nyaya Sanhita (BNS 2023) & IPC:\n` +
-      `• **Applied Statutory Scenarios**: "What section applied if I steal my friend\'s pen?", "What if I slap someone?", "Friend borrowed money and won\'t return"\n` +
-      `• **Landmark Supreme Court Precedents**: Arnesh Kumar (Arrest guidelines), D.K. Basu (Custodial rights), Puttaswamy (Right to Privacy)\n` +
-      `• **Civil & Criminal Remedies**: Section 138 Cheque Bounce, Landlord lockouts, Cyber fraud, Consumer disputes\n\n` +
-      `Try asking any incident or click one of the intellectual suggestions below!`;
+    response = `Hello ${name}! I am LexBot, your AI legal assistant.\n\nYou can ask me regarding any legal scenario, applicable statutory sections (BNS 2023 / IPC), or court procedures.`;
     suggestions = ['Stealing a friend pen', '🏛️ Landmark Cases', 'Slapping someone', 'Find an advocate'];
   }
 

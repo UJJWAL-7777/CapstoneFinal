@@ -133,7 +133,43 @@
 .cb-num { color: #2F7367; font-weight: 600; }
 .cb-bullet { color: #C9A257; font-weight: 700; }
 .cb-bubble-user .cb-num, .cb-bubble-user .cb-bullet { color: rgba(255,255,255,0.8); }
-.cb-time { display: block; font-size: 10px; opacity: 0.45; margin-top: 4px; text-align: right; }
+.cb-bubble-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 4px;
+}
+.cb-time {
+  font-size: 10px;
+  opacity: 0.5;
+  margin: 0;
+}
+.cb-speak-icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: #2F7367;
+  opacity: 0.65;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.cb-speak-icon-btn:hover {
+  opacity: 1;
+  background: rgba(47, 115, 103, 0.12);
+}
+.cb-speak-icon-btn.cb-speaking {
+  color: #CF1322;
+  opacity: 1;
+  animation: cbPulseRed 1.2s infinite ease-in-out;
+}
+.cb-bubble-user .cb-speak-icon-btn {
+  color: white;
+}
 
 /* ─── Navigation Links ───────────────────────────────────────── */
 .cb-nav-links {

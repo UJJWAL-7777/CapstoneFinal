@@ -143,36 +143,7 @@ function TypingDots() {
   );
 }
 
-function NavLinks({ links, onNavigate }) {
-  if (!links?.length) return null;
-  return (
-    <div className="cb-nav-links">
-      {links.map((link, i) => (
-        <button key={i} className="cb-nav-btn" onClick={() => onNavigate(link.path)}>
-          <span className="cb-nav-icon">{link.icon}</span>
-          <div className="cb-nav-info">
-            <span className="cb-nav-label">{link.label}</span>
-            {link.desc && <span className="cb-nav-desc">{link.desc}</span>}
-          </div>
-          <ArrowRight size={14} className="cb-nav-arrow" />
-        </button>
-      ))}
-    </div>
-  );
-}
 
-function QuickActions({ actions, onNavigate }) {
-  if (!actions?.length) return null;
-  return (
-    <div className="cb-quick-actions">
-      {actions.map((a, i) => (
-        <button key={i} className="cb-quick-btn" onClick={() => onNavigate(a.path)}>
-          {a.label}
-        </button>
-      ))}
-    </div>
-  );
-}
 
 function Chips({ items, onSelect, disabled }) {
   if (!items?.length) return null;
@@ -185,7 +156,7 @@ function Chips({ items, onSelect, disabled }) {
   );
 }
 
-function Message({ msg, isUser, onNavigate, onToggleSpeak, isSpeaking, lang }) {
+function Message({ msg, isUser, onToggleSpeak, isSpeaking, lang }) {
   return (
     <div className={`cb-msg ${isUser ? 'cb-msg-user' : 'cb-msg-bot'}`}>
       <div className={`cb-avatar ${isUser ? 'cb-avatar-user' : 'cb-avatar-bot'}`}>
@@ -194,30 +165,23 @@ function Message({ msg, isUser, onNavigate, onToggleSpeak, isSpeaking, lang }) {
       <div className="cb-msg-content">
         <div className={`cb-bubble ${isUser ? 'cb-bubble-user' : 'cb-bubble-bot'}`}>
           <div dangerouslySetInnerHTML={{ __html: md(msg.text) }} />
-          <span className="cb-time">
-            {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          </span>
+          <div className="cb-bubble-footer">
+            <span className="cb-time">
+              {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </span>
+            {!isUser && (
+              <button
+                type="button"
+                className={`cb-speak-icon-btn ${isSpeaking ? 'cb-speaking' : ''}`}
+                onClick={() => onToggleSpeak(msg)}
+                title={isSpeaking ? (lang === 'hi' ? 'रोकें' : 'Stop') : (lang === 'hi' ? 'सुनिए' : 'Listen')}
+                aria-label="Listen aloud"
+              >
+                {isSpeaking ? <VolumeX size={12} /> : <Volume2 size={12} />}
+              </button>
+            )}
+          </div>
         </div>
-
-        {/* Audio Speech Synthesis Button */}
-        {!isUser && (
-          <button
-            type="button"
-            className={`cb-speak-btn ${isSpeaking ? 'cb-speaking' : ''}`}
-            onClick={() => onToggleSpeak(msg)}
-            title={isSpeaking ? 'Stop speaking' : 'Listen aloud'}
-          >
-            {isSpeaking ? <VolumeX size={13} /> : <Volume2 size={13} />}
-            <span>{isSpeaking ? (lang === 'hi' ? 'रोकें' : 'Stop') : (lang === 'hi' ? 'सुनिए 🔊' : 'Listen 🔊')}</span>
-          </button>
-        )}
-
-        {!isUser && msg.navLinks?.length > 0 && (
-          <NavLinks links={msg.navLinks} onNavigate={onNavigate} />
-        )}
-        {!isUser && msg.quickActions?.length > 0 && (
-          <QuickActions actions={msg.quickActions} onNavigate={onNavigate} />
-        )}
       </div>
     </div>
   );
@@ -556,7 +520,6 @@ export default function ChatbotWidget() {
                     key={m.id}
                     msg={m}
                     isUser={m.isUser}
-                    onNavigate={handleNavigate}
                     onToggleSpeak={toggleSpeak}
                     isSpeaking={speakingMessageId === m.id}
                     lang={selectedLang}
@@ -575,8 +538,10 @@ export default function ChatbotWidget() {
                 <button onClick={() => scrollDown()} className="cb-scroll-btn"><ChevronDown size={16} /></button>
               )}
 
-              {/* Chips / Quick Suggestions */}
-              <Chips items={lastSuggestions} onSelect={s => sendMessage(s)} disabled={isTyping} />
+              {/* Chips / Quick Suggestions (Only show on initial welcome state for clean UI) */}
+              {messages.length <= 1 && (
+                <Chips items={lastSuggestions} onSelect={s => sendMessage(s)} disabled={isTyping} />
+              )}
 
               {/* Speech Recognition Active Indicator */}
               {isListening && (
