@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════
 // LexBot — LegalConnect Multilingual & Vernacular Intelligence Engine v4
 // Deep Intellectual Jurisprudence, BNS 2023 vs IPC, & Landmark Precedents
-// Supports English, हिन्दी (Hindi), and Hinglish with Voice & Nyaya Kosh
+// Client-side Instant Fallback Engine for 100% Uptime
 // ═══════════════════════════════════════════════════════════════
 
 export const INTENTS = {
@@ -70,33 +70,39 @@ const HELP_PATTERNS = [
 ];
 
 const BOOKING_PATTERNS = [
-  /\b(book|appointment|schedule|slot|hire|consult)\b/i,
-  /\b(बुक|अपॉइंटमेंट|परामर्श|वकील बुक|तारीख)\b/i,
-  /\b(book karna|appointment lena|vakil chahiye|consultation book)\b/i,
+  /\b(how\s*to\s*book|book\s*(an?\s*)?(appointment|slot|advocate|lawyer|consultation)|schedule\s*(a\s*)?consultation|hire\s*(an?\s*)?(advocate|lawyer))\b/i,
+  /^(book|appointment|hire\s*lawyer|consult\s*lawyer)$/i,
+  /\b(अपॉइंटमेंट\s*बुक|वकील\s*बुक|परामर्श\s*बुक|वकील\s*चाहिए)\b/i,
+  /\b(book\s*karna\s*hai|appointment\s*lena\s*hai|advocate\s*book\s*karein)\b/i,
 ];
 
 const CASE_PATTERNS = [
-  /\b(case|case\s*status|my\s*case|track|progress|hearing|update|court)\b/i,
-  /\b(केस|मुकदमा|केस स्टेटस|तारीख|सुनवाई|ट्रैक|अदालत)\b/i,
-  /\b(mera case|case status|mukadma|sunwai|hearing date)\b/i,
+  /\b(track\s*(my\s*)?case|case\s*status|check\s*case\s*progress|hearing\s*date\s*update|my\s*cases\s*(dashboard|page|workspace))\b/i,
+  /^(my\s*cases?|cases?|case\s*status|hearing\s*date)$/i,
+  /\b(केस\s*स्टेटस|मुकदमा\s*ट्रैक|केस\s*ट्रैक|सुनवाई\s*की\s*तारीख)\b/i,
+  /^(मेरे\s*केस|केस\s*स्टेटस)$/i,
+  /\b(mera\s*case\s*status|case\s*track\s*karna|hearing\s*date\s*kab\s*hai)\b/i,
 ];
 
 const PAYMENT_PATTERNS = [
-  /\b(pay|payment|fee|cost|charge|billing|invoice|receipt|escrow|refund|price|amount|money)\b/i,
-  /\b(फीस|भुगतान|पेमेंट|पैसा|खर्च|एस्क्रो|रिफंड)\b/i,
-  /\b(paisa|fees kitni|payment kaise|refund milega|escrow kya hai)\b/i,
+  /\b(how\s*to\s*pay|platform\s*fee|consultation\s*fee|payment\s*method|escrow\s*refund|invoice\s*download|refund\s*policy)\b/i,
+  /^(payment|pay|fees|fee|refund|escrow)$/i,
+  /\b(भुगतान\s*कैसे|फीस\s*कितनी|पेमेंट\s*का\s*तरीका|एस्क्रो\s*रिफंड|रसीद)\b/i,
+  /\b(fees\s*kitni\s*hai|payment\s*kaise\s*kare|refund\s*kaise\s*milega|escrow\s*paisa)\b/i,
 ];
 
 const DOCUMENT_PATTERNS = [
-  /\b(document|upload|file|paperwork|evidence|proof|certificate|affidavit)\b/i,
-  /\b(दस्तावेज़|कागज़ात|अपलोड|सबूत|प्रमाण|हलफनामा)\b/i,
-  /\b(kagaz|dastavez|saboot|proof|upload kaise)\b/i,
+  /\b(upload\s*document|upload\s*file|manage\s*documents|documents\s*section|paperwork\s*upload)\b/i,
+  /^(documents?|my\s*documents?|upload)$/i,
+  /\b(दस्तावेज़\s*अपलोड|कागज़ात\s*अपलोड|फाइल\s*अपलोड)\b/i,
+  /\b(dastavez\s*upload|kagaz\s*upload|documents\s*kahan\s*dalein)\b/i,
 ];
 
 const CONSULTATION_PATTERNS = [
-  /\b(consultation|upcoming|next|video\s*call|session|meeting|attend|join)\b/i,
-  /\b(वीडियो कॉल|परामर्श|मीटिंग|जॉइन|सेशन)\b/i,
-  /\b(video call|meeting link|join kaise kare)\b/i,
+  /\b(join\s*consultation|join\s*meeting|join\s*video\s*call|upcoming\s*consultation|meeting\s*link)\b/i,
+  /^(consultations?|video\s*call|meeting)$/i,
+  /\b(वीडियो\s*कॉल\s*जॉइन|मीटिंग\s*लिंक|परामर्श\s*शुरू)\b/i,
+  /\b(video\s*call\s*join|meeting\s*kahan\s*hogi|consultation\s*kaise\s*join)\b/i,
 ];
 
 const GLOSSARY_PATTERNS = [
@@ -625,6 +631,101 @@ const LANDMARK_CASES_DB = [
 
 // ─── Intellectual Applied Sections & Jurisprudential Scenarios ───
 const APPLIED_SECTIONS_DB = [
+  // 0. Advocate Abandonment Midway & Unauthorized Concession of Guilt
+  {
+    id: 'advocate_misconduct_abandonment',
+    patterns: [
+      /(advocate|lawyer|counsel|vakeel).*(leave|left|quit|abandon|drop|withdraw|midway|between|beech).*(case|guilty|confess|betray|bci|misconduct|say|said)/i,
+      /(advocate|lawyer|counsel|vakeel).*(say|said|tell|told|stated).*(client.*guilty|guilty|confess)/i,
+      /(what\s*if\s*advocate|what\s*if\s*lawyer|what\s*if\s*my\s*advocate).*(leave|abandon|quit|guilty)/i,
+      /(advocate|lawyer|vakeel).*(beech\s*me\s*chhod|dhokha|gunehgar|vakalatnama)/i,
+      /(client\s*is\s*guilty|lawyer\s*said\s*guilty|advocate\s*leaves\s*the\s*case|lawyer\s*leaves\s*case)/i,
+      /(professional\s*misconduct.*(advocate|lawyer)|bar\s*council.*complaint)/i,
+      /\b(advocate\s*abandon|lawyer\s*abandon|sayd\s*that\s*my\s*client\s*is\s*guilty|say.*client.*guilty)\b/i,
+    ],
+    incident: 'Advocate Abandoning Case Midway & Unauthorized Admission of Client Guilt',
+    en: {
+      title: 'Advocate Abandonment Midway & Unauthorized Concession of Guilt (Professional Misconduct vs Criminal Due Process)',
+      summary: 'If an advocate abandons your case in between or unilaterally tells the court "my client is guilty", it represents an egregious violation of **The Advocates Act, 1961**, the **Bar Council of India (BCI) Rules of Professional Conduct**, and settled Supreme Court criminal jurisprudence.',
+      sections: [
+        '🏛️ **Supreme Court Ruling on Counsel Concessions (Babu v. State of Kerala, 2010 & Periasami v. State of Madras)**: In criminal law, **an advocate\'s admission of guilt DOES NOT bind the accused**! The court is legally prohibited from convicting you based on your advocate\'s concession or personal opinion. The prosecution carries the independent, non-delegable burden of proving guilt beyond reasonable doubt under Article 20(3) & 21 of the Constitution.',
+        '🛡️ **Section 132 Bharatiya Sakshya Adhiniyam, 2023 (Old Section 126 Evidence Act) — Attorney-Client Privilege**: Communications between client and advocate are strictly confidential by law. An advocate is legally prohibited from disclosing any communication or stating personal opinions regarding your guilt. Doing so is an illegal breach of professional privilege.',
+        '⚖️ **Section 35 The Advocates Act, 1961 — Professional Misconduct**: Disclosing client secrets, colluding with the prosecution, or falsely admitting guilt constitutes gross professional misconduct. The State Bar Council Disciplinary Committee has statutory powers to **suspend or permanently cancel the advocate\'s license to practice**.',
+        '📜 **Rule 12 & Rule 15 Bar Council of India (BCI) Rules (Part VI, Ch. II)**: An advocate **cannot withdraw** from an engagement once accepted without sufficient cause and without giving reasonable notice to the client in advance. If an advocate withdraws unlawfully, they are legally bound to **refund the unearned legal fees**.',
+      ],
+      intellectualAnalysis: 'In the landmark judgment *Himalayan Coop. Group Housing Society v. Balwan Singh (2015 7 SCC 373)*, the Supreme Court authoritatively held that a counsel has no implied authority to make admissions or compromises prejudicial to the client\'s rights without express instructions. Furthermore, an accused has an inalienable Constitutional Right to fair legal representation under **Article 22(1)** and **Article 39A (Free Legal Aid / Section 341 BNSS)**.',
+      action: '1. Immediately address the Judge: "Your Honour, my counsel\'s statement was unauthorized and contrary to instructions; please expunge it."\n2. File an Affidavit cancelling the advocate\'s Vakalatnama for breach of trust.\n3. Request the Court for time to engage a new advocate or apply for Free Legal Aid (DLSA).\n4. Lodge a formal complaint under Section 35 Advocates Act with the State Bar Council Disciplinary Committee.\n5. File a civil petition for refund of fees and damages for professional negligence.',
+    },
+    hi: {
+      title: 'वकील द्वारा बीच में केस छोड़ना व मुवक्किल को दोषी बताना (व्यावसायिक कदाचार व कानूनी अधिकार)',
+      summary: 'यदि कोई वकील बीच में केस छोड़ दे या कोर्ट में मुवक्किल को दोषी बता दे, तो यह **अधिवक्ता अधिनियम, 1961 (Advocates Act)**, बार काउंसिल ऑफ इंडिया (BCI) के नियमों और संविधान के तहत एक गंभीर विधिक कदाचार (Professional Misconduct) है।',
+      sections: [
+        '🏛️ **सुप्रीम कोर्ट का ऐतिहासिक सिद्धांत (बाबू बनाम केरल राज्य 2010 व पेरियासामी केस)**: आपराधिक कानून में **वकील द्वारा मुवक्किल को दोषी मानना कोर्ट पर बाध्यकारी नहीं होता**! सुप्रीम कोर्ट ने स्पष्ट किया है कि वकील के कहने मात्र से किसी को सज़ा नहीं दी जा सकती। अभियोजन पक्ष (Prosecution) को स्वतंत्र रूप से अपराध साबित करना अनिवार्य है (अनुच्छेद 20(3) व 21)।',
+        '🛡️ **धारा 132 भारतीय साक्ष्य अधिनियम, 2023 (पुरानी धारा 126 Evidence Act) — विशेषाधिकार प्राप्त संवाद (Attorney-Client Privilege)**: मुवक्किल और वकील के बीच की बातें गोपनीय होती हैं। वकील द्वारा कोर्ट में मुवक्किल के खिलाफ बोलना कानूनन पूर्णतः निषिद्ध और अवैध है।',
+        '⚖️ **धारा 35 अधिवक्ता अधिनियम, 1961 — व्यावसायिक कदाचार (Professional Misconduct)**: विरोधी पक्ष से मिलीभगत या मुवक्किल के साथ विश्वासघात करने पर स्टेट बार काउंसिल की अनुशासन समिति (Disciplinary Committee) वकील का **लाइसेंस निलंबित या हमेशा के लिए रद्द** कर सकती है।',
+        '📜 **बार काउंसिल ऑफ इंडिया नियम (नियम 12 व 15)**: वकील बिना पर्याप्त कारण और पूर्व लिखित नोटिस के बीच में केस नहीं छोड़ सकता। यदि वह छोड़ता है, तो उसे **पूरी गैर-उपार्जित फीस लौटानी होगी**।',
+      ],
+      intellectualAnalysis: 'सुप्रीम कोर्ट ने *हिमालयन कोऑपरेटिव केस (2015)* में कहा कि वकील को मुवक्किल की स्पष्ट अनुमति के बिना उसके अधिकारों के विरुद्ध कोई भी बयान देने का अधिकार नहीं है। संविधान के अनुच्छेद 22(1) के तहत निष्पक्ष कानूनी रक्षा पाना आपका मौलिक अधिकार है।',
+      action: '1. कोर्ट में तुरंत जज साहब को बताएं: "श्रीमान, वकील का यह बयान अनधिकृत है, इसे निरस्त (Expunge) किया जाए।"\n2. वकालतनामा रद्द करने का हलफनामा (Affidavit) दाखिल करें।\n3. नए वकील की नियुक्ति हेतु कोर्ट से समय मांगें या मुफ्त सरकारी वकील (DLSA धारा 341 BNSS) लें।\n4. स्टेट बार काउंसिल में धारा 35 के तहत वकील के खिलाफ अनुशासनात्मक शिकायत दर्ज कराएं।\n5. फीस वापसी और हर्जाने के लिए कानूनी कार्रवाई करें।',
+    },
+    hinglish: {
+      title: 'Advocate beech me case chhod de ya client ko guilty bol de (Legal Remedies & BCI Rules)',
+      summary: 'Agar vakeel beech me case chhod de ya adalat me bol de ki "mera client guilty hai", to yeh **Advocates Act 1961** aur **Bar Council Rules** ke tehat illegal Professional Misconduct hai.',
+      sections: [
+        '🏛️ **Supreme Court Ruling (Babu v. State of Kerala & Periasami Case)**: Criminal case me **lawyer ke bolne se accused guilty nahi hota**! Court lawyer ke statement par conviction nahi kar sakti; prosecution ko crime independently prove karna padta hai.',
+        '🛡️ **Section 132 BSA 2023 (Old Section 126 Evidence Act) — Client Privilege**: Client aur advocate ke beech ki baatein legally confidential hoti hain. Lawyer legally apne client ke khilaf statement nahi de sakta.',
+        '⚖️ **Section 35 Advocates Act 1961 — Professional Misconduct**: Opponent party se collusion ya client ko betray karne par State Bar Council lawyer ka **licence suspend ya cancel** kar sakti hai.',
+        '📜 **Rule 12 BCI Rules**: Lawyer bina valid reason aur notice ke case nahi chhod sakta, aur beech me chhodne par **fees wapas (refund)** karni padti hai.',
+      ],
+      intellectualAnalysis: 'Himalayan Coop Case (2015 SC) me Supreme Court ne hold kiya ki lawyer bina client ki explicit instruction ke guilt concede nahi kar sakta. Article 22(1) aur Section 341 BNSS (Legal Aid) aapka constitutional right hai.',
+      action: '1. Court me Magistrate ko bole ki lawyer ka statement unauthorized hai aur use expunge karein.\n2. Vakalatnama cancel karne ka application file karein.\n3. Naya advocate appoint karein ya free Legal Aid (DLSA) claim karein.\n4. State Bar Council me Section 35 Advocates Act ki complaint darj karein.\n5. Fees refund aur damages claim karein.',
+    },
+  },
+
+  // 0.1 False Criminal Case & Quashing Frivolous FIR
+  {
+    id: 'false_case_quashing',
+    patterns: [
+      /(false\s*case|fake\s*fir|jhootha\s*case|fake\s*case|false\s*complaint|quash\s*fir|section\s*482|528\s*bnss)/i,
+      /(झूठा\s*केस|फर्जी\s*एफआईआर|झूठी\s*शिकायत|केस\s*रद्द)/i,
+      /(jhootha\s*mukadma|false\s*allegation|quash\s*karwana)/i,
+    ],
+    incident: 'Protection Against False Cases & Quashing of Frivolous FIRs',
+    en: {
+      title: 'False Criminal Cases & Quashing of FIR (Inherent Powers of High Court)',
+      summary: 'Facing a fabricated criminal case or extortionate FIR is governed by the High Court\'s extraordinary inherent powers to prevent abuse of the judicial process.',
+      sections: [
+        '⚖️ **Section 528 BNSS 2023 (Old Section 482 CrPC) — Quashing Petition**: Extraordinary inherent power of the High Court to quash a malicious, absurd, or groundless FIR to prevent miscarriage of justice.',
+        '⚖️ **Section 217 & 218 BNS 2023 (Old Section 182 & 211 IPC) — False Charges with Intent to Injure**: Whoever falsely charges someone knowing there is no just or lawful ground faces up to 7 years imprisonment + fine.',
+        '🏛️ **Supreme Court Ruling (State of Haryana v. Bhajan Lal, 1992)**: Formulated 7 golden categories where High Courts must quash FIRs, including where allegations are inherently improbable or manifestly attended with mala fide motives.',
+      ],
+      intellectualAnalysis: 'The Supreme Court in *Geeta Mehrotra v. State of UP* and *Kahkashan Kausar v. State of Bihar* strictly held that general and omnibus allegations without specific overt acts cannot be sustained to harass family members.',
+      action: 'File a Criminal Miscellaneous Petition under Section 528 BNSS before the High Court for quashing the FIR, and seek interim stay on arrest.',
+    },
+    hi: {
+      title: 'झूठे मुकदमों से सुरक्षा व FIR रद्द कराना (हाई कोर्ट की अंतर्निहित शक्तियां)',
+      summary: 'फर्जी या दुर्भावनापूर्ण मुकदमों से बचाव के लिए कानून में त्वरित राहत और झूठी शिकायत करने वाले पर कड़ी सज़ा का प्रावधान है।',
+      sections: [
+        '⚖️ **धारा 528 BNSS 2023 (पुरानी धारा 482 CrPC) — FIR रद्द (Quashing) याचिका**: हाई कोर्ट को किसी भी फर्जी या बदले की भावना से दर्ज FIR को सीधे रद्द करने का पूर्ण अधिकार है।',
+        '⚖️ **धारा 217 व 218 BNS 2023 (पुरानी धारा 182 व 211 IPC) — झूठा आरोप लगाने पर सज़ा**: किसी पर जानबूझकर झूठा केस दर्ज कराने वाले को 7 वर्ष तक की कठोर जेल हो सकती है।',
+        '🏛️ **भजन लाल केस (1992 SC)**: सुप्रीम कोर्ट ने 7 स्थितियां तय की हैं जहां हाई कोर्ट को तुरंत केस निरस्त करना अनिवार्य है।',
+      ],
+      intellectualAnalysis: 'सुप्रीम कोर्ट के अनुसार बिना ठोस सबूत केवल दबाव बनाने के लिए दर्ज कराए गए मुकदमों को न्यायिक प्रक्रिया का दुरुपयोग माना जाता है।',
+      action: 'हाई कोर्ट में धारा 528 BNSS के तहत FIR निरस्तीकरण (Quashing) की याचिका दाखिल करें और गिरफ्तारी पर रोक (Stay) मांगें।',
+    },
+    hinglish: {
+      title: 'Jhoothe Case se Bachav aur FIR Quashing Rules',
+      summary: 'Fake FIR se bachne ke liye High Court me Section 528 BNSS (Old 482 CrPC) ke tehat FIR quash karwai ja sakti hai.',
+      sections: [
+        '⚖️ **Section 528 BNSS (Old 482 CrPC) — Quashing**: High Court ke paas fake aur baseless FIR ko permanently dismiss karne ki inherent power hai.',
+        '⚖️ **Section 217/218 BNS (Old IPC 182/211) — Penalty for False Charges**: Jhootha case karne wale ko 7 saal tak ki jail ho sakti hai.',
+        '🏛️ **Bhajan Lal Landmark Precedent**: 7 criteria jisme court FIR dismiss karti hai agar allegations absurd ya malicious hon.',
+      ],
+      intellectualAnalysis: 'General allegations bina proof ke family ko harass karne ke liye use nahi kiye ja sakte (Geeta Mehrotra ruling).',
+      action: 'High Court me 528 BNSS Quashing Petition file karein aur advocate ke zariye arrest stay lein.',
+    },
+  },
+
   // 1. Theft / Stealing Pen / Petty Items
   {
     id: 'theft_petty',
@@ -1447,33 +1548,89 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
     }
   }
 
-  // 10. Navigation keywords
-  if (BOOKING_PATTERNS.some((p) => p.test(text))) {
-    intent = INTENTS.BOOKING;
-    const r = routes.advocates || routes.consultations;
-    if (lang === 'hi') {
-      response = `परामर्श (Consultation) बुक करने के लिए आप हमारे सत्यापित वकीलों की सूची देख सकते हैं और अपनी पसंद का समय चुन सकते हैं।`;
-    } else if (lang === 'hinglish') {
-      response = `Advocate book karne ke liye niche diye gaye link par jayein aur date/time choose karein.`;
-    } else {
-      response = `To book a consultation, browse verified advocates and pick an available time slot.`;
+  // 10. Navigation keywords (strictly guarded against legal questions)
+  const isSituationalQuery = /\b(what\s*if|what\s*happens|why|how\s*can|can\s*(i|we|they|he|she|police|advocate|lawyer|judge|court|landlord|someone)|guilty|punishment|penalty|rights|kya\s*hoga|kya\s*karein|dhara|section)\b/i.test(text);
+
+  if (!isSituationalQuery) {
+    if (BOOKING_PATTERNS.some((p) => p.test(text))) {
+      intent = INTENTS.BOOKING;
+      const r = routes.advocates || routes.consultations;
+      if (lang === 'hi') {
+        response = `परामर्श (Consultation) बुक करने के लिए आप हमारे सत्यापित वकीलों की सूची देख सकते हैं और अपनी पसंद का समय चुन सकते हैं।`;
+      } else if (lang === 'hinglish') {
+        response = `Advocate book karne ke liye niche diye gaye link par jayein aur date/time choose karein.`;
+      } else {
+        response = `To book a consultation, browse verified advocates and pick an available time slot.`;
+      }
+      navLinks = [{ path: r.path, label: lang === 'hi' ? r.labelHi : r.labelEn, icon: r.icon, desc: r.desc }];
+      return { response, suggestions: ['Find Advocates', 'Help'], navLinks, quickActions: [], type: 'nav', intent, lang, timestamp: new Date().toISOString() };
     }
-    navLinks = [{ path: r.path, label: lang === 'hi' ? r.labelHi : r.labelEn, icon: r.icon, desc: r.desc }];
-    return { response, suggestions: ['Find Advocates', 'Help'], navLinks, quickActions: [], type: 'nav', intent, lang, timestamp: new Date().toISOString() };
+
+    if (CASE_PATTERNS.some((p) => p.test(text))) {
+      intent = INTENTS.CASE_STATUS;
+      const r = routes.cases;
+      if (lang === 'hi') {
+        response = `अपने सभी मुकदमों और केस की अगली सुनवाई की जानकारी देखने के लिए **'मेरे केस'** सेक्शन खोलें।`;
+      } else if (lang === 'hinglish') {
+        response = `Apne sabhi active legal cases aur hearing dates dekhne ke liye **'My Cases'** par jayein.`;
+      } else {
+        response = `To track your ongoing legal cases and next hearing dates, open the **'My Cases'** workspace.`;
+      }
+      navLinks = [{ path: r.path, label: lang === 'hi' ? r.labelHi : r.labelEn, icon: r.icon, desc: r.desc }];
+      return { response, suggestions: ['My Cases', 'Help'], navLinks, quickActions: [], type: 'nav', intent, lang, timestamp: new Date().toISOString() };
+    }
   }
 
-  if (CASE_PATTERNS.some((p) => p.test(text))) {
-    intent = INTENTS.CASE_STATUS;
-    const r = routes.cases;
+  // 11. Situational Legal Jurisprudence Evaluator
+  if (isSituationalQuery) {
+    intent = INTENTS.LEGAL_QUERY;
+    type = 'legal_analysis';
+
     if (lang === 'hi') {
-      response = `अपने सभी मुकदमों और केस की अगली सुनवाई की जानकारी देखने के लिए **'मेरे केस'** सेक्शन खोलें।`;
+      response = `⚖️ **विधिक परिस्थिति का बौद्धिक विश्लेषण (Legal Jurisprudential Assessment):**\n\n` +
+        `आपके प्रश्न का भारतीय न्याय संहिता (BNS 2023), भारतीय नागरिक सुरक्षा संहिता (BNSS 2023) और संवैधानिक सिद्धांतों के तहत विधिक मूल्यांकन:\n\n` +
+        `1. **संवैधानिक व विधिक अधिकार**: भारतीय संविधान के अनुच्छेद 21 (जीवन व व्यक्तिगत स्वतंत्रता) और अनुच्छेद 22(1) के तहत हर नागरिक को प्राकृतिक न्याय (Natural Justice) और निष्पक्ष कानूनी रक्षा का मौलिक अधिकार प्राप्त है।\n` +
+        `2. **साक्ष्य व साबित करने का भार**: भारतीय साक्ष्य कानून (BSA 2023) के अनुसार, 'साबित करने का दायित्व' उस पक्ष पर होता है जो आरोप लगाता है (*Burden of Proof* — धारा 104)। कोई भी आरोप बिना दस्तावेजी या ठोस मौखिक साक्ष्य के कानूनन मान्य नहीं होता।\n` +
+        `3. **अदालती व कानूनी सुरक्षा उपाय**: यदि मामला वकील की कार्यशैली, पुलिस कार्रवाई, या झूठे आरोपों से संबंधित है, तो कोई भी मनमानी या गैर-कानूनी कार्रवाई सीधे चुनौती योग्य है। आप सक्षम न्यायालय में हलफनामा (Affidavit) दाखिल कर सकते हैं, स्टेट बार काउंसिल में शिकायत कर सकते हैं, या हाई कोर्ट से संरक्षण ले सकते हैं।\n\n` +
+        `💡 **सलाह**: इस मामले में अपने विधिक अधिकारों की सुरक्षा हेतु बार काउंसिल से सत्यापित विशेषज्ञ वकील से तुरंत कानूनी परामर्श (Legal Consultation) लें।`;
+      suggestions = ['वकील से परामर्श करें', '🏛️ ऐतिहासिक केस', 'कानूनी नोटिस भेजें'];
     } else if (lang === 'hinglish') {
-      response = `Apne sabhi active legal cases aur hearing dates dekhne ke liye **'My Cases'** par jayein.`;
+      response = `⚖️ **Legal Jurisprudential Assessment:**\n\n` +
+        `Aapke scenario ka Indian statutory framework (BNS 2023, BNSS 2023 & Constitution) ke tehat legal assessment:\n\n` +
+        `1. **Constitutional Protection**: Article 21 (Personal Liberty) aur Article 22(1) ke under har citizen ko Fair Hearing aur Due Process of Law ka Fundamental Right hai.\n` +
+        `2. **Burden of Proof**: Indian law me 'Innocent until proven guilty' ka doctrine apply hota hai. Kisi ke kehne ya unilateral concession se adalat convict nahi karti.\n` +
+        `3. **Immediate Legal Recourse**: Agar yeh matter advocate conduct, police harassment, ya false allegations ka hai, to court me instant objection/affidavit file karke aur Bar Council ya High Court ke zariye immediate legal relief li ja sakti hai.\n\n` +
+        `💡 **Action Plan**: Bar Council verified specialist advocate se 1-on-1 consultation book karke official legal opinion lein.`;
+      suggestions = ['Consult an advocate', 'Explore Landmark Cases', 'Draft Legal Notice'];
     } else {
-      response = `To track your ongoing legal cases and next hearing dates, open the **'My Cases'** workspace.`;
+      response = `⚖️ **Jurisprudential Assessment & Statutory Evaluation:**\n\n` +
+        `Analyzing your scenario under the Bharatiya Nyaya Sanhita (BNS 2023), Bharatiya Nagarik Suraksha Sanhita (BNSS 2023), and Constitutional Principles:\n\n` +
+        `1. **Constitutional Due Process & Natural Justice**: Under Article 21 (Personal Liberty) and Article 22(1) of the Constitution of India, every citizen is entitled to fair procedure and effective legal representation. No unilateral action or unauthorized statement prejudicial to your rights can be sustained without strict adherence to *Audi Alteram Partem* (Listen to the other side).\n` +
+        `2. **Presumption of Innocence & Evidentiary Standard**: In Indian criminal jurisprudence (*Ei incumbit probatio qui dicit, non qui negat*), the legal burden of proof rests entirely on the asserting party. An unauthorized concession or arbitrary accusation cannot substitute proof beyond reasonable doubt.\n` +
+        `3. **Statutory & Judicial Safeguards**:\n` +
+        `   • Immediate right to file an Affidavit of Repudiation before the Presiding Judge.\n` +
+        `   • Remedy under High Court inherent jurisdiction (BNSS Section 528 / Article 226) against procedural abuse.\n` +
+        `   • Disciplinary recourse before the State Bar Council under Section 35 of the Advocates Act, 1961 for professional misconduct.\n\n` +
+        `💡 **Actionable Counsel**: It is strongly advised to schedule a consultation with a Bar Council verified advocate on LegalConnect to formally safeguard your legal position.`;
+      suggestions = ['Consult a specialist lawyer', 'Explore Landmark Cases', 'Open Legal Study Hub'];
     }
-    navLinks = [{ path: r.path, label: lang === 'hi' ? r.labelHi : r.labelEn, icon: r.icon, desc: r.desc }];
-    return { response, suggestions: ['My Cases', 'Help'], navLinks, quickActions: [], type: 'nav', intent, lang, timestamp: new Date().toISOString() };
+
+    navLinks = [
+      {
+        path: routes.advocates?.path,
+        label: lang === 'hi' ? '🔍 संबंधित विशेषज्ञ वकील खोजें' : '🔍 Consult Verified Advocates',
+        icon: '🔍',
+        desc: 'Consult Bar Council verified legal professionals for formal legal opinion',
+      },
+      {
+        path: '/legal-resources',
+        label: lang === 'hi' ? '🏛️ ऐतिहासिक केस व विधिक अध्ययन हब' : '🏛️ Landmark Cases & Legal Resources',
+        icon: '🏛️',
+        desc: 'Explore comprehensive Supreme Court case briefs and statutory frameworks',
+      },
+    ].filter(Boolean);
+
+    return { response, suggestions, navLinks, quickActions: [], type, intent, lang, timestamp: new Date().toISOString() };
   }
 
   // 11. Default Intellectual Fallback
