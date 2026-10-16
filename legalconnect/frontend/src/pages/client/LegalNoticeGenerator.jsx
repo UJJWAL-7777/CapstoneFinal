@@ -15,10 +15,22 @@ import {
   Languages,
 } from 'lucide-react';
 import Button from '../../components/ui/Button.jsx';
-import Field from '../../components/ui/Field.jsx';
 import Badge from '../../components/ui/Badge.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
 import { useToast } from '../../context/ToastContext.jsx';
+
+// ─── Clean Form Input Helper (Avoids void element nesting) ────────
+function FormField({ label, as: Component = 'input', className = '', ...props }) {
+  return (
+    <div>
+      <label className="mb-1 block text-xs font-medium text-ink dark:text-ink-soft">{label}</label>
+      <Component
+        className={`input text-sm py-1.5 w-full ${className}`}
+        {...props}
+      />
+    </div>
+  );
+}
 
 // ─── Notice Categories & Statutory Templates ─────────────────────
 const NOTICE_CATEGORIES = [
@@ -464,33 +476,28 @@ ${formData.senderName}`;
               <span className="text-xs font-semibold text-chamber-800 uppercase tracking-wider block">
                 1. Sender (Your Details)
               </span>
-              <Field label="Your Full Name">
-                <input
-                  type="text"
-                  name="senderName"
-                  value={formData.senderName || ''}
-                  onChange={handleChange}
-                  className="input text-sm py-1.5"
-                />
-              </Field>
-              <Field label="Your Complete Address">
-                <textarea
-                  name="senderAddress"
-                  rows={2}
-                  value={formData.senderAddress || ''}
-                  onChange={handleChange}
-                  className="input text-sm py-1.5"
-                />
-              </Field>
-              <Field label="Phone / Mobile Number">
-                <input
-                  type="text"
-                  name="senderPhone"
-                  value={formData.senderPhone || ''}
-                  onChange={handleChange}
-                  className="input text-sm py-1.5"
-                />
-              </Field>
+              <FormField
+                label="Your Full Name"
+                type="text"
+                name="senderName"
+                value={formData.senderName || ''}
+                onChange={handleChange}
+              />
+              <FormField
+                label="Your Complete Address"
+                as="textarea"
+                rows={2}
+                name="senderAddress"
+                value={formData.senderAddress || ''}
+                onChange={handleChange}
+              />
+              <FormField
+                label="Phone / Mobile Number"
+                type="text"
+                name="senderPhone"
+                value={formData.senderPhone || ''}
+                onChange={handleChange}
+              />
             </div>
 
             {/* Recipient */}
@@ -498,24 +505,21 @@ ${formData.senderName}`;
               <span className="text-xs font-semibold text-rose-700 uppercase tracking-wider block">
                 2. Opposite Party (Defaulter)
               </span>
-              <Field label="Recipient / Defaulter Name">
-                <input
-                  type="text"
-                  name="recipientName"
-                  value={formData.recipientName || ''}
-                  onChange={handleChange}
-                  className="input text-sm py-1.5"
-                />
-              </Field>
-              <Field label="Recipient Complete Address">
-                <textarea
-                  name="recipientAddress"
-                  rows={2}
-                  value={formData.recipientAddress || ''}
-                  onChange={handleChange}
-                  className="input text-sm py-1.5"
-                />
-              </Field>
+              <FormField
+                label="Recipient / Defaulter Name"
+                type="text"
+                name="recipientName"
+                value={formData.recipientName || ''}
+                onChange={handleChange}
+              />
+              <FormField
+                label="Recipient Complete Address"
+                as="textarea"
+                rows={2}
+                name="recipientAddress"
+                value={formData.recipientAddress || ''}
+                onChange={handleChange}
+              />
             </div>
 
             {/* Claim / Dispute Details */}
@@ -524,182 +528,150 @@ ${formData.senderName}`;
                 3. Dispute Facts & Amounts
               </span>
               <div className="grid grid-cols-2 gap-2">
-                <Field label="Claim Amount (₹)">
-                  <input
-                    type="text"
-                    name="amount"
-                    value={formData.amount || ''}
-                    onChange={handleChange}
-                    className="input text-sm py-1.5 font-semibold text-chamber-800"
-                  />
-                </Field>
-                <Field label="Notice Issue Date">
-                  <input
-                    type="date"
-                    name="noticeDate"
-                    value={formData.noticeDate || ''}
-                    onChange={handleChange}
-                    className="input text-sm py-1.5"
-                  />
-                </Field>
+                <FormField
+                  label="Claim Amount (₹)"
+                  type="text"
+                  name="amount"
+                  value={formData.amount || ''}
+                  onChange={handleChange}
+                  className="font-semibold text-chamber-800"
+                />
+                <FormField
+                  label="Notice Issue Date"
+                  type="date"
+                  name="noticeDate"
+                  value={formData.noticeDate || ''}
+                  onChange={handleChange}
+                />
               </div>
 
               {selectedCatId === 'cheque_bounce' && (
                 <>
                   <div className="grid grid-cols-2 gap-2">
-                    <Field label="Cheque Number">
-                      <input
-                        type="text"
-                        name="chequeNumber"
-                        value={formData.chequeNumber || ''}
-                        onChange={handleChange}
-                        className="input text-sm py-1.5"
-                      />
-                    </Field>
-                    <Field label="Cheque Date">
-                      <input
-                        type="date"
-                        name="chequeDate"
-                        value={formData.chequeDate || ''}
-                        onChange={handleChange}
-                        className="input text-sm py-1.5"
-                      />
-                    </Field>
-                  </div>
-                  <Field label="Drawn Bank & Branch">
-                    <input
+                    <FormField
+                      label="Cheque Number"
                       type="text"
-                      name="bankName"
-                      value={formData.bankName || ''}
+                      name="chequeNumber"
+                      value={formData.chequeNumber || ''}
                       onChange={handleChange}
-                      className="input text-sm py-1.5"
                     />
-                  </Field>
+                    <FormField
+                      label="Cheque Date"
+                      type="date"
+                      name="chequeDate"
+                      value={formData.chequeDate || ''}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <FormField
+                    label="Drawn Bank & Branch"
+                    type="text"
+                    name="bankName"
+                    value={formData.bankName || ''}
+                    onChange={handleChange}
+                  />
                   <div className="grid grid-cols-2 gap-2">
-                    <Field label="Return Memo Date">
-                      <input
-                        type="date"
-                        name="memoDate"
-                        value={formData.memoDate || ''}
-                        onChange={handleChange}
-                        className="input text-sm py-1.5"
-                      />
-                    </Field>
-                    <Field label="Bank Reason">
-                      <input
-                        type="text"
-                        name="returnReason"
-                        value={formData.returnReason || ''}
-                        onChange={handleChange}
-                        className="input text-sm py-1.5"
-                      />
-                    </Field>
+                    <FormField
+                      label="Return Memo Date"
+                      type="date"
+                      name="memoDate"
+                      value={formData.memoDate || ''}
+                      onChange={handleChange}
+                    />
+                    <FormField
+                      label="Bank Reason"
+                      type="text"
+                      name="returnReason"
+                      value={formData.returnReason || ''}
+                      onChange={handleChange}
+                    />
                   </div>
                 </>
               )}
 
               {selectedCatId === 'security_deposit' && (
                 <>
-                  <Field label="Tenancy Property Address">
-                    <input
-                      type="text"
-                      name="tenancyAddress"
-                      value={formData.tenancyAddress || ''}
-                      onChange={handleChange}
-                      className="input text-sm py-1.5"
-                    />
-                  </Field>
+                  <FormField
+                    label="Tenancy Property Address"
+                    type="text"
+                    name="tenancyAddress"
+                    value={formData.tenancyAddress || ''}
+                    onChange={handleChange}
+                  />
                   <div className="grid grid-cols-2 gap-2">
-                    <Field label="Handover Date">
-                      <input
-                        type="date"
-                        name="handoverDate"
-                        value={formData.handoverDate || ''}
-                        onChange={handleChange}
-                        className="input text-sm py-1.5"
-                      />
-                    </Field>
-                    <Field label="Agreement Date">
-                      <input
-                        type="date"
-                        name="agreementDate"
-                        value={formData.agreementDate || ''}
-                        onChange={handleChange}
-                        className="input text-sm py-1.5"
-                      />
-                    </Field>
+                    <FormField
+                      label="Handover Date"
+                      type="date"
+                      name="handoverDate"
+                      value={formData.handoverDate || ''}
+                      onChange={handleChange}
+                    />
+                    <FormField
+                      label="Agreement Date"
+                      type="date"
+                      name="agreementDate"
+                      value={formData.agreementDate || ''}
+                      onChange={handleChange}
+                    />
                   </div>
                 </>
               )}
 
               {selectedCatId === 'unpaid_salary' && (
-                <>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Field label="Your Designation">
-                      <input
-                        type="text"
-                        name="designation"
-                        value={formData.designation || ''}
-                        onChange={handleChange}
-                        className="input text-sm py-1.5"
-                      />
-                    </Field>
-                    <Field label="Unpaid Months">
-                      <input
-                        type="text"
-                        name="unpaidMonths"
-                        value={formData.unpaidMonths || ''}
-                        onChange={handleChange}
-                        className="input text-sm py-1.5"
-                      />
-                    </Field>
-                  </div>
-                </>
+                <div className="grid grid-cols-2 gap-2">
+                  <FormField
+                    label="Your Designation"
+                    type="text"
+                    name="designation"
+                    value={formData.designation || ''}
+                    onChange={handleChange}
+                  />
+                  <FormField
+                    label="Unpaid Months"
+                    type="text"
+                    name="unpaidMonths"
+                    value={formData.unpaidMonths || ''}
+                    onChange={handleChange}
+                  />
+                </div>
               )}
 
               {selectedCatId === 'consumer_refund' && (
                 <>
                   <div className="grid grid-cols-2 gap-2">
-                    <Field label="Invoice Number">
-                      <input
-                        type="text"
-                        name="invoiceNumber"
-                        value={formData.invoiceNumber || ''}
-                        onChange={handleChange}
-                        className="input text-sm py-1.5"
-                      />
-                    </Field>
-                    <Field label="Purchase Date">
-                      <input
-                        type="date"
-                        name="purchaseDate"
-                        value={formData.purchaseDate || ''}
-                        onChange={handleChange}
-                        className="input text-sm py-1.5"
-                      />
-                    </Field>
-                  </div>
-                  <Field label="Defect / Problem Description">
-                    <input
+                    <FormField
+                      label="Invoice Number"
                       type="text"
-                      name="defectDetails"
-                      value={formData.defectDetails || ''}
+                      name="invoiceNumber"
+                      value={formData.invoiceNumber || ''}
                       onChange={handleChange}
-                      className="input text-sm py-1.5"
                     />
-                  </Field>
+                    <FormField
+                      label="Purchase Date"
+                      type="date"
+                      name="purchaseDate"
+                      value={formData.purchaseDate || ''}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <FormField
+                    label="Defect / Problem Description"
+                    type="text"
+                    name="defectDetails"
+                    value={formData.defectDetails || ''}
+                    onChange={handleChange}
+                  />
                 </>
               )}
 
-              <Field label="Advocate / Authorized Representative">
-                <input
-                  type="text"
-                  name="advocateName"
-                  value={formData.advocateName || ''}
-                  onChange={handleChange}
-                  className="input text-sm py-1.5 text-ink-muted"
-                />
-              </Field>
+              <FormField
+                label="Advocate / Authorized Representative"
+                type="text"
+                name="advocateName"
+                value={formData.advocateName || ''}
+                onChange={handleChange}
+                className="text-ink-muted"
+              />
             </div>
           </div>
         </div>
