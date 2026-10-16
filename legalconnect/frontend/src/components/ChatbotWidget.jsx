@@ -26,25 +26,25 @@ const WELCOME_MESSAGES = {
   en: {
     client: {
       text: "Hello! 👋 I'm **LexBot**, your multilingual LegalConnect assistant.\n\nI can help you navigate Indian laws, book verified advocates, and track your ongoing cases. Try asking in **English, हिन्दी, or Hinglish** — or click the mic 🎙️ to speak!",
-      suggestions: ['Book a consultation', 'Cheque bounce advice', 'Tenant & landlord dispute', '📖 Legal Glossary'],
+      suggestions: ['🏛️ Landmark Cases', '📚 Which Section Applies?', 'Cheque bounce advice', 'Tenant & landlord dispute'],
       quickActions: [
+        { label: '🏛️ Landmark Cases', path: '/legal-resources' },
         { label: '🔍 Find Advocates', path: '/client/advocates' },
         { label: '📋 My Cases', path: '/client/cases' },
-        { label: '📅 Consultations', path: '/client/consultations' },
       ],
     },
     advocate: {
       text: "Hello! 👋 I'm **LexBot**, your practice assistant.\n\nI can help you manage consultations, track earnings, update availability, and review cases in English or हिन्दी.",
-      suggestions: ['View consultations', 'Check earnings', 'Update availability', '📖 Legal Glossary'],
+      suggestions: ['🏛️ Landmark Cases', 'View consultations', 'Check earnings', '📖 Legal Glossary'],
       quickActions: [
+        { label: '🏛️ Landmark Cases', path: '/legal-resources' },
         { label: '📅 Consultations', path: '/advocate/consultations' },
         { label: '💰 Earnings', path: '/advocate/earnings' },
-        { label: '🕐 Availability', path: '/advocate/availability' },
       ],
     },
     admin: {
       text: "Hello! 👋 I'm **LexBot**, your platform assistant.\n\nI can help you navigate verification queues, check platform analytics, and manage users.",
-      suggestions: ['Platform overview', 'Pending verifications', 'View analytics', 'Help'],
+      suggestions: ['Platform overview', 'Pending verifications', 'View analytics', '🏛️ Landmark Cases'],
       quickActions: [
         { label: '📊 Dashboard', path: '/admin/dashboard' },
         { label: '✅ Verifications', path: '/admin/verification' },
@@ -55,20 +55,20 @@ const WELCOME_MESSAGES = {
   hi: {
     client: {
       text: "नमस्ते! 🙏 मैं **LexBot** हूँ, आपका LegalConnect कानूनी सहायक।\n\nमैं आपको भारतीय कानूनों (चेक बाउंस धारा 138, किरायेदार-मकान मालिक विवाद, ज़मानत, घरेलू हिंसा) को सरल भाषा में समझाने और वकील बुक करने में मदद करूँगा। आप माइक 🎙️ से बोल भी सकते हैं!",
-      suggestions: ['चेक बाउंस की सलाह', 'मकान मालिक विवाद', 'वकील कैसे बुक करें?', '📖 कानूनी शब्दकोश'],
+      suggestions: ['🏛️ ऐतिहासिक केस', '📚 कौन सी धारा लगेगी?', 'चेक बाउंस सलाह', 'मकान मालिक विवाद'],
       quickActions: [
+        { label: '🏛️ ऐतिहासिक केस', path: '/legal-resources' },
         { label: '🔍 वकील खोजें', path: '/client/advocates' },
         { label: '📋 मेरे केस', path: '/client/cases' },
-        { label: '📅 परामर्श (Bookings)', path: '/client/consultations' },
       ],
     },
     advocate: {
       text: "नमस्ते! 🙏 मैं **LexBot** हूँ, आपका प्रैक्टिस सहायक।\n\nमैं आपको परामर्श शेड्यूल, मुकदमों की सूची और फीस रिकॉर्ड प्रबंधित करने में सहायता कर सकता हूँ।",
-      suggestions: ['परामर्श देखें', 'कमाई रिकॉर्ड', 'समय सारिणी बदलें', '📖 कानूनी शब्दकोश'],
+      suggestions: ['🏛️ ऐतिहासिक केस', 'परामर्श देखें', 'कमाई रिकॉर्ड', '📖 कानूनी शब्दकोश'],
       quickActions: [
+        { label: '🏛️ ऐतिहासिक केस', path: '/legal-resources' },
         { label: '📅 परामर्श', path: '/advocate/consultations' },
         { label: '💰 कमाई', path: '/advocate/earnings' },
-        { label: '🕐 समय सारिणी', path: '/advocate/availability' },
       ],
     },
     admin: {
@@ -84,11 +84,11 @@ const WELCOME_MESSAGES = {
   hinglish: {
     client: {
       text: "Namaste! 🙏 Main hoon **LexBot**, aapka legal assistant.\n\nAap mujhse Cheque bounce (Sec 138), tenant dispute, bail process ya FIR ke baare me pooch sakte hain aur direct advocate book kar sakte hain. Mic 🎙️ button daba kar bol bhi sakte hain!",
-      suggestions: ['Cheque bounce advice', 'Makan malik dispute', 'Advocate kaise book kare?', '📖 Nyaya Kosh'],
+      suggestions: ['🏛️ Landmark Cases', '📚 Which section applies?', 'Cheque bounce advice', 'Tenant problem'],
       quickActions: [
+        { label: '🏛️ Landmark Cases', path: '/legal-resources' },
         { label: '🔍 Find Advocates', path: '/client/advocates' },
         { label: '📋 My Cases', path: '/client/cases' },
-        { label: '📅 Consultations', path: '/client/consultations' },
       ],
     },
     advocate: {

@@ -18,6 +18,8 @@ export const INTENTS = {
   COMPLAINT: 'complaint',
   NAVIGATION: 'navigation',
   GLOSSARY: 'glossary',
+  LANDMARK_CASES: 'landmark_cases',
+  APPLIED_SECTIONS: 'applied_sections',
   UNKNOWN: 'unknown',
 };
 
@@ -448,6 +450,311 @@ const NYAYA_KOSH = {
   },
 };
 
+// ─── Landmark Supreme Court Cases Database ───────────────────────
+const LANDMARK_CASES_DB = [
+  {
+    id: 'arnesh_kumar',
+    patterns: [/arnesh\s*kumar/i, /arrest\s*guideline/i, /41a\s*notice/i, /under\s*7\s*years\s*arrest/i],
+    title: 'Arnesh Kumar v. State of Bihar (2014) 8 SCC 273',
+    topic: 'Police Arrest Guidelines (Offences < 7 Years)',
+    en: {
+      headline: 'Police cannot automatically arrest citizens for offences carrying punishment up to 7 years.',
+      ruling: 'The Supreme Court ruled that arrests must not be made routinely upon filing of an FIR. Police MUST serve a Notice of Appearance (Section 41A CrPC / Sec 35(3) BNSS 2023) giving 14 days to appear. Failure to follow this makes the arresting officer personally liable for contempt of court.',
+      howToCite: 'Cite this if police threaten arbitrary arrest without serving formal written statutory notice.',
+    },
+    hi: {
+      headline: '7 साल से कम सज़ा वाले अपराधों में पुलिस सीधे गिरफ्तार नहीं कर सकती।',
+      ruling: 'सुप्रीम कोर्ट ने स्पष्ट किया कि FIR दर्ज होते ही गिरफ्तारी अनिवार्य नहीं है। पुलिस को पहले धारा 41A CrPC (अब धारा 35 BNSS) का लिखित नोटिस देना होगा। यदि पुलिस अधिकारी इसका उल्लंघन करते हैं तो उनके खिलाफ हाईकोर्ट में अवमानना (Contempt) की कार्रवाई हो सकती है।',
+      howToCite: 'यदि पुलिस बिना लिखित नोटिस के गिरफ्तारी की धमकी दे, तो अर्नेश कुमार जजमेंट का हवाला दें।',
+    },
+    hinglish: {
+      headline: '7 years se kam punishment wale cases me police directly arrest nahi kar sakti.',
+      ruling: 'Supreme Court ne mandate kiya hai ki police pehle Section 41A CrPC (ab Section 35 BNSS) ka written notice degi. Bina solid reasons ke arrest karne wale police officer par High Court Contempt chal sakta hai.',
+      howToCite: 'Agar police bina legal notice ke dhamki de to Arnesh Kumar ruling cite karein.',
+    },
+  },
+  {
+    id: 'dk_basu',
+    patterns: [/d\.?k\.?\s*basu/i, /custodial\s*(violence|death|torture)/i, /11\s*rules\s*of\s*arrest/i],
+    title: 'D.K. Basu v. State of West Bengal (1997) 1 SCC 416',
+    topic: '11 Golden Rules Against Custodial Torture',
+    en: {
+      headline: '11 mandatory guidelines to eliminate police brutality, custodial torture, and secret detention.',
+      ruling: 'The Supreme Court mandated that every arrest must have a signed arrest memo with a witness, family must be informed within 8-12 hours, medical exam conducted every 48 hours, and the arrestee has the constitutional right to meet their advocate during interrogation.',
+      howToCite: 'Cite whenever police detain someone without informing relatives, deny access to a lawyer, or commit physical assault in custody.',
+    },
+    hi: {
+      headline: 'हिरासत में प्रताड़ना व मौतों को रोकने हेतु 11 अनिवार्य नियम।',
+      ruling: 'सुप्रीम कोर्ट ने निर्देश दिया कि गिरफ्तारी के समय अरेस्ट मेमो बनाना, 8-12 घंटे में परिवार को सूचित करना, हर 48 घंटे में मेडिकल जांच और पूछताछ के दौरान वकील से मिलने की अनुमति देना अनिवार्य है।',
+      howToCite: 'यदि किसी को बिना कारण हिरासत में रखा जाए या वकील से न मिलने दिया जाए, तो डी.के. बसु जजमेंट तुरंत लागू होता है।',
+    },
+    hinglish: {
+      headline: 'Custodial torture aur illegal detention rokne ke 11 mandatory Supreme Court rules.',
+      ruling: 'Arrest memo banana, family ko 8-12 hours me inform karna, mandatory medical checkup aur inquiry ke waqt lawyer se milne ka right D.K. Basu case ne diya.',
+      howToCite: 'Agar police secret detention kare ya lawyer se na milne de to D.K. Basu guidelines cite karein.',
+    },
+  },
+  {
+    id: 'lalita_kumari',
+    patterns: [/lalita\s*kumari/i, /fir\s*mandatory/i, /refus(e|al)\s*to\s*(file|register)\s*fir/i, /zero\s*fir/i],
+    title: 'Lalita Kumari v. Govt. of UP (2014) 2 SCC 1',
+    topic: 'Mandatory FIR Registration in Cognizable Crime',
+    en: {
+      headline: 'Registration of FIR is mandatory under Section 154 CrPC if complaint discloses a cognizable offence.',
+      ruling: 'A 5-judge Constitution Bench held that police have zero discretion to refuse an FIR or delay it under the guise of an open-ended inquiry if a cognizable crime is alleged.',
+      howToCite: 'Cite before the SHO, SP, or Magistrate under Section 156(3) if a police station refuses to lodge your FIR.',
+    },
+    hi: {
+      headline: 'संज्ञेय अपराध में पुलिस के लिए तत्काल FIR दर्ज करना अनिवार्य है।',
+      ruling: 'सुप्रीम कोर्ट की 5 जजों की संविधान पीठ ने फैसला दिया कि यदि शिकायत में संज्ञेय अपराध (Cognizable Offence) का उल्लेख है, तो पुलिस अधिकारी FIR दर्ज करने से इनकार नहीं कर सकता।',
+      howToCite: 'यदि थाना आपकी FIR दर्ज न करे, तो ललिता कुमारी केस का हवाला देकर उच्चाधिकारियों या कोर्ट में शिकायत करें।',
+    },
+    hinglish: {
+      headline: 'Cognizable crime me FIR register karna police ke liye compulsory hai.',
+      ruling: 'Police preliminary enquiry ke naam par FIR delay nahi kar sakti. 5-judge bench ne FIR registration mandatory kiya hai.',
+      howToCite: 'Agar police FIR likhne se mana kare to Lalita Kumari ruling cite karein.',
+    },
+  },
+  {
+    id: 'ks_puttaswamy',
+    patterns: [/puttaswamy/i, /right\s*to\s*privacy/i, /privacy\s*(case|judgment)/i, /aadhaar\s*case/i],
+    title: 'Justice K.S. Puttaswamy v. Union of India (2017) 10 SCC 1',
+    topic: 'Fundamental Right to Privacy (Article 21)',
+    en: {
+      headline: 'Unanimous 9-judge bench declared Right to Privacy an inalienable Fundamental Right.',
+      ruling: 'Privacy covers bodily autonomy, informational privacy, and personal choices. Any state surveillance or data collection must pass the 3-fold proportionality test: Legality, Legitimate State Aim, and Proportionality.',
+      howToCite: 'Cite in cases of phone tapping, unauthorized leak of personal photos/chats, or financial data theft.',
+    },
+    hi: {
+      headline: 'सुप्रीम कोर्ट ने निजता के अधिकार (Right to Privacy) को मौलिक अधिकार घोषित किया।',
+      ruling: '9 जजों की पीठ ने माना कि निजता संविधान के अनुच्छेद 21 के तहत हर नागरिक का बुनियादी हक है। फोन टैपिंग या अनधिकृत डेटा लीक करना इसका सीधा उल्लंघन है।',
+      howToCite: 'डेटा चोरी, फोन टैपिंग या निजी संदेशों के सार्वजनिक प्रसार पर इस निर्णय को उद्धृत करें।',
+    },
+    hinglish: {
+      headline: 'Right to Privacy ab Article 21 ke under ek Fundamental Right hai.',
+      ruling: '9-judge Constitution Bench ne kaha ki citizen ka data, personal chats aur surveillance bina legal proportionality ke violate nahi kiya ja sakta.',
+      howToCite: 'Privacy violation ya unauthorized data leak me Puttaswamy judgment cite karein.',
+    },
+  },
+  {
+    id: 'vishaka',
+    patterns: [/vishaka/i, /posh\s*(act|guidelines)/i, /sexual\s*harassment\s*(at\s*workplace|guidelines)/i],
+    title: 'Vishaka & Ors. v. State of Rajasthan (1997) 7 SCC 241',
+    topic: 'Workplace Sexual Harassment & POSH Guidelines',
+    en: {
+      headline: 'Framed historic guidelines creating Internal Complaints Committees (ICC) for women safety at workplaces.',
+      ruling: 'Mandated every organization with 10+ employees to institute an Internal Complaints Committee presided over by a senior woman to investigate harassment within 90 days.',
+      howToCite: 'Cite when an employer fails to provide a safe working environment or victimizes an employee reporting harassment.',
+    },
+    hi: {
+      headline: 'कार्यस्थल पर महिलाओं के यौन उत्पीड़न की रोकथाम के लिए विशाखा गाइडलाइन्स।',
+      ruling: 'सुप्रीम कोर्ट ने हर संस्थान में आंतरिक शिकायत समिति (ICC) का गठन अनिवार्य किया, जिसके आधार पर संसद ने 2013 में POSH Act पारित किया।',
+      howToCite: 'ऑफिस में प्रताड़ना या ICC न होने की स्थिति में विशाखा निर्णय का संदर्भ दें।',
+    },
+    hinglish: {
+      headline: 'Workplace par women safety aur Internal Complaints Committee (ICC) ka landmark case.',
+      ruling: 'Har company jisme 10+ employees hain, wahan POSH committee mandatory hai jo 90 days me inquiry complete kare.',
+      howToCite: 'Workplace harassment ya missing ICC complaint me Vishaka guidelines cite karein.',
+    },
+  },
+  {
+    id: 'shreya_singhal',
+    patterns: [/shreya\s*singhal/i, /section\s*66a/i, /66a\s*it\s*act/i, /social\s*media\s*arrest/i],
+    title: 'Shreya Singhal v. Union of India (2015) 5 SCC 1',
+    topic: 'Freedom of Speech on Social Media (Sec 66A Voided)',
+    en: {
+      headline: 'Struck down Section 66A of the IT Act, protecting citizens from arrest for social media posts.',
+      ruling: 'The court held that vague terms like "offensive" or "annoying" cast too wide a net and chilled free speech. Peaceful online criticism or commentary cannot be criminalized.',
+      howToCite: 'Cite if police illegally threaten to book or arrest you under Section 66A for social media commentary.',
+    },
+    hi: {
+      headline: 'सोशल मीडिया पोस्ट पर गिरफ्तारी कराने वाली आईटी एक्ट की धारा 66A को असंवैधानिक घोषित कर रद्द किया।',
+      ruling: 'सुप्रीम कोर्ट ने स्पष्ट किया कि शांतिपूर्ण आलोचना, कार्टून या ऑनलाइन टिप्पणी पर किसी को जेल नहीं भेजा जा सकता।',
+      howToCite: 'यदि सोशल मीडिया पोस्ट पर धारा 66A की धमकी मिले, तो श्रेया सिंघल केस का उल्लेख करें।',
+    },
+    hinglish: {
+      headline: 'Social media post par arrest karne wali IT Act Section 66A ko Supreme Court ne strike down kiya.',
+      ruling: 'Online peaceful criticism ya opinion share karne par FIR karna unconstitutional hai.',
+      howToCite: 'Social media post controversy me Shreya Singhal verdict cite karein.',
+    },
+  },
+  {
+    id: 'kesavananda_bharati',
+    patterns: [/kesavananda/i, /basic\s*structure/i, /mool\s*dhancha/i, /13\s*judge/i],
+    title: 'Kesavananda Bharati v. State of Kerala (1973) 4 SCC 225',
+    topic: 'Basic Structure Doctrine of Constitution',
+    en: {
+      headline: 'Parliament can amend the Constitution, but cannot alter its Basic Structure (democracy, judicial review, rule of law).',
+      ruling: 'A 13-judge bench established that fundamental democratic pillars are inviolable and cannot be wiped away even by a 2/3rd majority constitutional amendment.',
+      howToCite: 'Cite when a government law attempts to undermine judicial independence or overturn constitutional guarantees.',
+    },
+    hi: {
+      headline: 'संसद संविधान में संशोधन कर सकती है, लेकिन इसके "मूल ढांचे" (Basic Structure) को नष्ट नहीं कर सकती।',
+      ruling: '13 जजों की सबसे बड़ी संविधान पीठ ने लोकतंत्र, निष्पक्ष न्यायपालिका और कानून के राज को संविधान का अमिट आधार माना।',
+      howToCite: 'संवैधानिक अधिकारों या न्यायिक स्वतंत्रता पर किसी भी सरकारी अतिक्रमण के विरुद्ध यह निर्णय सर्वोपरि है।',
+    },
+    hinglish: {
+      headline: 'Parliament Constitution amend kar sakti hai par "Basic Structure" destroy nahi kar sakti.',
+      ruling: 'Democracy, judicial review aur fundamental rights ko 2/3rd majority se bhi remove nahi kiya ja sakta.',
+      howToCite: 'Constitutional validity challenge karne ke liye Kesavananda Bharati cite karein.',
+    },
+  },
+  {
+    id: 'dashrathbhai',
+    patterns: [/dashrathbhai/i, /part\s*payment\s*cheque/i, /138\s*part\s*payment/i],
+    title: 'Dashrathbhai Patel v. Hitesh Patel (2022 INSC 1084)',
+    topic: 'Section 138 Cheque Bounce & Part-Payment Defense',
+    en: {
+      headline: 'Notice demanding full cheque amount after receiving partial payment invalidates Section 138 complaint.',
+      ruling: 'Under Section 56 of the NI Act, an endorsement must be made for part-payment. If a complainant demands the full ₹20 Lakhs when ₹4 Lakhs was already paid, the statutory demand notice is legally defective.',
+      howToCite: 'Use as a complete defense if you paid part of the debt via bank transfer but the opponent still demanded the whole original cheque amount.',
+    },
+    hi: {
+      headline: 'आंशिक भुगतान के बाद पूरे चेक का नोटिस भेजना धारा 138 के केस को खारिज कर देता है।',
+      ruling: 'सुप्रीम कोर्ट ने कहा कि चेक बाउंस का नोटिस केवल वास्तविक बकाया राशि का ही हो सकता है। यदि पहले से प्राप्त भुगतान को छिपाकर पूरे चेक का नोटिस भेजा गया, तो केस रद्द होगा।',
+      howToCite: 'यदि आपने आंशिक भुगतान कर दिया था और फिर भी पूरे चेक का केस हुआ है, तो इस केस का बचाव लें।',
+    },
+    hinglish: {
+      headline: 'Part-payment receive karne ke baad full cheque amount ka notice Section 138 me dismiss ho jata hai.',
+      ruling: 'Notice strictly actual pending balance ka hona chahiye. Agar opponent ne part payment chupaya to notice illegal hai.',
+      howToCite: 'Cheque bounce defense me part payment proof ke sath Dashrathbhai case cite karein.',
+    },
+  },
+  {
+    id: 'bishan_das',
+    patterns: [/bishan\s*das/i, /forceful\s*(eviction|lock|locking)/i, /makan\s*malik.*tala/i, /tenant\s*locked/i],
+    title: 'Bishan Das v. State of Punjab (1961 2 SCR 69)',
+    topic: 'Protection Against Forcible Eviction & Lockout',
+    en: {
+      headline: 'Landlords cannot take the law into their own hands to forcefully lock or evict a tenant without a court decree.',
+      ruling: 'Even if a lease has expired, possession can only be recovered through competent court proceedings. Locking rooms, cutting electricity, or throwing belongings is criminal dispossession.',
+      howToCite: 'Cite before the police or civil judge if your landlord puts their own lock on your door or cuts electricity/water.',
+    },
+    hi: {
+      headline: 'मकान मालिक बिना कोर्ट आदेश के किरायेदार को जबरन बाहर नहीं निकाल सकता और न ताला लगा सकता है।',
+      ruling: 'सुप्रीम कोर्ट की संविधान पीठ ने माना कि कानून के राज में किसी को भी जबरन बेदखल करने की अनुमति नहीं है। बिजली-पानी काटना या ताला लगाना अवैध है।',
+      howToCite: 'मकान मालिक द्वारा ताला लगाने या सामान बाहर फेंकने पर इस निर्णय का संदर्भ देकर पुलिस व कोर्ट से राहत पाएं।',
+    },
+    hinglish: {
+      headline: 'Landlord bina court order ke tenant ko forcefully evict ya tala nahi lag sakta.',
+      ruling: 'Bijli-paani cut karna ya door par padlock lagana criminal act hai. Eviction ke liye formal court process mandatory hai.',
+      howToCite: 'Landlord ke illegal lockout par police complaint aur court me Bishan Das case cite karein.',
+    },
+  },
+];
+
+// ─── Applied Sections & Situational Guide Database ──────────────
+const APPLIED_SECTIONS_DB = [
+  {
+    patterns: [/landlord.*lock/i, /makan\s*malik.*tala/i, /room\s*locked/i, /evict.*without\s*notice/i],
+    incident: 'Landlord Forcefully Locking Tenant / Dispossession',
+    en: {
+      title: 'Landlord Forcefully Locking Flat & Illegal Eviction',
+      sections: [
+        'Section 126 BNS (Old IPC 341): Wrongful Restraint — Up to 1 month jail or ₹5,000 fine (Cognizable).',
+        'Section 329 BNS (Old IPC 441/448): Criminal Trespass — Up to 1 year jail or ₹5,000 fine.',
+        'Section 316 BNS (Old IPC 405/406): Criminal Breach of Trust for seizing tenant goods — Up to 5 years jail (Non-Bailable).',
+        'Section 108 Transfer of Property Act: Tenant\'s civil right to peaceful possession.',
+      ],
+      precedent: 'Bishan Das v. State of Punjab (1961): Forcible dispossession without court decree is strictly illegal.',
+      action: 'Call 112 immediately, take photos/videos of the padlock, and file complaint under Section 126 BNS.',
+    },
+    hi: {
+      title: 'मकान मालिक द्वारा फ्लैट पर ताला लगाना व अवैध बेदखली',
+      sections: [
+        'धारा 126 BNS (पुरानी IPC 341): गलत तरीके से रोकना (Wrongful Restraint) — 1 माह जेल या ₹5,000 जुर्माना (संज्ञेय अपराध)।',
+        'धारा 329 BNS (पुरानी IPC 448): आपराधिक अनधिकार प्रवेश (Criminal Trespass) — 1 साल तक की जेल।',
+        'धारा 316 BNS (पुरानी IPC 406): किरायेदार के सामान पर अमानत में खयानत — 5 साल तक जेल (गैर-जमानती)।',
+        'ट्रांसफर ऑफ प्रॉपर्टी एक्ट धारा 108: किरायेदार का शांतिपूर्ण कब्जे का अधिकार।',
+      ],
+      precedent: 'बिशन दास बनाम पंजाब राज्य (1961): बिना कोर्ट आदेश के ताला लगाना या बेदखल करना कानूनन अपराध है।',
+      action: 'तुरंत 112 पर पुलिस बुलाएं, ताले की वीडियो बनाएं और धारा 126 BNS के तहत लिखित तहरीर दें।',
+    },
+    hinglish: {
+      title: 'Landlord ka flat par tala lagana aur illegal eviction',
+      sections: [
+        'Section 126 BNS (IPC 341): Wrongful Restraint — 1 month jail / ₹5,000 fine (Police FIR mandatory).',
+        'Section 329 BNS (IPC 448): Criminal Trespass — 1 year jail.',
+        'Section 316 BNS (IPC 406): Criminal Breach of Trust for holding luggage — 5 years jail (Non-Bailable).',
+        'Transfer of Property Act Sec 108: Peaceful enjoyment right.',
+      ],
+      precedent: 'Bishan Das Case (1961): Landlord legally force use nahi kar sakta bina court eviction order ke.',
+      action: '112 par call karein, lock ki video banayein aur police station me Section 126 BNS me complaint dein.',
+    },
+  },
+  {
+    patterns: [/online\s*(fraud|scam|thagi)/i, /upi\s*(scam|fraud)/i, /otp\s*(fraud|scam)/i, /cyber\s*crime\s*section/i],
+    incident: 'Online Financial Fraud, UPI & OTP Scams',
+    en: {
+      title: 'Online Financial Fraud & Cyber Impersonation',
+      sections: [
+        'Section 66D IT Act: Cheating by personation using computer/phone — Up to 3 years imprisonment + ₹1,00,000 fine (Non-Bailable).',
+        'Section 318(4) BNS (Old IPC 420): Cheating & dishonestly inducing delivery of property — Up to 7 years jail.',
+        'Section 66C IT Act: Identity Theft using OTP or password — Up to 3 years jail.',
+      ],
+      precedent: 'K.S. Puttaswamy (2017) & RBI Zero-Liability Circular: Report within 3 days for full bank refund.',
+      action: 'Dial 1930 Cyber Helpline within 2 hours to freeze recipient bank account, and lodge complaint on cybercrime.gov.in.',
+    },
+    hi: {
+      title: 'ऑनलाइन वित्तीय ठगी, यूपीआई व ओटीपी फ्रॉड',
+      sections: [
+        'आईटी एक्ट धारा 66D: कंप्यूटर/फोन के जरिए पहचान छिपाकर धोखाधड़ी — 3 साल जेल व ₹1,00,000 जुर्माना (गैर-जमानती)।',
+        'धारा 318(4) BNS (पुरानी IPC 420): छल व बेईमानी से संपत्ति प्राप्त करना — 7 साल तक की जेल।',
+        'आईटी एक्ट धारा 66C: पासवर्ड या ओटीपी की चोरी — 3 साल तक जेल।',
+      ],
+      precedent: 'आरबीआई सर्कुलर: 3 दिनों के भीतर शिकायत करने पर बैंक को पूरी राशि वापस करनी होती है।',
+      action: 'ठगी होते ही 2 घंटे के अंदर 1930 पर कॉल करें और cybercrime.gov.in पर पावती दर्ज करें।',
+    },
+    hinglish: {
+      title: 'Online Financial Fraud & Cyber Scam Sections',
+      sections: [
+        'Section 66D IT Act: Cheating by personation using digital devices — 3 years jail (Non-Bailable).',
+        'Section 318(4) BNS (IPC 420): Cheating — Up to 7 years imprisonment.',
+        'Section 66C IT Act: Identity theft & OTP fraud — 3 years jail.',
+      ],
+      precedent: 'RBI Zero Liability Policy: 3 din me report karne par bank se refund milta hai.',
+      action: '1930 helpline par turant call karein aur cybercrime.gov.in par complaint receipt download karein.',
+    },
+  },
+  {
+    patterns: [/assault/i, /beat.*me/i, /marpeet/i, /road\s*rage/i, /threat.*kill/i, /jaan\s*se\s*marne/i],
+    incident: 'Physical Assault, Road Rage & Threats',
+    en: {
+      title: 'Physical Assault, Road Rage & Criminal Threats',
+      sections: [
+        'Section 115 BNS (Old IPC 323): Voluntarily causing hurt — Up to 1 year jail or ₹10,000 fine.',
+        'Section 117 BNS (Old IPC 325): Grievous hurt (fracture, tooth loss) — Up to 7 years jail (Non-Bailable).',
+        'Section 351 BNS (Old IPC 506): Criminal Intimidation / death threat — Up to 7 years jail.',
+        'Section 324 BNS (Old IPC 427): Mischief causing damage to vehicle — Up to 1 year jail.',
+      ],
+      precedent: 'Lalita Kumari (2014): Immediate FIR registration and government Medico-Legal Case (MLC) examination.',
+      action: 'Call 112, take video of vehicle number, and get an MLC test done at a government hospital immediately.',
+    },
+    hi: {
+      title: 'मारपीट, सड़क पर झगड़ा व आपराधिक धमकी',
+      sections: [
+        'धारा 115 BNS (पुरानी IPC 323): स्वेच्छा से चोट पहुंचाना — 1 साल तक जेल या ₹10,000 जुर्माना।',
+        'धारा 117 BNS (पुरानी IPC 325): गंभीर चोट (हड्डी टूटना) — 7 साल तक कठोर कारावास (गैर-जमानती)।',
+        'धारा 351 BNS (पुरानी IPC 506): जान से मारने की धमकी देना — 7 साल तक जेल।',
+        'धारा 324 BNS (पुरानी IPC 427): गाड़ी या संपत्ति में तोड़फोड़ करना — 1 साल तक जेल।',
+      ],
+      precedent: 'ललिता कुमारी केस (2014): चोट लगने पर पुलिस को तुरंत FIR दर्ज कर सरकारी अस्पताल में मेडिकल (MLC) कराना होगा।',
+      action: '112 पर फोन करें, हमलावर की गाड़ी का नंबर नोट करें और सरकारी अस्पताल से तुरंत MLC रिपोर्ट बनवाएं।',
+    },
+    hinglish: {
+      title: 'Physical Assault, Road Rage & Criminal Intimidation',
+      sections: [
+        'Section 115 BNS (IPC 323): Simple hurt — 1 year jail / ₹10,000 fine.',
+        'Section 117 BNS (IPC 325): Grievous hurt / fracture — 7 years jail (Non-Bailable).',
+        'Section 351 BNS (IPC 506): Threatening to kill — Up to 7 years jail.',
+        'Section 324 BNS (IPC 427): Vehicle damage — 1 year jail.',
+      ],
+      precedent: 'Lalita Kumari Ruling: Police ko turant FIR karke government hospital me MLC karana zaroori hai.',
+      action: '112 dial karein, attacker ki photo/video lein aur government hospital se MLC certificate banwayein.',
+    },
+  },
+];
+
 // ─── Vernacular FAQ Database ────────────────────────────────────
 const VERNACULAR_FAQS = [
   {
@@ -517,6 +824,7 @@ const NAV_ROUTES = {
     cases:         { path: '/client/cases',          labelEn: 'My Cases',         labelHi: 'मेरे केस',          icon: '📋', desc: 'Track all your legal cases' },
     documents:     { path: '/client/documents',      labelEn: 'Documents',        labelHi: 'दस्तावेज़',         icon: '📁', desc: 'Upload and manage legal files' },
     notices:       { path: '/client/legal-notice',   labelEn: 'Notice Generator', labelHi: 'नोटिस जनरेटर',      icon: '📝', desc: '1-Click statutory legal demand notice generator' },
+    resources:     { path: '/legal-resources',       labelEn: 'Landmark Cases & Study', labelHi: 'ऐतिहासिक केस व धाराएं', icon: '🏛️', desc: 'Supreme Court landmark judgments & statutory guides' },
     messages:      { path: '/client/messages',       labelEn: 'Messages',         labelHi: 'संदेश',             icon: '💬', desc: 'Chat with your advocates' },
     notifications: { path: '/client/notifications',  labelEn: 'Notifications',    labelHi: 'सूचनाएं',          icon: '🔔', desc: 'View alerts and updates' },
     profile:       { path: '/client/profile',        labelEn: 'Profile',          labelHi: 'प्रोफ़ाइल',         icon: '👤', desc: 'Update your personal information' },
@@ -558,8 +866,142 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
   let type = 'text';
   let intent = INTENTS.UNKNOWN;
 
-  // 1. Check Nyaya Kosh (Legal Glossary) match first
+  // 1. Check Landmark Supreme Court Cases match
   const lowerText = text.toLowerCase();
+  
+  // A. Check for specific Landmark Case
+  for (const c of LANDMARK_CASES_DB) {
+    if (c.patterns.some((p) => p.test(text))) {
+      intent = INTENTS.LANDMARK_CASES;
+      type = 'landmark_case';
+      const info = c[lang] || c.en;
+
+      if (lang === 'hi') {
+        response = `🏛️ **ऐतिहासिक सुप्रीम कोर्ट वाद — ${c.title}**\n*विषय: ${c.topic}*\n\n` +
+          `📌 **मुख्य निष्कर्ष:** ${info.headline}\n\n` +
+          `⚖️ **फैसला व कानूनी सिद्धांत:**\n${info.ruling}\n\n` +
+          `💡 **आप इसका उपयोग कैसे कर सकते हैं:**\n${info.howToCite}\n\n` +
+          `*विस्तृत विधिक अध्ययन के लिए हमारे Resources हब पर जाएं!*`;
+        suggestions = ['और ऐतिहासिक केस देखें', 'अर्नेश कुमार जजमेंट', 'वकील से परामर्श करें'];
+      } else if (lang === 'hinglish') {
+        response = `🏛️ **Landmark Supreme Court Case — ${c.title}**\n*Topic: ${c.topic}*\n\n` +
+          `📌 **Key Ruling:** ${info.headline}\n\n` +
+          `⚖️ **Verdict & Legal Principle:**\n${info.ruling}\n\n` +
+          `💡 **How You Can Cite This:**\n${info.howToCite}\n\n` +
+          `*Full case brief study karne ke liye Resources hub visit karein!*`;
+        suggestions = ['View more landmark cases', 'Arnesh Kumar ruling', 'Consult an advocate'];
+      } else {
+        response = `🏛️ **Landmark Supreme Court Precedent — ${c.title}**\n*Topic: ${c.topic}*\n\n` +
+          `📌 **Headline:** ${info.headline}\n\n` +
+          `⚖️ **Verdict & Legal Principle (Ratio Decidendi):**\n${info.ruling}\n\n` +
+          `💡 **How You Can Use This Today:**\n${info.howToCite}\n\n` +
+          `*Explore full case briefs on our Legal Resources & Study Hub!*`;
+        suggestions = ['Explore more landmark cases', 'D.K. Basu arrest rules', 'Book a consultation'];
+      }
+
+      navLinks = [
+        {
+          path: '/legal-resources',
+          label: lang === 'hi' ? '🏛️ ऐतिहासिक केस हब खोलें' : '🏛️ Open Landmark Cases Hub',
+          icon: '🏛️',
+          desc: 'Read full Supreme Court case briefs and study notes',
+        },
+      ];
+
+      return { response, suggestions, navLinks, quickActions: [], type, intent, lang, timestamp: new Date().toISOString() };
+    }
+  }
+
+  // B. General Landmark Cases query ("famous cases", "landmark cases", "aitihasik faisle")
+  if (/\b(famous\s*cases?|landmark\s*cases?|supreme\s*court\s*(cases?|judgments?|verdicts?)|aitihasik\s*(case|faisle)|top\s*cases?)\b/i.test(text)) {
+    intent = INTENTS.LANDMARK_CASES;
+    type = 'landmark_case';
+
+    if (lang === 'hi') {
+      response = `🏛️ **भारत के प्रमुख ऐतिहासिक सुप्रीम कोर्ट वाद (Landmark Precedents):**\n\n` +
+        `1. **अर्नेश कुमार बनाम बिहार राज्य (2014)**: 7 साल से कम सज़ा वाले मामलों में मनमानी गिरफ्तारी पर रोक (धारा 41A नोटिस अनिवार्य)।\n` +
+        `2. **डी.के. बसु बनाम प. बंगाल (1997)**: पुलिस हिरासत में प्रताड़ना रोकने हेतु 11 अनिवार्य नियम।\n` +
+        `3. **के.एस. पुट्टास्वामी बनाम भारत संघ (2017)**: निजता का अधिकार (Right to Privacy) एक मौलिक अधिकार है।\n` +
+        `4. **विशाखा बनाम राजस्थान राज्य (1997)**: कार्यस्थल पर महिलाओं के यौन उत्पीड़न की रोकथाम (POSH Guidelines)।\n` +
+        `5. **केशवानंद भारती बनाम केरल राज्य (1973)**: संविधान का मूल ढांचा सिद्धांत (Basic Structure Doctrine)।\n\n` +
+        `*किसी भी केस का नाम लिखकर पूछें, या नीचे दिए गए लिंक से पूरा स्टडी हब खोलें!*`;
+      suggestions = ['अर्नेश कुमार केस समझाओ', 'डी.के. बसु के 11 नियम', 'पुट्टास्वामी प्राइवेसी केस'];
+    } else if (lang === 'hinglish') {
+      response = `🏛️ **India ke Top Landmark Supreme Court Cases:**\n\n` +
+        `1. **Arnesh Kumar v. State of Bihar (2014)**: Offences < 7 years me automatic arrest banned; Section 41A notice mandatory.\n` +
+        `2. **D.K. Basu v. State of West Bengal (1997)**: 11 golden rules against custodial torture and secret police detention.\n` +
+        `3. **K.S. Puttaswamy v. UOI (2017)**: Right to Privacy is a Fundamental Right under Article 21.\n` +
+        `4. **Vishaka v. State of Rajasthan (1997)**: Workplace sexual harassment prevention (POSH).\n` +
+        `5. **Kesavananda Bharati (1973)**: Parliament cannot destroy Basic Structure of Constitution.\n\n` +
+        `*Kisi bhi case ka naam type karein to explain or click the hub link!*`;
+      suggestions = ['Explain Arnesh Kumar case', 'D.K. Basu guidelines', 'Puttaswamy privacy ruling'];
+    } else {
+      response = `🏛️ **Top Landmark Supreme Court Judgments of India:**\n\n` +
+        `1. **Arnesh Kumar v. State of Bihar (2014)**: Protection against arbitrary police arrest for offences carrying < 7 years jail.\n` +
+        `2. **D.K. Basu v. State of West Bengal (1997)**: 11 golden rules protecting arrestees from custodial torture and secret lockup.\n` +
+        `3. **Justice K.S. Puttaswamy v. UOI (2017)**: Right to Privacy affirmed as a Fundamental Right under Article 21.\n` +
+        `4. **Vishaka v. State of Rajasthan (1997)**: Established mandatory Internal Complaints Committees (ICC) under POSH.\n` +
+        `5. **Kesavananda Bharati (1973)**: Formulated the inviolable Basic Structure Doctrine of the Constitution.\n\n` +
+        `*Type any case name to get a detailed brief, or click the hub link below!*`;
+      suggestions = ['Explain Arnesh Kumar', 'D.K. Basu 11 arrest rules', 'Puttaswamy privacy case'];
+    }
+
+    navLinks = [
+      {
+        path: '/legal-resources',
+        label: lang === 'hi' ? '🏛️ ऐतिहासिक केस हब खोलें' : '🏛️ Open Landmark Cases Hub',
+        icon: '🏛️',
+        desc: 'Explore comprehensive case briefs, ratio decidendi & citations',
+      },
+    ];
+
+    return { response, suggestions, navLinks, quickActions: [], type, intent, lang, timestamp: new Date().toISOString() };
+  }
+
+  // 2. Check Applied Sections by Incident
+  for (const s of APPLIED_SECTIONS_DB) {
+    if (s.patterns.some((p) => p.test(text))) {
+      intent = INTENTS.APPLIED_SECTIONS;
+      type = 'applied_sections';
+      const info = s[lang] || s.en;
+
+      if (lang === 'hi') {
+        response = `📚 **लागू होने वाली विधिक धाराएं (Statutory Sections Study):**\n*घटना: ${info.title}*\n\n` +
+          `📌 **लागू धाराएं (BNS 2023 व विशेष कानून):**\n` +
+          info.sections.map((sec) => `• ${sec}`).join('\n') + `\n\n` +
+          `🏛️ **संबंधित सुप्रीम कोर्ट निर्णय:**\n${info.precedent}\n\n` +
+          `✅ **तत्काल कानूनी कदम (Action Plan):**\n${info.action}`;
+        suggestions = ['संबंधित वकील से परामर्श करें', 'विधिक नोटिस जनरेटर', 'और धाराएं देखें'];
+      } else if (lang === 'hinglish') {
+        response = `📚 **Applicable Legal Sections & Dhara Guide:**\n*Scenario: ${info.title}*\n\n` +
+          `📌 **Applicable Sections (BNS 2023 & Special Acts):**\n` +
+          info.sections.map((sec) => `• ${sec}`).join('\n') + `\n\n` +
+          `🏛️ **Connected Landmark Precedent:**\n${info.precedent}\n\n` +
+          `✅ **Immediate Action Steps:**\n${info.action}`;
+        suggestions = ['Find an advocate for this', 'Generate legal notice', 'View more sections'];
+      } else {
+        response = `📚 **Applicable Statutory Sections Study Guide:**\n*Scenario: ${info.title}*\n\n` +
+          `📌 **Statutory Sections (New BNS 2023 & Special Acts):**\n` +
+          info.sections.map((sec) => `• ${sec}`).join('\n') + `\n\n` +
+          `🏛️ **Connected Supreme Court Precedent:**\n${info.precedent}\n\n` +
+          `✅ **Immediate Citizen Action Plan:**\n${info.action}`;
+        suggestions = ['Consult a specialist lawyer', 'Generate statutory notice', 'Legal Study Hub'];
+      }
+
+      navLinks = [
+        {
+          path: '/legal-resources',
+          label: lang === 'hi' ? '📚 पूरा विधिक अध्ययन हब' : '📚 Full Legal Study Hub',
+          icon: '📚',
+          desc: 'View comprehensive section tables, bailable status & punishments',
+        },
+      ];
+
+      return { response, suggestions, navLinks, quickActions: [], type, intent, lang, timestamp: new Date().toISOString() };
+    }
+  }
+
+  // 3. Check Nyaya Kosh (Legal Glossary) match
   for (const [key, termObj] of Object.entries(NYAYA_KOSH)) {
     if (lowerText.includes(key) && (GLOSSARY_PATTERNS.some((p) => p.test(text)) || lowerText.length < 35)) {
       intent = INTENTS.GLOSSARY;
