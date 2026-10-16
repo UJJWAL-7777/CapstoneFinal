@@ -136,9 +136,40 @@ export default function DevilsAdvocatePanel({
     ];
   };
 
+  const fallbackIndexRef = useRef(0);
+
+  // Category-specific rotating fallback pools (courtroom-sharp, realistic, never repeating generic text)
+  const categoryFallbacks = {
+    security_deposit: [
+      `Merely asserting this does not overcome Clause 14 of your tenancy agreement. Can you place on record the signed move-in condition inventory compared against your move-out photos?`,
+      `My client disputes that the premises were returned in tenantable repair. In the absence of an agreed joint inspection report, how do you prove these damages were ordinary wear and tear?`,
+      `Do you hold the bank transaction receipt and landlord's formal acknowledgment for the original ₹${formData.amount || 'deposit'}? In court, payment proof is step one.`,
+      `Did you serve statutory 30 days' advance notice to vacate in writing, or did you surrender the keys without giving the landlord opportunity to inspect?`,
+    ],
+    cheque_bounce: [
+      `A bare assertion without the underlying sales ledger will not convince the Magistrate. Under Section 139 NI Act, where is the audited ledger showing this specific ₹${formData.amount || 'amount'} was due on the cheque date?`,
+      `My client maintains the cheque was an undated security token. Do you have contemporaneous emails or purchase orders referencing this specific cheque number?`,
+      `Under Section 138(b), limitation runs strictly from the date of speed post delivery. What is the India Post tracking article number and delivery status?`,
+      `Did you present the cheque within its 3-month statutory validity period, and does the return memo explicitly state a dishonour code under Section 138?`,
+    ],
+    unpaid_salary: [
+      `Company HR policy requires mandatory notice period completion. Can you produce an official HR email formally relieving you and waiving notice pay recovery?`,
+      `Did you obtain written sign-offs from your reporting manager on the transition handover document before your last working day?`,
+      `Under the employment agreement, produce your monthly salary slips and Form 16 showing the exact TDS deducted and arrears claimed.`,
+      `If your claim is disputed, what documentary evidence refutes our claim of unreturned corporate assets and unauthorized absence?`,
+    ],
+    consumer_refund: [
+      `Under Section 38 of CPA 2019, alleging an inherent defect requires an expert laboratory report. Where is the authorized testing agency certificate?`,
+      `Our warranty terms exclude user mishandling, electrical voltage spikes, and unauthorized repair. Does your service job sheet rule out these exclusions?`,
+      `Did you purchase the product directly from an authorized distributor? Please specify the serial number and GST tax invoice details.`,
+      `Consumer Commissions require proof of deficiency of service. Did the service center refuse repair or did you reject their replacement offer?`,
+    ],
+  };
+
   // ─── AI Opponent Rebuttal Generator (Concise, Logical, Courtroom-Sharp) ──
   const generateOpponentReply = (userText) => {
     const text = userText.toLowerCase().trim();
+    const words = text.split(/\s+/).filter(Boolean);
 
     // 1. Concession of loss or missing documents ("i lost", "lost the bill", "don't have proof")
     if (/\b(lost|misplaced|missing|cannot find|can't find|destroyed|deleted|no proof|dont have|don't have|no bill|no invoice|no receipt)\b/.test(text)) {
@@ -158,59 +189,125 @@ export default function DevilsAdvocatePanel({
       return `You haven't served statutory demand notice yet? Then no offence has been committed under Section 138. The criminal cause of action only arises 15 days AFTER the drawer receives formal notice.`;
     }
 
-    // 4. Verbal deal / Cash / Trust
-    if (/\b(cash|verbal|oral|trust|on call|phone call|word of mouth|hand to hand)\b/.test(text)) {
-      setChatBonus((prev) => Math.max(prev - 8, -25));
-      return `A cash transaction based on verbal trust? Section 269ST of the Income Tax Act bars cash receipts above ₹20,000, and courts demand clear consideration. Oral assertions without documentary corroboration will be rejected in five minutes.`;
+    // 4. Balance Confirmation / Promissory Note / Debt Acknowledgment
+    if (/\b(balance confirmation|confirmation of balance|promissory note|pronote|debt acknowledgment|acknowledgment of debt|signed balance|signed confirmation|exhibit\b)/i.test(text)) {
+      setChatBonus((prev) => Math.min(prev + 8, 25));
+      return `If you hold a written balance confirmation signed by my client, that extends limitation under Section 18 of the Limitation Act, 1963. However, my client will depose that this signature was obtained for provisional audit reconciliation only, not as an unconditional admission of liability. Can you produce the underlying account ledger and bank entries supporting that amount?`;
     }
 
-    // 5. Strong documentary proof (Invoice, Delivery Challan, Ledger, e-Way bill)
-    if (/\b(invoice|bill|receipt|ledger|challan|delivery|proof|bank statement|account|e-way|eway)\b/.test(text)) {
+    // 5. Tenancy Proofs: Handover sign-off, Timestamped Photos/Videos, Keys, Clean condition
+    if (/\b(photo|photos|picture|pictures|video|handover|sign[- ]?off|possession|keys?|vacated?|inspection report|clean|flat was clean)\b/i.test(text)) {
+      setChatBonus((prev) => Math.min(prev + 8, 25));
+      if (category.id === 'security_deposit') {
+        return `Timestamped handover photos and a signed key-return receipt are strong prima facie evidence under Section 106 of the Evidence Act. However, my client's defense is that latent structural defects—such as seepage behind cabinets and plumbing blockages—only surfaced 48 hours post-handover. Did you execute a formal joint move-out inspection checklist signed by both parties?`;
+      }
+      return `Photographic and video records are recognized under the BSA 2023, but require clear date-time metadata and an accompanying certification under Section 63. Will you be filing the complete inspection sheet alongside these photos?`;
+    }
+
+    // 6. Tenancy Proofs: Contractor repair bills, Society receipts, Painting quotes, Deductions
+    if (/\b(contractor|repair bills?|maintenance|society receipts?|quotation|quote|painting|whitewash|cleaning bills?|gst bill)\b/i.test(text) && category.id === 'security_deposit') {
+      setChatBonus((prev) => Math.min(prev + 7, 25));
+      return `Under settled tenancy law, a landlord cannot unilaterally deduct arbitrary repair sums without furnishing actual GST tax invoices from registered contractors. Self-made repair estimates or routine wear-and-tear painting after standard tenancy are routinely rejected by Rent Authorities. If my client has no official contractor tax invoices, our deduction claim is heavily weakened.`;
+    }
+
+    // 7. Tenancy / Monetary: Penal Interest (18% p.a., wrongful withholding)
+    if (/\b(18%|penal interest|interest|withhold|withholding|statutory period|15 days)\b/i.test(text)) {
+      setChatBonus((prev) => Math.min(prev + 7, 25));
+      return `Demanding 18% penal interest under the Model Tenancy Act precedents creates serious financial exposure for the landlord. Courts and Consumer Forums frequently award interest between 12% to 18% p.a. for wrongful withholding of tenant deposits. If our deductions cannot be substantiated with GST bills, my client risks paying both the principal and accrued interest.`;
+    }
+
+    // 8. Employment Proofs: IT Asset Clearance slip, Laptop returned, Resignation acceptance, Payment of Wages Act
+    if (/\b(resignation|relieving|clearance|asset clearance|laptop|id card|wages act|payment of wages|labor commissioner|labour)\b/i.test(text)) {
+      setChatBonus((prev) => Math.min(prev + 8, 25));
+      if (/\b(laptop|asset|clearance|id card)\b/i.test(text)) {
+        return `A signed IT asset clearance slip and company ID surrender receipt effectively destroy our defense of unreturned corporate assets under Clause 8. The only remaining ground is notice period recovery. Did your resignation acceptance email explicitly waive the mandatory notice shortfall?`;
+      }
+      return `The resignation acceptance email confirms the separation was mutually acknowledged. Withholding earned wages post-resignation invites strict penalties under Section 15 of the Payment of Wages Act. Can you produce your final clearance settlement sheet?`;
+    }
+
+    // 9. Consumer Proofs: Job sheet, Service Center report, Motherboard, Warranty, CPA 2019
+    if (/\b(job sheet|service center|motherboard|hardware failure|technician|diagnostic|cpa 2019|unfair trade|replacement|7 days)\b/i.test(text)) {
+      setChatBonus((prev) => Math.min(prev + 8, 25));
+      return `An authorized service center job sheet noting hardware motherboard failure is marked as Exhibit C-1 under Section 38(2)(c) of the Consumer Protection Act, 2019. Unless our technical experts can prove liquid ingress or unauthorized tampering, the District Commission will order a full replacement or refund with compensation.`;
+    }
+
+    // 10. Cheque Bounce: Section 139 presumption, Return Memo, Funds Insufficient
+    if (/\b(section 139|139|presumption|return memo|funds insufficient|bounced|dishonour memo)\b/i.test(text)) {
+      setChatBonus((prev) => Math.min(prev + 7, 25));
+      if (/\b(section 139|139|presumption)\b/i.test(text)) {
+        return `Under Section 139 NI Act, the court presumes the cheque was issued for debt, but this is a rebuttable presumption. My client only needs to raise a probable defense through cross-examination to shift the onus back to you. Where is the signed purchase order corresponding to this exact amount?`;
+      }
+      return `The return memo confirms dishonour, but did you serve the demand notice within 30 days of receiving that memo from your bank? We will demand the bank deposit slip and memo delivery date to verify limitation.`;
+    }
+
+    // 11. Invoices, Bills, Delivery Challans, e-Way bills, Ledgers
+    if (/\b(invoice|bill|receipt|ledger|challan|delivery|proof|bank statement|account|e-way|eway)\b/i.test(text)) {
       setChatBonus((prev) => Math.min(prev + 6, 20));
+      if (category.id === 'security_deposit') {
+        return `Do you hold the original bank statement showing the ₹${formData.amount || 'deposit'} transfer to the landlord's account with the transaction UTR number? Bank debits leave no room for denial of the initial deposit.`;
+      }
       return `Noted. But did my client sign the delivery challan or e-Way bill with an official stamp? An unacknowledged invoice will be challenged as unilateral. If you produce the signed delivery acknowledgment as Exhibit P-1, our security defense is severely weakened.`;
     }
 
-    // 6. Digital proof (WhatsApp, Chat, Email, Screenshot, Call recording)
-    if (/\b(whatsapp|chat|email|screen\s*shot|message|recording|call|sms|audio)\b/.test(text)) {
+    // 12. Digital proof (WhatsApp, Chat, Email, Screenshot, Call recording)
+    if (/\b(whatsapp|chat|email|screen\s*shot|message|recording|call|sms|audio)\b/i.test(text)) {
       setChatBonus((prev) => Math.min(prev + 5, 20));
-      return `Screenshots alone are inadmissible. Under Section 63 of Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B IEA), electronic records strictly require a statutory certificate under oath with a cryptographic hash. Do you have that Section 63 certificate ready?`;
+      return `Digital correspondence is admissible in Indian courts, provided you attach a statutory Affidavit under Section 63 of the Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B of Evidence Act) verifying the device and cryptographic hash. Did my client specifically reply confirming the liability on that thread?`;
     }
 
-    // 7. Contract / Agreement / Stamped clauses
-    if (/\b(agreement|contract|clause|stamp|notary|registered|promissory|deed)\b/.test(text)) {
+    // 13. Contract / Agreement / Stamped clauses
+    if (/\b(agreement|contract|clause|stamp|notary|registered|promissory|deed)\b/i.test(text)) {
       setChatBonus((prev) => Math.min(prev + 5, 20));
       return `You cite the contract, but was proper State Stamp Duty paid? Under Supreme Court precedents, an under-stamped commercial agreement cannot be admitted in evidence until deficit duty plus a 10x penalty is paid to the Collector. Check your stamp value before trial.`;
     }
 
-    // 8. Limitation / Speed post tracking / Return memo
-    if (/\b(speed\s*post|tracking|consignment|postal|ad|memo|bank memo|within 30)\b/.test(text)) {
+    // 14. Limitation / Speed post tracking
+    if (/\b(speed\s*post|tracking|consignment|postal|ad|memo|bank memo|within 30)\b/i.test(text)) {
       setChatBonus((prev) => Math.min(prev + 5, 20));
       return `We will scrutinize the India Post delivery code. If the tracking sheet does not reflect "Item Delivered" to our registered address, the presumption of service under Section 27 General Clauses Act completely fails.`;
     }
 
-    // 9. Criminal threats (Police, Jail, FIR, 420, Arrest)
-    if (/\b(police|fir|jail|arrest|fraud|cheating|420|crime)\b/.test(text)) {
+    // 15. Criminal threats (Police, Jail, FIR, 420, Arrest)
+    if (/\b(police|fir|jail|arrest|fraud|cheating|420|crime)\b/i.test(text)) {
       return `Threatening a criminal FIR for a commercial debt is an abuse of judicial process. The High Court routinely quashes such complaints under Section 528 BNSS / 482 CrPC with exemplary costs. Keep your claim strictly within civil and statutory procedures.`;
     }
 
-    // 10. Settlement / Compromise / Mediation
-    if (/\b(settle|settlement|compromise|negotiate|discount|mutual|half)\b/.test(text)) {
+    // 16. Settlement / Compromise / Mediation
+    if (/\b(settle|settlement|compromise|negotiate|discount|mutual|half)\b/i.test(text)) {
       return `If your client is open to a pragmatic settlement without protracted litigation, have your advocate send a formal mediation proposal. What liquidated amount will your client accept for a full and final withdrawal?`;
     }
 
-    // 11. Short Affirmation ("yes", "i have", "ready", "sure", "i do")
-    if (/^(yes|yeah|yep|i have|i do|sure|ready|done|ok|okay|of course)\b/.test(text)) {
+    // 17. Explicit Verbal deal / Cash / Trust (Only if user actually mentions cash or verbal deal!)
+    if (/\b(cash|verbal|oral|trust|on call|phone call|word of mouth|hand to hand)\b/.test(text)) {
+      setChatBonus((prev) => Math.max(prev - 8, -25));
+      return `A cash transaction based on verbal trust? Section 269ST of the Income Tax Act bars cash receipts above ₹20,000, and courts demand clear consideration. Oral assertions without documentary corroboration will be rejected in five minutes. What contemporaneous paper trail proves this?`;
+    }
+
+    // 18. Short Affirmation ("yes", "i have", "ready", "sure", "i do" - only if brief, <= 4 words!)
+    if (words.length <= 4 && /^(yes|yeah|yep|i have|i do|sure|ready|done|ok|okay|of course|yes i have|i have them|yes i do)\b/.test(text)) {
+      if (category.id === 'security_deposit') {
+        return `State the exact document you hold: is it a signed move-out inspection annexure, an official handover memo, or a WhatsApp acknowledgment of key return? Quote the exhibit.`;
+      }
+      if (category.id === 'unpaid_salary') {
+        return `Specify the exhibit: is it a signed IT asset clearance slip, HR resignation acceptance email, or bank salary credit statement?`;
+      }
+      if (category.id === 'consumer_refund') {
+        return `Name the exhibit: is it an authorized service center job sheet, a stamped warranty card, or a diagnostic hardware failure report?`;
+      }
       return `Be precise: what exact document do you hold? Is it a signed balance confirmation, an acknowledged promissory note, or a bank deposit advice? State the exhibit name.`;
     }
 
-    // 12. Short Negation ("no", "nothing", "none", "i dont", "i don't")
-    if (/^(no|nope|nothing|none|i dont|i don't|neither)\b/.test(text)) {
+    // 19. Short Negation ("no", "nothing", "none", "i dont", "i don't" - only if brief, <= 4 words!)
+    if (words.length <= 4 && /^(no|nope|nothing|none|i dont|i don't|neither)\b/.test(text)) {
       setChatBonus((prev) => Math.max(prev - 8, -25));
       return `If you possess no documentary proof, your legal notice is an uncorroborated bluff. We will formally reject it and hold you liable for exemplary costs under Section 35A of the CPC.`;
     }
 
-    // 13. Default Concise Cross-Examination (Concise, punchy 2 sentences)
-    return `That is merely an uncorroborated oral statement. In Indian courts, oral testimony without a contemporaneous paper trail is demolished during cross-examination. What verifiable written document proves your claim?`;
+    // 20. Dynamic Rotating Courtroom Cross-Examination (Category-specific, rotates every time!)
+    const pool = categoryFallbacks[category.id] || categoryFallbacks.cheque_bounce;
+    const reply = pool[fallbackIndexRef.current % pool.length];
+    fallbackIndexRef.current += 1;
+    return reply;
   };
 
   const handleSendMessage = (messageText) => {
@@ -252,6 +349,7 @@ export default function DevilsAdvocatePanel({
 
   const handleResetChat = () => {
     setChatBonus(0);
+    fallbackIndexRef.current = 0;
     setMessages([
       {
         id: `init-${Date.now()}`,
