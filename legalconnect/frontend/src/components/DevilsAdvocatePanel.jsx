@@ -47,7 +47,7 @@ export default function DevilsAdvocatePanel({
     return score;
   })();
 
-  const currentScore = Math.min(baseScore + chatBonus, 98);
+  const currentScore = Math.min(Math.max(baseScore + chatBonus, 30), 98);
 
   // ─── Initial Opening Rebuttal by Opposing Senior Counsel ───────────
   const getInitialOpponentGreeting = () => {
@@ -136,41 +136,81 @@ export default function DevilsAdvocatePanel({
     ];
   };
 
-  // ─── AI Opponent Rebuttal Generator ────────────────────────────────
+  // ─── AI Opponent Rebuttal Generator (Concise, Logical, Courtroom-Sharp) ──
   const generateOpponentReply = (userText) => {
-    const text = userText.toLowerCase();
+    const text = userText.toLowerCase().trim();
 
-    // Invoices / Bills / Ledger
-    if (/invoice|bill|receipt|ledger|challan|delivery|proof|bank statement|account/.test(text)) {
+    // 1. Concession of loss or missing documents ("i lost", "lost the bill", "don't have proof")
+    if (/\b(lost|misplaced|missing|cannot find|can't find|destroyed|deleted|no proof|dont have|don't have|no bill|no invoice|no receipt)\b/.test(text)) {
+      setChatBonus((prev) => Math.max(prev - 10, -25));
+      return `You lost it? Then your claim collapses before the Magistrate. Under Section 65 of the Evidence Act / BSA 2023, secondary evidence requires strict proof that the original was destroyed without your default. Without that primary paper, my client will simply testify that no debt ever existed.`;
+    }
+
+    // 2. Concession of limitation lapse / delay ("late", "delayed", "after 30 days")
+    if (/\b(late|delayed|after 30 days|missed|forgot to send|too late|delay)\b/.test(text)) {
+      setChatBonus((prev) => Math.max(prev - 12, -25));
+      return `Then you have no legal cause of action under Section 138(b). The 30-day notice limitation is statutory and absolute—no court can condone pre-notice delay. Your complaint will be dismissed at the pre-summoning stage.`;
+    }
+
+    // 3. Concession of no notice sent
+    if (/\b(didn't send|did not send|no notice|havent sent|haven't sent|not sent)\b/.test(text)) {
+      setChatBonus((prev) => Math.max(prev - 15, -25));
+      return `You haven't served statutory demand notice yet? Then no offence has been committed under Section 138. The criminal cause of action only arises 15 days AFTER the drawer receives formal notice.`;
+    }
+
+    // 4. Verbal deal / Cash / Trust
+    if (/\b(cash|verbal|oral|trust|on call|phone call|word of mouth|hand to hand)\b/.test(text)) {
+      setChatBonus((prev) => Math.max(prev - 8, -25));
+      return `A cash transaction based on verbal trust? Section 269ST of the Income Tax Act bars cash receipts above ₹20,000, and courts demand clear consideration. Oral assertions without documentary corroboration will be rejected in five minutes.`;
+    }
+
+    // 5. Strong documentary proof (Invoice, Delivery Challan, Ledger, e-Way bill)
+    if (/\b(invoice|bill|receipt|ledger|challan|delivery|proof|bank statement|account|e-way|eway)\b/.test(text)) {
+      setChatBonus((prev) => Math.min(prev + 6, 20));
+      return `Noted. But did my client sign the delivery challan or e-Way bill with an official stamp? An unacknowledged invoice will be challenged as unilateral. If you produce the signed delivery acknowledgment as Exhibit P-1, our security defense is severely weakened.`;
+    }
+
+    // 6. Digital proof (WhatsApp, Chat, Email, Screenshot, Call recording)
+    if (/\b(whatsapp|chat|email|screen\s*shot|message|recording|call|sms|audio)\b/.test(text)) {
       setChatBonus((prev) => Math.min(prev + 5, 20));
-      return `Good point, but in court, an invoice alone is not conclusive unless you prove physical delivery of goods or services. Did my client sign the delivery challan or e-Way bill? If you produce the signed delivery acknowledgment in your complaint, our "security token" defense will be severely weakened. Make sure you annex that copy as Exhibit P-1.`;
+      return `Screenshots alone are inadmissible. Under Section 63 of Bharatiya Sakshya Adhiniyam, 2023 (formerly Section 65B IEA), electronic records strictly require a statutory certificate under oath with a cryptographic hash. Do you have that Section 63 certificate ready?`;
     }
 
-    // WhatsApp / Emails / Digital Records
-    if (/whatsapp|chat|email|screen\s*shot|message|recording|call|sms/.test(text)) {
+    // 7. Contract / Agreement / Stamped clauses
+    if (/\b(agreement|contract|clause|stamp|notary|registered|promissory|deed)\b/.test(text)) {
       setChatBonus((prev) => Math.min(prev + 5, 20));
-      return `Hold on! Under Section 63 of the new Bharatiya Sakshya Adhiniyam, 2023 (BSA) — formerly Section 65B of the Indian Evidence Act — printouts or screenshots of WhatsApp chats are strictly INADMISSIBLE without a statutory Electronic Evidence Certificate under oath. Do you have a Section 63 BSA certificate with SHA-256 hash ready, or will our objection have your screenshots thrown out on Day 1?`;
+      return `You cite the contract, but was proper State Stamp Duty paid? Under Supreme Court precedents, an under-stamped commercial agreement cannot be admitted in evidence until deficit duty plus a 10x penalty is paid to the Collector. Check your stamp value before trial.`;
     }
 
-    // Agreement / Contract / Legally Enforceable
-    if (/agreement|contract|clause|stamp|notary|registered|promissory/.test(text)) {
-      setChatBonus((prev) => Math.min(prev + 4, 20));
-      return `You refer to the agreement, but is it properly stamped under the relevant State Stamp Act? Under landmark Supreme Court rulings, an unstamped or under-stamped commercial agreement cannot be admitted into evidence until the deficit stamp duty plus a 10x penalty is deposited with the Collector. Check your agreement's stamp value before entering the witness box.`;
-    }
-
-    // Limitation / Speed Post / Timing
-    if (/30\s*day|limitation|time|speed\s*post|tracking|memo|delay/.test(text)) {
+    // 8. Limitation / Speed post tracking / Return memo
+    if (/\b(speed\s*post|tracking|consignment|postal|ad|memo|bank memo|within 30)\b/.test(text)) {
       setChatBonus((prev) => Math.min(prev + 5, 20));
-      return `We will aggressively scrutinize the calendar. The law mandates that the notice must be dispatched within 30 days of receiving the bank memo, and the complaint must be filed within 30 days AFTER the 15-day cure period expires. Keep the India Post consignment tracking delivery receipt safe; without official delivery confirmation, we will argue service was never effected under Section 27 General Clauses Act.`;
+      return `We will scrutinize the India Post delivery code. If the tracking sheet does not reflect "Item Delivered" to our registered address, the presumption of service under Section 27 General Clauses Act completely fails.`;
     }
 
-    // Criminal / Police / FIR / Perjury
-    if (/police|fir|fraud|cheating|jail|criminal|420|bns|perjury/.test(text)) {
-      return `Be very cautious with criminal threats. The Supreme Court and Delhi High Court have repeatedly ruled that attempting to twist a civil recovery or breach of contract into a criminal cheating case constitutes an abuse of judicial process. If you file a frivolous FIR, we will move the High Court under Section 528 BNSS / Section 482 CrPC to quash it with exemplary costs against you.`;
+    // 9. Criminal threats (Police, Jail, FIR, 420, Arrest)
+    if (/\b(police|fir|jail|arrest|fraud|cheating|420|crime)\b/.test(text)) {
+      return `Threatening a criminal FIR for a commercial debt is an abuse of judicial process. The High Court routinely quashes such complaints under Section 528 BNSS / 482 CrPC with exemplary costs. Keep your claim strictly within civil and statutory procedures.`;
     }
 
-    // Default Sharp Cross-Examination
-    return `That sounds plausible as an oral assertion, but before a Judicial Magistrate or Civil Judge, oral testimony without contemporaneous documentary backing is discarded during cross-examination. The burden of proof initially rests on the complainant. What tangible, verifiable document will you append to your complaint to disprove our client's defense?`;
+    // 10. Settlement / Compromise / Mediation
+    if (/\b(settle|settlement|compromise|negotiate|discount|mutual|half)\b/.test(text)) {
+      return `If your client is open to a pragmatic settlement without protracted litigation, have your advocate send a formal mediation proposal. What liquidated amount will your client accept for a full and final withdrawal?`;
+    }
+
+    // 11. Short Affirmation ("yes", "i have", "ready", "sure", "i do")
+    if (/^(yes|yeah|yep|i have|i do|sure|ready|done|ok|okay|of course)\b/.test(text)) {
+      return `Be precise: what exact document do you hold? Is it a signed balance confirmation, an acknowledged promissory note, or a bank deposit advice? State the exhibit name.`;
+    }
+
+    // 12. Short Negation ("no", "nothing", "none", "i dont", "i don't")
+    if (/^(no|nope|nothing|none|i dont|i don't|neither)\b/.test(text)) {
+      setChatBonus((prev) => Math.max(prev - 8, -25));
+      return `If you possess no documentary proof, your legal notice is an uncorroborated bluff. We will formally reject it and hold you liable for exemplary costs under Section 35A of the CPC.`;
+    }
+
+    // 13. Default Concise Cross-Examination (Concise, punchy 2 sentences)
+    return `That is merely an uncorroborated oral statement. In Indian courts, oral testimony without a contemporaneous paper trail is demolished during cross-examination. What verifiable written document proves your claim?`;
   };
 
   const handleSendMessage = (messageText) => {
