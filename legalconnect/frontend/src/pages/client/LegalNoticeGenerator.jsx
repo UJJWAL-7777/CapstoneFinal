@@ -19,13 +19,13 @@ import Badge from '../../components/ui/Badge.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
 import { useToast } from '../../context/ToastContext.jsx';
 
-// ─── Clean Form Input Helper (Avoids void element nesting) ────────
+// ─── Clean Form Input Helper (High Contrast Dark Mode) ───────────
 function FormField({ label, as: Component = 'input', className = '', ...props }) {
   return (
     <div>
-      <label className="mb-1 block text-xs font-medium text-ink dark:text-ink-soft">{label}</label>
+      <label className="mb-1 block text-xs font-semibold text-ink dark:text-[#E2ECE8]">{label}</label>
       <Component
-        className={`input text-sm py-1.5 w-full ${className}`}
+        className={`block w-full rounded-lg border border-line dark:border-[#2A443E] bg-white dark:bg-[#0E1A17] px-3 py-2 text-sm text-ink dark:text-[#F1F7F5] placeholder:text-ink-muted/50 dark:placeholder-[#6C857F] focus:border-chamber-500 dark:focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-chamber-500/20 dark:focus:ring-emerald-400/20 transition-all ${className}`}
         {...props}
       />
     </div>
@@ -141,6 +141,7 @@ export default function LegalNoticeGenerator() {
   const [selectedCatId, setSelectedCatId] = useState(NOTICE_CATEGORIES[0].id);
   const [lang, setLang] = useState('en'); // 'en' | 'hi'
   const [copied, setCopied] = useState(false);
+  const [darkPaper, setDarkPaper] = useState(false);
 
   // Form State
   const activeCategory = NOTICE_CATEGORIES.find((c) => c.id === selectedCatId) || NOTICE_CATEGORIES[0];
@@ -431,27 +432,29 @@ ${formData.senderName}`;
               onClick={() => handleSelectCategory(cat.id)}
               className={`text-left p-4 rounded-xl border transition-all ${
                 isSelected
-                  ? 'border-chamber-600 bg-chamber-50/50 shadow-md ring-2 ring-chamber-600/20'
-                  : 'border-line bg-surface hover:border-chamber-300'
+                  ? 'border-chamber-600 bg-chamber-50/80 dark:border-emerald-400 dark:bg-emerald-950/40 shadow-md ring-2 ring-chamber-600/20 dark:ring-emerald-400/30'
+                  : 'border-line bg-surface dark:bg-[#13221E] hover:border-chamber-300 dark:hover:border-emerald-600/40'
               }`}
             >
               <div className="flex items-center justify-between mb-2">
                 <div
                   className={`p-2 rounded-lg ${
-                    isSelected ? 'bg-chamber-700 text-white' : 'bg-chamber-100 text-chamber-700'
+                    isSelected
+                      ? 'bg-chamber-700 text-white dark:bg-emerald-600'
+                      : 'bg-chamber-100 text-chamber-700 dark:bg-emerald-950/80 dark:text-emerald-300'
                   }`}
                 >
                   <Icon size={18} />
                 </div>
-                <span className="text-[10px] font-semibold tracking-wider uppercase text-ink-muted">
+                <span className="text-[10px] font-bold tracking-wider uppercase text-ink-muted dark:text-emerald-300/80">
                   {cat.badge}
                 </span>
               </div>
-              <h3 className="font-semibold text-sm text-ink">{lang === 'hi' ? cat.titleHi : cat.title}</h3>
-              <p className="text-xs text-ink-muted mt-1 line-clamp-2">{cat.desc}</p>
-              <div className="mt-3 pt-2 border-t border-line/60 flex items-center justify-between text-[11px] font-medium text-chamber-700">
+              <h3 className="font-semibold text-sm text-ink dark:text-white">{lang === 'hi' ? cat.titleHi : cat.title}</h3>
+              <p className="text-xs text-ink-muted dark:text-[#CBDAD5] mt-1 line-clamp-2">{cat.desc}</p>
+              <div className="mt-3 pt-2 border-t border-line/60 dark:border-[#28443E] flex items-center justify-between text-[11px] font-semibold text-chamber-700 dark:text-emerald-300">
                 <span>{cat.curePeriod}</span>
-                {isSelected && <CheckCircle size={14} className="text-chamber-700" />}
+                {isSelected && <CheckCircle size={14} className="text-chamber-700 dark:text-emerald-300" />}
               </div>
             </button>
           );
@@ -461,10 +464,10 @@ ${formData.senderName}`;
       {/* ─── Main Workspace: Form (Left) & Document Preview (Right) ─ */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Form Details (Hidden during print) */}
-        <div className="print:hidden lg:col-span-5 space-y-4 rounded-2xl border border-line bg-surface p-5 shadow-sm">
-          <div className="flex items-center justify-between pb-3 border-b border-line">
-            <h2 className="font-serif font-bold text-lg text-ink flex items-center gap-2">
-              <FileText size={18} className="text-chamber-700" />
+        <div className="print:hidden lg:col-span-5 space-y-4 rounded-2xl border border-line dark:border-[#28443E] bg-surface dark:bg-[#13221E] p-5 shadow-sm">
+          <div className="flex items-center justify-between pb-3 border-b border-line dark:border-[#28443E]">
+            <h2 className="font-serif font-bold text-lg text-ink dark:text-white flex items-center gap-2">
+              <FileText size={18} className="text-chamber-700 dark:text-emerald-400" />
               Notice Parameters
             </h2>
             <Badge variant="blue">{activeCategory.law.split(',')[0]}</Badge>
@@ -472,8 +475,8 @@ ${formData.senderName}`;
 
           <div className="space-y-3.5 text-sm">
             {/* Sender */}
-            <div className="p-3 rounded-xl bg-paper/60 border border-line space-y-2.5">
-              <span className="text-xs font-semibold text-chamber-800 uppercase tracking-wider block">
+            <div className="p-3.5 rounded-xl bg-paper/80 dark:bg-[#182C27] border border-line dark:border-[#28443E] space-y-2.5">
+              <span className="text-xs font-bold text-chamber-700 dark:text-emerald-400 uppercase tracking-wider block">
                 1. Sender (Your Details)
               </span>
               <FormField
@@ -501,8 +504,8 @@ ${formData.senderName}`;
             </div>
 
             {/* Recipient */}
-            <div className="p-3 rounded-xl bg-paper/60 border border-line space-y-2.5">
-              <span className="text-xs font-semibold text-rose-700 uppercase tracking-wider block">
+            <div className="p-3.5 rounded-xl bg-paper/80 dark:bg-[#182C27] border border-line dark:border-[#28443E] space-y-2.5">
+              <span className="text-xs font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider block">
                 2. Opposite Party (Defaulter)
               </span>
               <FormField
@@ -523,8 +526,8 @@ ${formData.senderName}`;
             </div>
 
             {/* Claim / Dispute Details */}
-            <div className="p-3 rounded-xl bg-paper/60 border border-line space-y-2.5">
-              <span className="text-xs font-semibold text-ink-muted uppercase tracking-wider block">
+            <div className="p-3.5 rounded-xl bg-paper/80 dark:bg-[#182C27] border border-line dark:border-[#28443E] space-y-2.5">
+              <span className="text-xs font-bold text-ink-muted dark:text-emerald-300/80 uppercase tracking-wider block">
                 3. Dispute Facts & Amounts
               </span>
               <div className="grid grid-cols-2 gap-2">
@@ -679,22 +682,30 @@ ${formData.senderName}`;
         {/* Right Column: Court Paper Document Live Preview */}
         <div className="lg:col-span-7 space-y-4">
           {/* Action Toolbar (Hidden during print) */}
-          <div className="print:hidden flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl border border-line bg-surface shadow-sm">
+          <div className="print:hidden flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl border border-line dark:border-[#28443E] bg-surface dark:bg-[#13221E] shadow-sm">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-ink-muted">Document Output:</span>
+              <span className="text-xs font-semibold text-ink-muted dark:text-[#CBDAD5]">Document Output:</span>
               <Badge variant="emerald">{lang === 'hi' ? 'विधिक हिन्दी' : 'High Court Legal English'}</Badge>
             </div>
             <div className="flex items-center gap-2">
+              {/* Paper Appearance Switcher */}
+              <button
+                onClick={() => setDarkPaper((prev) => !prev)}
+                className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-line dark:border-[#28443E] px-2.5 py-1.5 text-xs font-medium text-ink dark:text-[#E2ECE8] hover:bg-paper dark:hover:bg-[#1A2C27] transition-colors"
+                title="Toggle Paper Appearance"
+              >
+                {darkPaper ? '📄 White Paper' : '🌙 Dark Paper'}
+              </button>
               <button
                 onClick={handleCopy}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-ink hover:bg-paper transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-line dark:border-[#28443E] px-3 py-1.5 text-xs font-medium text-ink dark:text-[#E2ECE8] hover:bg-paper dark:hover:bg-[#1A2C27] transition-colors"
               >
-                {copied ? <CheckCircle size={14} className="text-emerald-600" /> : <Copy size={14} />}
+                {copied ? <CheckCircle size={14} className="text-emerald-500" /> : <Copy size={14} />}
                 {copied ? 'Copied!' : 'Copy Text'}
               </button>
               <button
                 onClick={handlePrint}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-chamber-700 hover:bg-chamber-800 text-white px-3.5 py-1.5 text-xs font-semibold shadow transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-chamber-700 hover:bg-chamber-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white px-3.5 py-1.5 text-xs font-semibold shadow transition-colors"
               >
                 <Printer size={14} /> Print / Save PDF
               </button>
@@ -704,29 +715,53 @@ ${formData.senderName}`;
           {/* Actual Legal Document (Simulated A4 Court Paper) */}
           <div
             id="legal-notice-document"
-            className="relative bg-white text-black p-8 sm:p-12 rounded-xl border border-stone-300 shadow-xl font-serif text-[13px] leading-relaxed select-text print:border-none print:shadow-none print:p-0 print:m-0"
-            style={{ minHeight: '800px' }}
+            className={`legal-paper-preview ${darkPaper ? 'dark-paper' : ''} relative p-8 sm:p-12 rounded-xl shadow-2xl font-serif text-[13px] leading-relaxed select-text print:border-none print:shadow-none print:p-0 print:m-0`}
+            style={{
+              minHeight: '800px',
+              backgroundColor: darkPaper ? '#111C19' : '#FFFFFF',
+              color: darkPaper ? '#F0FDF4' : '#0F172A',
+              border: darkPaper ? '1px solid #28443E' : '1px solid #D1D5DB',
+            }}
           >
             {/* Watermark Ribbon */}
-            <div className="absolute top-4 right-4 text-[10px] font-sans font-semibold tracking-widest text-stone-400 uppercase border border-stone-300 px-2.5 py-1 rounded">
+            <div
+              className="watermark-tag absolute top-4 right-4 text-[10px] font-sans font-bold tracking-widest uppercase px-2.5 py-1 rounded"
+              style={{
+                color: darkPaper ? '#6EE7B7' : '#64748B',
+                border: darkPaper ? '1px solid rgba(110, 231, 183, 0.4)' : '1px solid #D1D5DB',
+              }}
+            >
               FORMAL STATUTORY NOTICE
             </div>
 
             {/* Document Content */}
-            <pre className="whitespace-pre-wrap font-serif text-stone-900 leading-6 text-[13.5px]">
+            <pre
+              className="whitespace-pre-wrap font-serif leading-6 text-[13.5px]"
+              style={{ color: darkPaper ? '#F0FDF4' : '#0F172A' }}
+            >
               {noticeText}
             </pre>
 
             {/* Speed Post Instructions Box (Hidden during print) */}
-            <div className="print:hidden mt-8 pt-6 border-t-2 border-dashed border-stone-300 font-sans text-xs text-stone-600 bg-stone-50 p-4 rounded-lg">
-              <h4 className="font-bold text-stone-800 flex items-center gap-1.5 mb-1.5">
-                <AlertTriangle size={15} className="text-amber-600" />
+            <div
+              className="dispatch-box print:hidden mt-8 pt-6 border-t-2 border-dashed font-sans text-xs p-4 rounded-lg"
+              style={{
+                backgroundColor: darkPaper ? '#0E1715' : '#F8FAFC',
+                borderColor: darkPaper ? '#28443E' : '#CBD5E1',
+                color: darkPaper ? '#CBDAD5' : '#334155',
+              }}
+            >
+              <h4
+                className="font-bold flex items-center gap-1.5 mb-1.5"
+                style={{ color: darkPaper ? '#6EE7B7' : '#0F172A' }}
+              >
+                <AlertTriangle size={15} className="text-amber-500" />
                 Dispatch & Evidence Instructions (For Court Admissibility)
               </h4>
-              <ul className="list-disc list-inside space-y-1 text-stone-600">
-                <li>Print 2 copies: Sign both. Send one copy to the recipient via <strong>Speed Post with A.D.</strong></li>
+              <ul className="list-disc list-inside space-y-1" style={{ color: darkPaper ? '#CBDAD5' : '#334155' }}>
+                <li>Print 2 copies: Sign both. Send one copy to the recipient via <strong style={{ color: darkPaper ? '#6EE7B7' : '#0F172A' }}>Speed Post with A.D.</strong></li>
                 <li>Keep the post office postal dispatch receipt and consignment tracking sheet safely.</li>
-                <li>The statutory 15-day countdown begins from the date the delivery report marks <em>"Item Delivered"</em>.</li>
+                <li>The statutory 15-day countdown begins from the date the delivery report marks <em style={{ color: darkPaper ? '#6EE7B7' : '#0F172A' }}>"Item Delivered"</em>.</li>
               </ul>
             </div>
           </div>

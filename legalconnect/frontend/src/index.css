@@ -19,16 +19,16 @@
 
 html.dark {
   color-scheme: dark;
-  --bg-page: #0C1412;
-  --bg-surface: #13201D;
-  --bg-surface-subtle: #162421;
-  --bg-surface-hover: #1C2E2A;
-  --border-color: #233833;
-  --border-subtle: #1C2E2A;
-  --text-primary: #E2ECE8;
-  --text-secondary: #A4B7B2;
-  --text-muted: #8A9E99;
-  --panel-shadow: 0 4px 20px -8px rgba(0, 0, 0, 0.6);
+  --bg-page: #0B1311;
+  --bg-surface: #13221E;
+  --bg-surface-subtle: #192C27;
+  --bg-surface-hover: #1F3630;
+  --border-color: #28443E;
+  --border-subtle: #1E342F;
+  --text-primary: #F3F7F5;
+  --text-secondary: #CBDAD5;
+  --text-muted: #95ADA7;
+  --panel-shadow: 0 4px 20px -8px rgba(0, 0, 0, 0.7);
 }
 
 @layer base {
@@ -226,6 +226,84 @@ html.dark {
   }
   html.dark .text-ink-muted {
     color: var(--text-muted) !important;
+  }
+
+  /* High contrast accessible overrides in Dark Mode */
+  html.dark .text-chamber-500 {
+    color: #34D399 !important;
+  }
+  html.dark .text-chamber-600,
+  html.dark .text-chamber-700,
+  html.dark .text-chamber-800,
+  html.dark .text-chamber-900 {
+    color: #5EEAD4 !important;
+  }
+  html.dark .bg-chamber-50,
+  html.dark .bg-chamber-100 {
+    background-color: rgba(47, 115, 103, 0.25) !important;
+    color: #A7F3D0 !important;
+  }
+  html.dark .border-chamber-100,
+  html.dark .border-chamber-200,
+  html.dark .border-chamber-300 {
+    border-color: rgba(94, 234, 212, 0.28) !important;
+  }
+
+  /* Document Paper Preview: High-contrast & always readable */
+  .legal-paper-preview {
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    border-color: #D1D5DB !important;
+  }
+  .legal-paper-preview pre,
+  .legal-paper-preview p,
+  .legal-paper-preview span,
+  .legal-paper-preview div {
+    color: #0F172A !important;
+  }
+  .legal-paper-preview .watermark-tag {
+    color: #64748B !important;
+    border-color: #CBD5E1 !important;
+    background-color: transparent !important;
+  }
+  .legal-paper-preview .dispatch-box {
+    background-color: #F8FAFC !important;
+    border-color: #CBD5E1 !important;
+    color: #334155 !important;
+  }
+  .legal-paper-preview .dispatch-box * {
+    color: #334155 !important;
+  }
+  .legal-paper-preview .dispatch-box h4 {
+    color: #0F172A !important;
+  }
+
+  .legal-paper-preview.dark-paper {
+    background-color: #111C19 !important;
+    border-color: #28443E !important;
+    color: #F0FDF4 !important;
+  }
+  .legal-paper-preview.dark-paper pre,
+  .legal-paper-preview.dark-paper p,
+  .legal-paper-preview.dark-paper span,
+  .legal-paper-preview.dark-paper div {
+    color: #F0FDF4 !important;
+  }
+  .legal-paper-preview.dark-paper .watermark-tag {
+    color: #6EE7B7 !important;
+    border-color: rgba(110, 231, 183, 0.4) !important;
+    background-color: rgba(16, 185, 129, 0.08) !important;
+  }
+  .legal-paper-preview.dark-paper .dispatch-box {
+    background-color: #0E1715 !important;
+    border-color: #28443E !important;
+    color: #CBDAD5 !important;
+  }
+  .legal-paper-preview.dark-paper .dispatch-box * {
+    color: #CBDAD5 !important;
+  }
+  .legal-paper-preview.dark-paper .dispatch-box h4 {
+    color: #6EE7B7 !important;
   }
 
   /* Theme overrides for standard utility classes in Light Mode */
