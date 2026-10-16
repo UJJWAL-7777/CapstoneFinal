@@ -1,17 +1,46 @@
-# LexBot — LegalConnect AI Chatbot
+# 🤖 LexBot — AI Legal Jurisprudence & Chatbot Microservice
 
-A standalone chatbot microservice for the LegalConnect platform. Runs independently and can be deployed separately.
+A standalone, zero-external-dependency AI chatbot microservice for the LegalConnect platform. Operates independently on **port 5001** with zero API costs, full offline capability, and deep statutory knowledge of Indian law.
 
-## Features
+---
 
-- 🤖 **Smart Intent Detection** — Greetings, legal queries, platform navigation, FAQs, complaints
-- ⚖️ **12 Legal Practice Areas** — Family, Property, Criminal, Corporate, Civil, Labour, Consumer, Tax, IP, Cyber, Banking, Immigration
-- 🎯 **Role-Aware Responses** — Different help for Clients, Advocates, and Admins
-- 📚 **9 Built-in FAQs** — Booking, cases, payments, documents, video calls, security, etc.
-- 🚀 **Zero External Dependencies** — No external AI APIs needed, works 100% offline
-- 🔗 **REST API** — Simple POST endpoint, easy to integrate
+## 🌟 Key Capabilities
 
-## Quick Start
+### 1. 🇮🇳 Trilingual "Nyaya Bhasha" Engine
+- **Languages Supported**: **English**, **हिन्दी (Hindi)**, and **Hinglish**.
+- **Vernacular Tone**: Context-aware legal vernacular adapted for ordinary citizens and professional advocates.
+
+### 2. ⚖️ Bharatiya Nyaya Sanhita (BNS 2023) vs IPC Database
+- **Robbery & House-Breaking**:
+  - **Section 309(4) BNS** (Old IPC 392) — Robbery in dwelling house (up to 14 years rigorous imprisonment + fine).
+  - **Section 331(6) & 332 BNS** (Old IPC 457/458) — House-breaking by night.
+  - **Section 310 BNS** (Old IPC 395) — Dacoity (5+ persons) with Life Imprisonment.
+  - **Section 41 BNS** (Old IPC 103) — Statutory Right of Private Defence extending to causing death to night home-invaders.
+- **Homicide & Assault**:
+  - **Section 103 BNS** (Old IPC 302) — Murder (Death penalty or Life Imprisonment).
+  - **Section 109 BNS** (Old IPC 307) — Attempt to Murder.
+  - **Section 115(2) BNS** (Old IPC 323) — Voluntarily causing hurt.
+- **Intellectual Legal Doctrines**:
+  - **Section 21 BNS** (Old IPC 95) — *De Minimis Non Curat Lex* (law does not take account of trifles).
+  - **Advocate Misconduct** — Bar Council Rules & landmark *Himalayan Coop* doctrine against unauthorized concession of guilt.
+- **Commercial & Cyber Offenses**:
+  - **Section 138 NI Act** — Cheque bounce procedure and limitation periods.
+  - **Section 66E / 67 IT Act & Section 77 BNS** — Non-consensual image sharing and privacy violations.
+
+### 3. 🏛️ Supreme Court Landmark Precedents
+Provides structured case briefs, ratio decidendi, and citation guidance for:
+- *Arnesh Kumar v. State of Bihar* (Arrest safeguards under 7 years)
+- *D.K. Basu v. State of West Bengal* (Custodial rights & arrest memo rules)
+- *Justice K.S. Puttaswamy v. UOI* (Right to Privacy)
+- *Vishaka v. State of Rajasthan* (Workplace sexual harassment / POSH)
+- *Kesavananda Bharati v. State of Kerala* (Basic Structure Doctrine)
+
+### 4. 📖 Nyaya Kosh (Legal Glossary)
+Instant definitions for common legal terms (*Bail, Cognizable Offence, FIR, Vakalatnama, Injunction, Anticipatory Bail, Lok Adalat*).
+
+---
+
+## 🚀 Quick Start
 
 ```bash
 # Install dependencies
@@ -23,96 +52,65 @@ npm run dev
 # Start production server
 npm start
 ```
+Starts on **port 5001** (or `PORT` / `CHATBOT_PORT` from `.env`).
 
-Server starts on **port 5001** (configurable via `CHATBOT_PORT` env variable).
+---
 
-## API Reference
+## 📡 API Reference
 
-### Health Check
-```
+### 1. Health Check
+```http
 GET /api/health
 ```
-
 Response:
 ```json
 {
   "success": true,
   "service": "LexBot Chatbot",
   "version": "1.0.0",
-  "status": "online"
+  "status": "online",
+  "timestamp": "2026-10-17T01:30:00.000Z"
 }
 ```
 
-### Chat
-```
+### 2. Chat Query
+```http
 POST /api/chat
 Content-Type: application/json
 ```
-
-Request body:
+Request Body:
 ```json
 {
-  "message": "Hello",
-  "userRole": "client",    // "client" | "advocate" | "admin" (optional, defaults to "client")
-  "userName": "Rahul"      // optional, defaults to "User"
+  "message": "what is act applied if any one rob a house",
+  "userRole": "client",
+  "userName": "Rahul",
+  "lang": "en"
 }
 ```
-
 Response:
 ```json
 {
   "success": true,
   "data": {
-    "response": "Hello Rahul! 👋 I'm LexBot, your LegalConnect assistant...",
-    "suggestions": ["Book a consultation", "Track my case", "Find an advocate"],
-    "type": "text",
-    "intent": "greeting",
-    "timestamp": "2026-09-30T06:36:06.966Z"
+    "response": "📚 **Applicable Statutory Sections & Jurisprudential Analysis:**\n*Topic: Robbing a House / House-Breaking & Burglary (BNS 2023 vs IPC)*\n...",
+    "suggestions": ["Consult a specialist lawyer", "Explore Landmark Cases", "Open Legal Study Hub"],
+    "type": "applied_sections",
+    "intent": "applied_sections",
+    "lang": "en",
+    "timestamp": "2026-10-17T01:30:01.000Z"
   }
 }
 ```
 
-## Integration with LegalConnect Frontend
+---
 
-The main LegalConnect frontend includes a `ChatbotWidget.jsx` component that calls this API. The widget:
-
-1. Shows a floating chat button (bottom-right) after user login
-2. Sends `{ message, userRole, userName }` to `http://localhost:5001/api/chat`
-3. Displays the bot response with markdown formatting
-4. Shows clickable suggestion chips
-
-To change the chatbot URL in production, update the `CHATBOT_API` constant in:
-```
-legalconnect/frontend/src/components/ChatbotWidget.jsx
-```
-
-## Environment Variables
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `CHATBOT_PORT` | `5001` | Server port |
-| `CORS_ORIGIN` | — | Production frontend URL for CORS |
-
-## Deployment
-
-This is a standard Node.js Express app. Deploy to any platform:
-
-```bash
-# Docker
-docker build -t lexbot .
-docker run -p 5001:5001 lexbot
-
-# Railway / Render / Fly.io
-# Just connect the repo and set the start command to: npm start
-```
-
-## Project Structure
+## 📁 Architecture
 
 ```
 legalconnect-chatbot/
-├── server.js                    # Express server + API routes
+├── server.js                    # Express microservice, rate limiter, CORS & health check
 ├── services/
-│   └── chatbot.service.js       # Intelligence engine (intents, legal KB, FAQs)
+│   └── chatbot.service.js       # Statutory BNS 2023 engine, landmark cases, glossary
 ├── package.json
 └── README.md
 ```
