@@ -209,6 +209,11 @@ html.dark {
   html.dark .bg-white {
     background-color: var(--bg-surface) !important;
   }
+  html.dark header,
+  html.dark .bg-white\/90,
+  html.dark .bg-white\/95 {
+    background-color: rgba(11, 19, 17, 0.95) !important;
+  }
   html.dark .bg-paper {
     background-color: var(--bg-page) !important;
   }

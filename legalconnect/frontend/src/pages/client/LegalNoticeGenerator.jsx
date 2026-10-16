@@ -386,13 +386,15 @@ ${formData.senderName}`;
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="inline-flex items-center gap-1 rounded-full bg-gold-400/20 px-3 py-1 text-xs font-semibold text-gold-300">
+              <span className="inline-flex items-center gap-1 rounded-full bg-amber-400/25 px-3 py-1 text-xs font-semibold text-amber-300 border border-amber-400/30">
                 <Sparkles size={13} /> NyayaDraft • Legal Notice Engine
               </span>
               <Badge variant="emerald">Court-Ready PDF</Badge>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-serif">1-Click Legal Notice Generator</h1>
-            <p className="mt-1 text-sm text-chamber-100 max-w-2xl">
+            <h1 className="text-2xl sm:text-3xl font-bold font-serif !text-white text-white" style={{ color: '#FFFFFF' }}>
+              1-Click Legal Notice Generator
+            </h1>
+            <p className="mt-1 text-sm text-white/90 max-w-2xl leading-relaxed">
               Generate officially formatted, statutory legal demand notices (Section 138 NI Act, Tenancy Eviction,
               Security Deposit, Unpaid Salary) in English & हिन्दी. Ready to print, sign, and dispatch via Speed Post.
             </p>
