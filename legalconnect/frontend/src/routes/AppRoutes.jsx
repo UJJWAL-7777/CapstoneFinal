@@ -29,6 +29,7 @@ const ClientMessages = lazy(() => import('../pages/client/Messages.jsx'));
 const ClientNotifications = lazy(() => import('../pages/client/Notifications.jsx'));
 const ClientProfile = lazy(() => import('../pages/client/Profile.jsx'));
 const ClientSettings = lazy(() => import('../pages/client/Settings.jsx'));
+const LegalNoticeGenerator = lazy(() => import('../pages/client/LegalNoticeGenerator.jsx'));
 
 // Advocate
 const AdvocateDashboard = lazy(() => import('../pages/advocate/Dashboard.jsx'));
@@ -75,6 +76,7 @@ export default function AppRoutes() {
           <Route path="about" element={<About />} />
           <Route path="how-it-works" element={<HowItWorks />} />
           <Route path="legal-resources" element={<LegalResources />} />
+          <Route path="legal-notice" element={<LegalNoticeGenerator />} />
           <Route element={<GuestRoute />}>
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
@@ -101,6 +103,7 @@ export default function AppRoutes() {
               <Route path="client/notifications" element={<ClientNotifications />} />
               <Route path="client/profile" element={<ClientProfile />} />
               <Route path="client/settings" element={<ClientSettings />} />
+              <Route path="client/legal-notice" element={<LegalNoticeGenerator />} />
             </Route>
 
             {/* Advocate */}
@@ -118,6 +121,7 @@ export default function AppRoutes() {
               <Route path="advocate/consultations/:id/video" element={<AdvocateVideoCall />} />
               <Route path="advocate/badges" element={<AdvocateBadges />} />
               <Route path="advocate/settings" element={<AdvocateSettings />} />
+              <Route path="advocate/legal-notice" element={<LegalNoticeGenerator />} />
             </Route>
 
             {/* Admin */}

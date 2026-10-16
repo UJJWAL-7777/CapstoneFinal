@@ -18,6 +18,7 @@ export default function PublicLayout() {
             <Link to="/about" className="hidden sm:block px-3 py-2 text-sm text-ink-soft hover:text-ink transition-colors">About</Link>
             <Link to="/how-it-works" className="hidden sm:block px-3 py-2 text-sm text-ink-soft hover:text-ink transition-colors">How It Works</Link>
             <Link to="/legal-resources" className="hidden sm:block px-3 py-2 text-sm text-ink-soft hover:text-ink transition-colors">Resources</Link>
+            <Link to="/legal-notice" className="hidden sm:block px-3 py-2 text-sm font-medium text-chamber-700 hover:text-chamber-800 transition-colors">Notice Generator</Link>
             <ThemeToggle className="ml-1" />
             <div className="ml-2 flex items-center gap-2">
               {isAuthenticated ? (

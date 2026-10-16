@@ -492,6 +492,20 @@ const VERNACULAR_FAQS = [
     },
     navKey: 'consultations',
   },
+  {
+    patterns: [
+      /legal\s*notice/i,
+      /draft\s*(a\s*)?notice/i,
+      /नोटिस\s*(कैसे|बनाएं|भेजें|चाहिए|जनरेटर)/i,
+      /notice\s*(kaise|banaye|bheje|draft|generate)/i,
+    ],
+    answer: {
+      en: 'You can generate a court-ready statutory legal notice in 1 click:\n\n1. Open our **Notice Generator**\n2. Select your dispute (Cheque Bounce Sec 138, Security Deposit, Unpaid Salary, Consumer Refund)\n3. Fill in the counterparty details & claim amount\n4. Instantly print or download your court-formatted Legal Notice PDF! 📝',
+      hi: 'आप LegalConnect के **Notice Generator (नोटिस जनरेटर)** से 1 क्लिक में कानूनी नोटिस तैयार कर सकते हैं:\n\n1. साइडबार से **Notice Generator** खोलें\n2. अपनी समस्या चुनें (चेक बाउंस धारा 138, मकान मालिक डिपॉजिट, बकाया वेतन, उपभोक्ता रिफंड)\n3. संबंधित जानकारी व राशि भरें\n4. सीधे कोर्ट-मान्य कानूनी नोटिस का प्रिंट या PDF प्राप्त करें! 📝',
+      hinglish: 'Aap 1-click me court-ready Legal Notice generate kar sakte hain:\n\n1. Sidebar se **Notice Generator** par jayein\n2. Category choose karein (Cheque Bounce Sec 138, Security Deposit, Salary, Consumer Court)\n3. Details fill karke instant Court-ready Notice PDF download ya print karein! 📝',
+    },
+    navKey: 'notices',
+  },
 ];
 
 // ─── Navigation Routes ──────────────────────────────────────────
@@ -502,6 +516,7 @@ const NAV_ROUTES = {
     consultations: { path: '/client/consultations',  labelEn: 'Consultations',    labelHi: 'परामर्श व मीटिंग्स', icon: '📅', desc: 'View upcoming and past consultations' },
     cases:         { path: '/client/cases',          labelEn: 'My Cases',         labelHi: 'मेरे केस',          icon: '📋', desc: 'Track all your legal cases' },
     documents:     { path: '/client/documents',      labelEn: 'Documents',        labelHi: 'दस्तावेज़',         icon: '📁', desc: 'Upload and manage legal files' },
+    notices:       { path: '/client/legal-notice',   labelEn: 'Notice Generator', labelHi: 'नोटिस जनरेटर',      icon: '📝', desc: '1-Click statutory legal demand notice generator' },
     messages:      { path: '/client/messages',       labelEn: 'Messages',         labelHi: 'संदेश',             icon: '💬', desc: 'Chat with your advocates' },
     notifications: { path: '/client/notifications',  labelEn: 'Notifications',    labelHi: 'सूचनाएं',          icon: '🔔', desc: 'View alerts and updates' },
     profile:       { path: '/client/profile',        labelEn: 'Profile',          labelHi: 'प्रोफ़ाइल',         icon: '👤', desc: 'Update your personal information' },
@@ -511,6 +526,7 @@ const NAV_ROUTES = {
     consultations: { path: '/advocate/consultations', labelEn: 'Consultations',    labelHi: 'परामर्श',           icon: '📅', desc: 'Manage booking requests' },
     clients:       { path: '/advocate/clients',       labelEn: 'Clients',          labelHi: 'क्लाइंट्स',         icon: '👥', desc: 'View your client directory' },
     cases:         { path: '/advocate/cases',         labelEn: 'Cases',            labelHi: 'केस मैनेजमेंट',     icon: '📋', desc: 'Track and update case progress' },
+    notices:       { path: '/advocate/legal-notice',  labelEn: 'Notice Drafts',    labelHi: 'नोटिस ड्राफ्ट्स',   icon: '📝', desc: 'Generate court-ready statutory notices' },
     messages:      { path: '/advocate/messages',      labelEn: 'Messages',         labelHi: 'संदेश',             icon: '💬', desc: 'Communicate with clients' },
     availability:  { path: '/advocate/availability',  labelEn: 'Availability',     labelHi: 'समय सारिणी',       icon: '🕐', desc: 'Set your consultation schedule' },
     earnings:      { path: '/advocate/earnings',      labelEn: 'Earnings',         labelHi: 'कमाई व भुगतान',     icon: '💰', desc: 'Track payments and payouts' },
