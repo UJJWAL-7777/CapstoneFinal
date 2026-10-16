@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Scale, Users, CreditCard, Star, TrendingUp, ArrowRight, Clock, Plus, ShieldCheck, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth.js';
@@ -14,6 +14,16 @@ import Button from '../../components/ui/Button.jsx';
 import { format } from 'date-fns';
 
 const STATUS_COLORS = { Pending: 'warning', Confirmed: 'success', Completed: 'default', Cancelled: 'danger' };
+
+const ADVOCATE_QUICK_ACTIONS = [
+  { to: '/advocate/cases', label: 'Open New Case', icon: Plus },
+  { to: '/advocate/consultations', label: 'Manage Inquiries', icon: Calendar },
+  { to: '/advocate/calendar', label: 'Set Availability Slots', icon: Clock },
+  { to: '/advocate/clients', label: 'Client Directory', icon: Users },
+  { to: '/advocate/earnings', label: 'View Revenue & Receipts', icon: CreditCard },
+  { to: '/advocate/reviews', label: 'Client Feedback & Reviews', icon: Star },
+  { to: '/advocate/profile', label: 'Edit Public Profile', icon: ShieldCheck },
+];
 
 export default function AdvocateDashboard() {
   const { user } = useAuth();
@@ -37,8 +47,16 @@ export default function AdvocateDashboard() {
     }).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
-  const pending = consultations.filter((c) => c.status === 'Pending').length;
-  const upcoming = consultations.filter((c) => c.status === 'Confirmed' && new Date(c.date) >= new Date()).length;
+  const { pending, upcoming } = useMemo(() => {
+    const now = new Date();
+    let p = 0;
+    let u = 0;
+    for (const c of consultations) {
+      if (c.status === 'Pending') p++;
+      if (c.status === 'Confirmed' && new Date(c.date) >= now) u++;
+    }
+    return { pending: p, upcoming: u };
+  }, [consultations]);
 
   return (
     <div className="space-y-8 animate-fade-in pb-12">
@@ -150,15 +168,7 @@ export default function AdvocateDashboard() {
         <div className="space-y-4">
           <h2 className="text-lg font-bold text-ink">Quick Actions</h2>
           <div className="grid gap-3">
-            {[
-              { to: '/advocate/cases', label: 'Open New Case', icon: Plus },
-              { to: '/advocate/consultations', label: 'Manage Inquiries', icon: Calendar },
-              { to: '/advocate/calendar', label: 'Set Availability Slots', icon: Clock },
-              { to: '/advocate/clients', label: 'Client Directory', icon: Users },
-              { to: '/advocate/earnings', label: 'View Revenue & Receipts', icon: CreditCard },
-              { to: '/advocate/reviews', label: 'Client Feedback & Reviews', icon: Star },
-              { to: '/advocate/profile', label: 'Edit Public Profile', icon: ShieldCheck },
-            ].map(({ to, label, icon: Icon }) => (
+            {ADVOCATE_QUICK_ACTIONS.map(({ to, label, icon: Icon }) => (
               <Link key={to} to={to} className="panel p-3.5 flex items-center gap-3 hover:border-chamber-300 hover:shadow-xs transition-all">
                 <div className="p-2 rounded-lg bg-chamber-50 text-chamber-700">
                   <Icon className="h-4 w-4" />

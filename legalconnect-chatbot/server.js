@@ -77,7 +77,7 @@ app.use(
       const allowed = process.env.CORS_ORIGIN.split(',').map((s) => s.trim());
       if (allowed.includes(origin)) return callback(null, true);
 
-      callback(new Error('Not allowed by CORS'));
+      callback(null, false);
     },
     methods: ['GET', 'POST'],
     credentials: true,
@@ -166,6 +166,7 @@ const server = app.listen(PORT, () => {
 
 const gracefulShutdown = (signal) => {
   console.log(`\n[LexBot] Received ${signal}. Closing server gracefully...`);
+  clearInterval(cleanupInterval);
   server.close(() => {
     console.log('[LexBot] Server closed cleanly.');
     process.exit(0);

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   MessageCircle,
@@ -447,7 +447,21 @@ export default function ChatbotWidget() {
     setIsMinimized(false);
   };
 
-  const lastSuggestions = [...messages].reverse().find(m => !m.isUser && m.suggestions?.length)?.suggestions;
+  useEffect(() => {
+    return () => {
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      if (recognitionRef.current) recognitionRef.current.stop();
+    };
+  }, []);
+
+  const lastSuggestions = useMemo(() => {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (!messages[i].isUser && messages[i].suggestions?.length) {
+        return messages[i].suggestions;
+      }
+    }
+    return null;
+  }, [messages]);
 
   return (
     <>

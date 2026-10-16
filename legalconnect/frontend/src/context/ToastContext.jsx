@@ -39,44 +39,36 @@ function ToastItem({ toast, onDismiss }) {
   const config = CONFIG[type] || CONFIG.info;
   const Icon = config.icon;
 
-  const [progress, setProgress] = useState(100);
   const [isPaused, setIsPaused] = useState(false);
-  const startTimeRef = useRef(Date.now());
+  const timerRef = useRef(null);
   const remainingRef = useRef(duration);
+  const startRef = useRef(Date.now());
 
   useEffect(() => {
     if (duration <= 0) return;
 
-    let timerId;
-    const updateProgress = () => {
-      if (isPaused) return;
-
-      const elapsed = Date.now() - startTimeRef.current;
-      const left = remainingRef.current - elapsed;
-      const pct = Math.max(0, (left / duration) * 100);
-      setProgress(pct);
-
-      if (left <= 0) {
+    if (!isPaused) {
+      startRef.current = Date.now();
+      timerRef.current = setTimeout(() => {
         onDismiss(id);
-      } else {
-        timerId = requestAnimationFrame(updateProgress);
-      }
-    };
-
-    timerId = requestAnimationFrame(updateProgress);
+      }, remainingRef.current);
+    }
 
     return () => {
-      if (timerId) cancelAnimationFrame(timerId);
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, [id, duration, isPaused, onDismiss]);
 
   const handleMouseEnter = () => {
+    if (duration <= 0) return;
+    if (timerRef.current) clearTimeout(timerRef.current);
+    const elapsed = Date.now() - startRef.current;
+    remainingRef.current = Math.max(0, remainingRef.current - elapsed);
     setIsPaused(true);
-    remainingRef.current = (progress / 100) * duration;
   };
 
   const handleMouseLeave = () => {
-    startTimeRef.current = Date.now();
+    if (duration <= 0) return;
     setIsPaused(false);
   };
 
@@ -124,10 +116,13 @@ function ToastItem({ toast, onDismiss }) {
       </div>
 
       {duration > 0 && (
-        <div className="h-1 w-full bg-paper dark:bg-[#0E1715]">
+        <div className="h-1 w-full bg-paper dark:bg-[#0E1715] overflow-hidden">
           <div
-            className={`h-full transition-[width] ease-linear duration-75 ${config.barColor}`}
-            style={{ width: `${progress}%` }}
+            className={`h-full origin-left ${config.barColor}`}
+            style={{
+              animation: `toastProgress ${duration}ms linear forwards`,
+              animationPlayState: isPaused ? 'paused' : 'running',
+            }}
           />
         </div>
       )}

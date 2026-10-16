@@ -54,7 +54,12 @@ export default function FindAdvocates() {
     finally { setLoading(false); }
   }, [filters, page]);
 
-  useEffect(() => { fetch(); }, [fetch]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetch();
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [fetch]);
 
   const updateFilter = (key, val) => {
     setFilters((prev) => ({ ...prev, [key]: val }));

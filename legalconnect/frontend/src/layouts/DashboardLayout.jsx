@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, memo } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, LogOut, Menu, X, Users, Scale, Calendar,
@@ -59,22 +59,8 @@ const NAV = {
   ],
 };
 
-export default function DashboardLayout() {
-  const { user, logout } = useAuth();
-  const toast = useToast();
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const { unreadCount } = useNotifications();
-
-  const handleLogout = async () => {
-    await logout();
-    toast.info('You have been signed out.');
-    navigate('/login', { replace: true });
-  };
-
-  const navItems = NAV[user.role] || [];
-
-  const sidebar = (
+const SidebarContent = memo(function SidebarContent({ user, navItems, unreadCount, onNavClick, onLogout }) {
+  return (
     <div className="flex h-full flex-col">
       <div className="flex h-16 items-center px-5 border-b border-white/10">
         <Logo to={ROLE_HOME[user.role]} light />
@@ -84,7 +70,7 @@ export default function DashboardLayout() {
           <NavLink
             key={to}
             to={to}
-            onClick={() => setOpen(false)}
+            onClick={onNavClick}
             className={({ isActive }) =>
               `nav-link ${isActive ? 'active' : ''}`
             }
@@ -111,7 +97,7 @@ export default function DashboardLayout() {
           <ThemeToggle className="bg-white/10 text-white border-white/20 hover:bg-white/20 hover:text-white dark:bg-white/10 dark:text-white shrink-0" />
         </div>
         <button
-          onClick={handleLogout}
+          onClick={onLogout}
           className="nav-link w-full"
         >
           <LogOut className="h-4 w-4" aria-hidden /> Sign out
@@ -119,12 +105,35 @@ export default function DashboardLayout() {
       </div>
     </div>
   );
+});
+
+export default function DashboardLayout() {
+  const { user, logout } = useAuth();
+  const toast = useToast();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const { unreadCount } = useNotifications();
+
+  const handleLogout = useCallback(async () => {
+    await logout();
+    toast.info('You have been signed out.');
+    navigate('/login', { replace: true });
+  }, [logout, navigate, toast]);
+
+  const closeMenu = useCallback(() => setOpen(false), []);
+  const navItems = NAV[user.role] || [];
 
   return (
     <div className="min-h-screen lg:flex bg-paper text-ink transition-colors duration-200">
       {/* Desktop sidebar */}
       <aside className="hidden w-64 shrink-0 bg-chamber-900 lg:flex lg:flex-col">
-        {sidebar}
+        <SidebarContent
+          user={user}
+          navItems={navItems}
+          unreadCount={unreadCount}
+          onNavClick={closeMenu}
+          onLogout={handleLogout}
+        />
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0 min-h-screen">
@@ -160,7 +169,13 @@ export default function DashboardLayout() {
               >
                 <X className="h-5 w-5" />
               </button>
-              {sidebar}
+              <SidebarContent
+                user={user}
+                navItems={navItems}
+                unreadCount={unreadCount}
+                onNavClick={closeMenu}
+                onLogout={handleLogout}
+              />
             </aside>
           </div>
         )}

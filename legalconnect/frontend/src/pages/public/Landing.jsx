@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ShieldCheck, FileCheck2, CalendarClock, MessageSquare,
-  Video, Scale, Star, ChevronRight, ArrowRight, Sparkles,
+  Video, Scale, Star, ArrowRight, Sparkles,
 } from 'lucide-react';
 import Button from '../../components/ui/Button.jsx';
 import { useAuth } from '../../hooks/useAuth.js';

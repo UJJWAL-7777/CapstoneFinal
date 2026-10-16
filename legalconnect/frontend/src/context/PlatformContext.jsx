@@ -33,14 +33,32 @@ export function PlatformProvider({ children }) {
       if (res.ok) {
         const data = await res.json();
         if (data?.success && data.data) {
-          setStatus((prev) => ({
-            ...prev,
-            maintenanceMode: Boolean(data.data.maintenanceMode),
-            announcementBanner: data.data.announcementBanner || { active: false, message: '', type: 'info' },
-            supportEmail: data.data.supportEmail || 'support@legalconnect.local',
-            supportPhone: data.data.supportPhone || '+91 1800 123 4567',
-            loading: false,
-          }));
+          const newMaintenance = Boolean(data.data.maintenanceMode);
+          const newBanner = data.data.announcementBanner || { active: false, message: '', type: 'info' };
+          const newEmail = data.data.supportEmail || 'support@legalconnect.local';
+          const newPhone = data.data.supportPhone || '+91 1800 123 4567';
+
+          setStatus((prev) => {
+            if (
+              !prev.loading &&
+              prev.maintenanceMode === newMaintenance &&
+              prev.supportEmail === newEmail &&
+              prev.supportPhone === newPhone &&
+              prev.announcementBanner?.active === newBanner.active &&
+              prev.announcementBanner?.message === newBanner.message &&
+              prev.announcementBanner?.type === newBanner.type
+            ) {
+              return prev; // Nothing changed, avoid re-rendering platform context consumers
+            }
+            return {
+              ...prev,
+              maintenanceMode: newMaintenance,
+              announcementBanner: newBanner,
+              supportEmail: newEmail,
+              supportPhone: newPhone,
+              loading: false,
+            };
+          });
         }
       }
     } catch {
@@ -60,13 +78,29 @@ export function PlatformProvider({ children }) {
     });
 
     socket.on('platform:status:updated', (newStatus) => {
-      setStatus((prev) => ({
-        ...prev,
-        maintenanceMode: Boolean(newStatus.maintenanceMode),
-        announcementBanner: newStatus.announcementBanner || prev.announcementBanner,
-        supportEmail: newStatus.supportEmail || prev.supportEmail,
-        supportPhone: newStatus.supportPhone || prev.supportPhone,
-      }));
+      setStatus((prev) => {
+        const nextMaintenance = Boolean(newStatus.maintenanceMode);
+        const nextBanner = newStatus.announcementBanner || prev.announcementBanner;
+        const nextEmail = newStatus.supportEmail || prev.supportEmail;
+        const nextPhone = newStatus.supportPhone || prev.supportPhone;
+        if (
+          prev.maintenanceMode === nextMaintenance &&
+          prev.supportEmail === nextEmail &&
+          prev.supportPhone === nextPhone &&
+          prev.announcementBanner?.active === nextBanner.active &&
+          prev.announcementBanner?.message === nextBanner.message &&
+          prev.announcementBanner?.type === nextBanner.type
+        ) {
+          return prev;
+        }
+        return {
+          ...prev,
+          maintenanceMode: nextMaintenance,
+          announcementBanner: nextBanner,
+          supportEmail: nextEmail,
+          supportPhone: nextPhone,
+        };
+      });
       setDismissedAnnouncement(false);
     });
 
@@ -79,16 +113,19 @@ export function PlatformProvider({ children }) {
     };
   }, [fetchStatus]);
 
+  const value = useMemo(
+    () => ({
+      ...status,
+      dismissedAnnouncement,
+      setDismissedAnnouncement,
+      refreshStatus: fetchStatus,
+      isAdmin: user?.role === 'admin',
+    }),
+    [status, dismissedAnnouncement, fetchStatus, user?.role]
+  );
+
   return (
-    <PlatformContext.Provider
-      value={{
-        ...status,
-        dismissedAnnouncement,
-        setDismissedAnnouncement,
-        refreshStatus: fetchStatus,
-        isAdmin: user?.role === 'admin',
-      }}
-    >
+    <PlatformContext.Provider value={value}>
       {children}
     </PlatformContext.Provider>
   );

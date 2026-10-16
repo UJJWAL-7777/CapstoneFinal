@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Scale, FileText, Bell, MessageSquare, Clock, ArrowRight, CheckCircle } from 'lucide-react';
+import { Calendar, Scale, FileText, Bell, MessageSquare, ArrowRight, CheckCircle } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth.js';
 import { consultationService } from '../../services/consultationService.js';
 import { caseService } from '../../services/caseService.js';
@@ -11,6 +11,13 @@ import Button from '../../components/ui/Button.jsx';
 import Badge from '../../components/ui/Badge.jsx';
 import Avatar from '../../components/ui/Avatar.jsx';
 import { format } from 'date-fns';
+
+const QUICK_ACTIONS = [
+  { to: '/client/advocates', label: 'Find Advocate', icon: Scale },
+  { to: '/client/consultations', label: 'My Consultations', icon: Calendar },
+  { to: '/client/cases', label: 'My Cases', icon: FileText },
+  { to: '/client/messages', label: 'Messages', icon: MessageSquare },
+];
 
 export default function ClientDashboard() {
   const { user } = useAuth();
@@ -151,12 +158,7 @@ export default function ClientDashboard() {
       <div>
         <h2 className="text-lg mb-4">Quick Actions</h2>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {[
-            { to: '/client/advocates', label: 'Find Advocate', icon: Scale },
-            { to: '/client/consultations', label: 'My Consultations', icon: Calendar },
-            { to: '/client/cases', label: 'My Cases', icon: FileText },
-            { to: '/client/messages', label: 'Messages', icon: MessageSquare },
-          ].map(({ to, label, icon: Icon }) => (
+          {QUICK_ACTIONS.map(({ to, label, icon: Icon }) => (
             <Link key={to} to={to} className="panel p-4 flex flex-col items-center gap-2 text-center hover:border-chamber-300 hover:shadow-md transition-all">
               <Icon className="h-6 w-6 text-chamber-600" />
               <span className="text-sm font-medium">{label}</span>
