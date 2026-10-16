@@ -631,6 +631,97 @@ const LANDMARK_CASES_DB = [
 
 // ─── Intellectual Applied Sections & Jurisprudential Scenarios ───
 const APPLIED_SECTIONS_DB = [
+  // 00. Robbing a House / House-Breaking & Burglary
+  {
+    id: 'robbery_house_breaking',
+    patterns: [
+      /\b(rob|robs|robbing|robbed|robbery|robbers?|dacoity|dakaiti|loot|looting|lootna|burglary|burglars?|nakabzani)\b/i,
+      /\b(break(s|ing)?\s*(in(to)?)?\s*(a\s*|my\s*|the\s*|someone\'?s?\s*)?(house|home|flat|shop|building)|rob(s|bing)?\s*(a\s*|my\s*|the\s*)?(house|home|bank|store)|house\s*trespass)\b/i,
+      /(डकैती|लूट|घर.*चोरी|घर.*लूटना|सेंधमारी|लूटपाट|घर.*डाका)/i,
+      /(ghar.*loot|ghar.*chori|robbery.*case|dakaiti|loot\s*a\s*house)/i,
+    ],
+    incident: 'Robbing a House, House-Breaking & Burglary',
+    en: {
+      title: 'Robbing a House / House-Breaking & Burglary (BNS 2023 vs IPC)',
+      summary: 'Robbing a house constitutes an aggravated criminal felony combining **House-Breaking, Lurking House-Trespass, and Robbery/Dacoity** under the Bharatiya Nyaya Sanhita (BNS 2023) [erstwhile Indian Penal Code].',
+      sections: [
+        '⚖️ **Section 309(4) BNS 2023 (Old Section 392 IPC) — Punishment for Robbery**: Theft or extortion accompanied by violence or threat of instant death/hurt. If committed in a dwelling house or between sunset and sunrise, punishment extends to **Rigorous Imprisonment up to 14 years + Fine** (Cognizable & Non-Bailable).',
+        '⚖️ **Section 331(6) & 332 BNS 2023 (Old Section 457 & 458 IPC) — House-Breaking by Night**: Entering a private residence by breaking locks, doors, windows, or scaling walls at night to commit an offence. Punishment: **Up to 14 years Rigorous Imprisonment + Fine**.',
+        '⚖️ **Section 310 BNS 2023 (Old Section 395 IPC) — Dacoity**: If **5 or more persons** conjointly commit or attempt robbery in the home. Punishment: **Imprisonment for Life**, or rigorous imprisonment up to 10 years + fine.',
+        '⚖️ **Section 333 BNS 2023 (Old Section 459 / 460 IPC) — Joint Liability for Hurt/Death**: If any person committing night house-breaking causes or attempts grievous hurt or death, **every person jointly committed** is liable for **Imprisonment for Life**.',
+        '🛡️ **Section 41 BNS 2023 (Old Section 103 IPC) — Right of Private Defence Extending to Causing Death**: Under Indian criminal law, a homeowner or resident has a statutory Right of Private Defence of Property **extending to the voluntary causing of death** to the robber if the offence is Robbery, House-Breaking by night, or an armed attack endangering life. A homeowner using lethal force to neutralize a night home-invader is legally exonerated!',
+      ],
+      intellectualAnalysis: 'In criminal jurisprudence, theft transforms into robbery under Section 309 BNS when the offender voluntarily causes or attempts to cause wrongful restraint, hurt, or fear of instant death to effectuate the taking. When committed inside a dwelling residence (*res domicilium*), the law treats the sanctity of the home as paramount, elevating the offence from simple theft (Sec 303 BNS) to a non-bailable aggravated felony with up to 14 years incarceration.',
+      action: '1. Immediately dial 112 for Police Emergency.\n2. Do not touch or disturb the crime scene to preserve forensic fingerprints, footprints, and tool marks for the Crime Scene Investigation (CSI) unit.\n3. Register an FIR under Sections 309, 331, and 332 BNS 2023 at the jurisdictional police station.\n4. Provide CCTV footage, inventory of stolen valuables with purchase receipts, and names of any suspects.',
+    },
+    hi: {
+      title: 'घर में डकैती व सेंधमारी (BNS 2023 बनाम IPC के तहत कठोर प्रावधान)',
+      summary: 'घर में घुसकर लूटपाट या डकैती करना भारतीय न्याय संहिता (BNS 2023) और IPC के तहत एक अत्यंत गंभीर, संज्ञेय व गैर-जमानती अपराध है।',
+      sections: [
+        '⚖️ **धारा 309(4) BNS 2023 (पुरानी IPC धारा 392) — लूट (Robbery) की सज़ा**: हिंसा या जान से मारने की धमकी देकर चोरी करना। यदि यह किसी मकान में या रात के समय किया जाए, तो **14 वर्ष तक का कठोर कारावास व जुर्माना** हो सकता है (गैर-जमानती)।',
+        '⚖️ **धारा 331(6) व 332 BNS 2023 (पुरानी IPC 457 व 458) — रात्रि में गृह-भेदन (House-Breaking by Night)**: रात में ताला तोड़कर, खिड़की काटकर या दीवार फांदकर घर में घुसना। सज़ा: **14 वर्ष तक की कठोर जेल व जुर्माना**।',
+        '⚖️ **धारा 310 BNS 2023 (पुरानी IPC 395) — डकैती (Dacoity)**: यदि **5 या अधिक लोग** मिलकर घर में लूट करते हैं, तो इसे डकैती माना जाता है। सज़ा: **आजीवन कारावास (Life Imprisonment)** या 10 वर्ष तक की जेल।',
+        '🛡️ **धारा 41 BNS 2023 (पुरानी IPC 103) — आत्मरक्षा में हमलावर को मार डालने का अधिकार**: भारतीय कानून में घर के मालिक को संपत्ति व जीवन की आत्मरक्षा में **हमलावर/लुटेरे की जान लेने तक का कानूनी अधिकार** प्राप्त है, यदि अपराध रात में सेंधमारी (House-breaking by night) या सशस्त्र डकैती का हो।',
+      ],
+      intellectualAnalysis: 'भारतीय न्यायशास्त्र में साधारण चोरी और डकैती में मूल अंतर हिंसा का है। घर में घुसकर हिंसा करने पर कानून 14 वर्ष तक की कठोर सज़ा का प्रावधान करता है।',
+      action: '1. तुरंत 112 डायल करें।\n2. घटना स्थल पर फिंगरप्रिंट व सबूत सुरक्षित रखें (किसी चीज़ को न छुएं)।\n3. धारा 309 व 331 BNS में तुरंत FIR दर्ज कराएं।\n4. चोरी हुए सामान की सूची व CCTV फुटेज पुलिस को सौंपें।',
+    },
+    hinglish: {
+      title: 'Ghar me Robbery, Loot ya House-Breaking (BNS 2023 & IPC)',
+      summary: 'Ghar me ghus kar robbery ya chori karna BNS 2023 ke under serious Cognizable aur Non-Bailable felony hai.',
+      sections: [
+        '⚖️ **Section 309(4) BNS 2023 (Old IPC 392) — Robbery**: Violence ya threat dekar lootna. Dwelling house me hone par **14 saal tak ki Rigorous Imprisonment + Fine** hoti hai (Non-Bailable).',
+        '⚖️ **Section 331(6) BNS 2023 (Old IPC 457) — House-breaking by night**: Raat me tala todkar ya khidki se ghar me ghusna. Punishment: **14 saal tak jail**.',
+        '⚖️ **Section 310 BNS 2023 (Old IPC 395) — Dacoity**: Agar **5 ya zyada log** milkar loot karein to yeh Dacoity banti hai. Saza: **Life Imprisonment (Umar Qaid)**.',
+        '🛡️ **Section 41 BNS 2023 (Old IPC 103) — Right of Private Defence to Cause Death**: Raat ke house-breaking aur robbery me resident ko **robber ko neutralize/marne tak ka full legal self-defence right** hota hai.',
+      ],
+      intellectualAnalysis: 'Theft me violence add hone par wo Section 309 BNS me Robbery ban jati hai. Dwelling house me crime hone par punishment double ho jati hai.',
+      action: '1. Turant 112 call karein.\n2. Crime scene preserve karein (fingerprints mat chhuo).\n3. Police station me Section 309 aur 331 BNS me FIR darj karwayein.',
+    },
+  },
+
+  // 00.1 Murder & Culpable Homicide
+  {
+    id: 'murder_homicide',
+    patterns: [
+      /\b(murder|murders|murdered|murdering|kill|kills|killed|killing|killer|homicide|hatya|jaan\s*se\s*mar(na|ne)?|attempt\s*to\s*(murder|kill)|sec(tion)?\s*302|sec(tion)?\s*307|sec(tion)?\s*103\s*bns|sec(tion)?\s*109\s*bns)\b/i,
+      /(हत्या|कत्ल|जान\s*से\s*मारना|हत्या\s*का\s*प्रयास)/i,
+      /(murder\s*case|hatya\s*ka\s*mamla|jaan\s*se\s*maarne)/i,
+    ],
+    incident: 'Murder, Culpable Homicide & Attempt to Murder',
+    en: {
+      title: 'Murder & Attempt to Murder (Section 103 & 109 BNS 2023 vs IPC)',
+      summary: 'Governed under Chapter VI of the Bharatiya Nyaya Sanhita 2023 (Offences Affecting the Human Body).',
+      sections: [
+        '⚖️ **Section 103 BNS 2023 (Old Section 302 IPC) — Punishment for Murder**: Committing act with intention of causing death. Punishment: **Death Penalty or Imprisonment for Life + Fine** (Cognizable, Non-Bailable).',
+        '⚖️ **Section 105 BNS 2023 (Old Section 304 IPC) — Culpable Homicide not Amounting to Murder**: Imprisonment up to Life or 10 years.',
+        '⚖️ **Section 109 BNS 2023 (Old Section 307 IPC) — Attempt to Murder**: Any act with intention and knowledge to kill. Punishment: Up to 10 years; if hurt is caused, up to Life Imprisonment.',
+      ],
+      intellectualAnalysis: 'The landmark distinction between Murder (BNS 103) and Culpable Homicide (BNS 105) turns on the degree of probability of death and presence of premeditated Mens Rea (*Regina v. Govinda, 1876*).',
+      action: '1. Call 112 immediately.\n2. Police will lodge FIR under Section 103 BNS and initiate inquest under Section 194 BNSS (Old 174 CrPC).',
+    },
+    hi: {
+      title: 'हत्या व हत्या का प्रयास (धारा 103 व 109 BNS 2023 बनाम IPC)',
+      summary: 'भारतीय न्याय संहिता 2023 के तहत हत्या सबसे गंभीर अपराध है जिसमें मृत्युदंड या आजीवन कारावास का प्रावधान है।',
+      sections: [
+        '⚖️ **धारा 103 BNS 2023 (पुरानी IPC धारा 302) — हत्या की सज़ा**: जानबूझकर किसी की हत्या करना। सज़ा: **मृत्युदंड (फांसी) या आजीवन कारावास + जुर्माना**।',
+        '⚖️ **धारा 109 BNS 2023 (पुरानी IPC 307) — हत्या का प्रयास**: 10 वर्ष तक की जेल, और चोट लगने पर आजीवन कारावास।',
+      ],
+      intellectualAnalysis: 'रेजिना बनाम गोविंदा केस: हत्या और गैर-इरादतन हत्या में अंतर आपराधिक मंशा (Mens Rea) की गंभीरता पर निर्भर करता है।',
+      action: '112 पर तुरंत सूचना दें, पुलिस धारा 103 BNS में गैर-जमानती FIR दर्ज करेगी।',
+    },
+    hinglish: {
+      title: 'Murder aur Attempt to Murder Sections (BNS 2023)',
+      summary: 'BNS 2023 me murder ke liye capital punishment ya life imprisonment milti hai.',
+      sections: [
+        '⚖️ **Section 103 BNS (Old IPC 302) — Murder**: Death Penalty ya Life Imprisonment.',
+        '⚖️ **Section 109 BNS (Old IPC 307) — Attempt to Murder**: 10 saal se lekar Umar Qaid tak.',
+      ],
+      intellectualAnalysis: 'Premeditated intention ke bina sudden fight me culpable homicide (BNS 105) apply hota hai.',
+      action: '112 call karein aur police immediate FIR file karegi under BNSS 173.',
+    },
+  },
+
   // 0. Advocate Abandonment Midway & Unauthorized Concession of Guilt
   {
     id: 'advocate_misconduct_abandonment',
@@ -1258,8 +1349,10 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
     }
   }
 
-  // 2. Check General Section Query ("what section applied on me", "which section", "konsi dhara lagegi")
-  if (/\b(what\s*section|which\s*section|konsi\s*dhara|kon\s*si\s*dhara|dhara\s*lagegi|sections?\s*applied|what\s*if\s*i)\b/i.test(text)) {
+  // 2. Check General Section / Act Query ("what is act applied", "which section", "konsi dhara lagegi")
+  const isStatutorySectionQuery = /\b(what\s*(is\s*)?(the\s*)?(act|section|law|dhara|crime|punishment|penalty)|which\s*(act|section|law|dhara)|(act|section|law|dhara)\s*(is\s*)?(applied|lagti|lagegi)|applied\s*on|konsi\s*dhara|kon\s*si\s*dhara|kaunsa\s*kanoon|konsa\s*kanoon|what\s*if\s*(i|we|anyone|any\s*one|someone|a\s*person)|if\s*(anyone|any\s*one|someone|a\s*person|i))\b/i.test(text);
+
+  if (isStatutorySectionQuery) {
     intent = INTENTS.APPLIED_SECTIONS;
     type = 'applied_sections';
 
@@ -1543,7 +1636,7 @@ export function generateChatResponse(message, userRole = 'client', userName = 'U
   }
 
   // 10. Navigation keywords (strictly guarded against legal questions)
-  const isSituationalQuery = /\b(what\s*if|what\s*happens|why|how\s*can|can\s*(i|we|they|he|she|police|advocate|lawyer|judge|court|landlord|someone)|guilty|punishment|penalty|rights|kya\s*hoga|kya\s*karein|dhara|section)\b/i.test(text);
+  const isSituationalQuery = isStatutorySectionQuery || /\b(what\s*if|what\s*happens|why|how\s*can|can\s*(i|we|they|he|she|police|advocate|lawyer|judge|court|landlord|someone|anyone)|guilty|punishment|penalty|rights|kya\s*hoga|kya\s*karein|dhara|section|act|crime|offen[sc]e)\b/i.test(text);
 
   if (!isSituationalQuery) {
     if (BOOKING_PATTERNS.some((p) => p.test(text))) {
