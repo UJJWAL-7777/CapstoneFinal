@@ -14,6 +14,7 @@ import {
   RotateCcw,
   Languages,
   Swords,
+  MessageSquare,
 } from 'lucide-react';
 import Button from '../../components/ui/Button.jsx';
 import Badge from '../../components/ui/Badge.jsx';
@@ -404,10 +405,10 @@ ${formData.senderName}`;
           </div>
           <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
-              onClick={() => setActiveWorkspaceTab('devils_advocate')}
+              onClick={() => setActiveWorkspaceTab('chat')}
               className="inline-flex items-center gap-1.5 rounded-lg bg-rose-500/25 hover:bg-rose-500/35 border border-rose-400/40 px-3.5 py-2 text-xs font-semibold text-rose-200 transition-colors shadow-sm"
             >
-              <Swords size={14} className="text-rose-300" /> Devil's Advocate
+              <MessageSquare size={14} className="text-rose-300" /> Opponent Lawyer Chat
             </button>
             <button
               onClick={handleFillDemo}
@@ -477,345 +478,380 @@ ${formData.senderName}`;
         })}
       </div>
 
-      {/* ─── Main Workspace: Form (Left) & Document Preview (Right) ─ */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Form Details (Hidden during print) */}
-        <div className="print:hidden lg:col-span-5 space-y-4 rounded-2xl border border-line dark:border-[#28443E] bg-surface dark:bg-[#13221E] p-5 shadow-sm">
-          <div className="flex items-center justify-between pb-3 border-b border-line dark:border-[#28443E]">
-            <h2 className="font-serif font-bold text-lg text-ink dark:text-white flex items-center gap-2">
-              <FileText size={18} className="text-chamber-700 dark:text-emerald-400" />
-              Notice Parameters
-            </h2>
-            <Badge variant="blue">{activeCategory.law.split(',')[0]}</Badge>
-          </div>
+      {/* ─── Modern Workspace Navigation Tabs ─────────────────────────── */}
+      <div className="print:hidden flex flex-wrap items-center justify-between gap-3 p-2 rounded-2xl border border-line dark:border-[#28443E] bg-surface dark:bg-[#13221E] shadow-sm">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <button
+            onClick={() => setActiveWorkspaceTab('notice')}
+            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+              activeWorkspaceTab === 'notice'
+                ? 'bg-chamber-700 text-white dark:bg-emerald-600 shadow-md ring-2 ring-chamber-600/20 dark:ring-emerald-400/30'
+                : 'text-ink-muted dark:text-[#A7BFB8] hover:text-ink dark:hover:text-white hover:bg-paper dark:hover:bg-[#1A2C27]'
+            }`}
+          >
+            <FileText size={16} /> 1. Notice Draft & Preview
+          </button>
 
-          <div className="space-y-3.5 text-sm">
-            {/* Sender */}
-            <div className="p-3.5 rounded-xl bg-paper/80 dark:bg-[#182C27] border border-line dark:border-[#28443E] space-y-2.5">
-              <span className="text-xs font-bold text-chamber-700 dark:text-emerald-400 uppercase tracking-wider block">
-                1. Sender (Your Details)
-              </span>
-              <FormField
-                label="Your Full Name"
-                type="text"
-                name="senderName"
-                value={formData.senderName || ''}
-                onChange={handleChange}
-              />
-              <FormField
-                label="Your Complete Address"
-                as="textarea"
-                rows={2}
-                name="senderAddress"
-                value={formData.senderAddress || ''}
-                onChange={handleChange}
-              />
-              <FormField
-                label="Phone / Mobile Number"
-                type="text"
-                name="senderPhone"
-                value={formData.senderPhone || ''}
-                onChange={handleChange}
-              />
-            </div>
+          <button
+            onClick={() => setActiveWorkspaceTab('chat')}
+            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+              activeWorkspaceTab === 'chat'
+                ? 'bg-rose-700 text-white shadow-md ring-2 ring-rose-500/40'
+                : 'text-rose-600 dark:text-rose-400 hover:bg-rose-500/10'
+            }`}
+          >
+            <MessageSquare size={16} className={activeWorkspaceTab === 'chat' ? 'text-white' : 'text-rose-500'} />
+            2. Opponent Lawyer Chat
+            <span className="rounded-full bg-rose-500/20 px-2 py-0.5 text-[10px] font-extrabold uppercase text-rose-300 border border-rose-500/30">
+              Live Debate
+            </span>
+          </button>
 
-            {/* Recipient */}
-            <div className="p-3.5 rounded-xl bg-paper/80 dark:bg-[#182C27] border border-line dark:border-[#28443E] space-y-2.5">
-              <span className="text-xs font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider block">
-                2. Opposite Party (Defaulter)
-              </span>
-              <FormField
-                label="Recipient / Defaulter Name"
-                type="text"
-                name="recipientName"
-                value={formData.recipientName || ''}
-                onChange={handleChange}
-              />
-              <FormField
-                label="Recipient Complete Address"
-                as="textarea"
-                rows={2}
-                name="recipientAddress"
-                value={formData.recipientAddress || ''}
-                onChange={handleChange}
-              />
-            </div>
-
-            {/* Claim / Dispute Details */}
-            <div className="p-3.5 rounded-xl bg-paper/80 dark:bg-[#182C27] border border-line dark:border-[#28443E] space-y-2.5">
-              <span className="text-xs font-bold text-ink-muted dark:text-emerald-300/80 uppercase tracking-wider block">
-                3. Dispute Facts & Amounts
-              </span>
-              <div className="grid grid-cols-2 gap-2">
-                <FormField
-                  label="Claim Amount (₹)"
-                  type="text"
-                  name="amount"
-                  value={formData.amount || ''}
-                  onChange={handleChange}
-                  className="font-semibold text-chamber-800"
-                />
-                <FormField
-                  label="Notice Issue Date"
-                  type="date"
-                  name="noticeDate"
-                  value={formData.noticeDate || ''}
-                  onChange={handleChange}
-                />
-              </div>
-
-              {selectedCatId === 'cheque_bounce' && (
-                <>
-                  <div className="grid grid-cols-2 gap-2">
-                    <FormField
-                      label="Cheque Number"
-                      type="text"
-                      name="chequeNumber"
-                      value={formData.chequeNumber || ''}
-                      onChange={handleChange}
-                    />
-                    <FormField
-                      label="Cheque Date"
-                      type="date"
-                      name="chequeDate"
-                      value={formData.chequeDate || ''}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <FormField
-                    label="Drawn Bank & Branch"
-                    type="text"
-                    name="bankName"
-                    value={formData.bankName || ''}
-                    onChange={handleChange}
-                  />
-                  <div className="grid grid-cols-2 gap-2">
-                    <FormField
-                      label="Return Memo Date"
-                      type="date"
-                      name="memoDate"
-                      value={formData.memoDate || ''}
-                      onChange={handleChange}
-                    />
-                    <FormField
-                      label="Bank Reason"
-                      type="text"
-                      name="returnReason"
-                      value={formData.returnReason || ''}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </>
-              )}
-
-              {selectedCatId === 'security_deposit' && (
-                <>
-                  <FormField
-                    label="Tenancy Property Address"
-                    type="text"
-                    name="tenancyAddress"
-                    value={formData.tenancyAddress || ''}
-                    onChange={handleChange}
-                  />
-                  <div className="grid grid-cols-2 gap-2">
-                    <FormField
-                      label="Handover Date"
-                      type="date"
-                      name="handoverDate"
-                      value={formData.handoverDate || ''}
-                      onChange={handleChange}
-                    />
-                    <FormField
-                      label="Agreement Date"
-                      type="date"
-                      name="agreementDate"
-                      value={formData.agreementDate || ''}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </>
-              )}
-
-              {selectedCatId === 'unpaid_salary' && (
-                <div className="grid grid-cols-2 gap-2">
-                  <FormField
-                    label="Your Designation"
-                    type="text"
-                    name="designation"
-                    value={formData.designation || ''}
-                    onChange={handleChange}
-                  />
-                  <FormField
-                    label="Unpaid Months"
-                    type="text"
-                    name="unpaidMonths"
-                    value={formData.unpaidMonths || ''}
-                    onChange={handleChange}
-                  />
-                </div>
-              )}
-
-              {selectedCatId === 'consumer_refund' && (
-                <>
-                  <div className="grid grid-cols-2 gap-2">
-                    <FormField
-                      label="Invoice Number"
-                      type="text"
-                      name="invoiceNumber"
-                      value={formData.invoiceNumber || ''}
-                      onChange={handleChange}
-                    />
-                    <FormField
-                      label="Purchase Date"
-                      type="date"
-                      name="purchaseDate"
-                      value={formData.purchaseDate || ''}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <FormField
-                    label="Defect / Problem Description"
-                    type="text"
-                    name="defectDetails"
-                    value={formData.defectDetails || ''}
-                    onChange={handleChange}
-                  />
-                </>
-              )}
-
-              <FormField
-                label="Advocate / Authorized Representative"
-                type="text"
-                name="advocateName"
-                value={formData.advocateName || ''}
-                onChange={handleChange}
-                className="text-ink-muted"
-              />
-            </div>
-          </div>
+          <button
+            onClick={() => setActiveWorkspaceTab('audit')}
+            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+              activeWorkspaceTab === 'audit'
+                ? 'bg-amber-700 text-white shadow-md ring-2 ring-amber-500/40'
+                : 'text-amber-700 dark:text-amber-400 hover:bg-amber-500/10'
+            }`}
+          >
+            <Scale size={16} />
+            3. Counter-Notice & Loopholes Audit
+          </button>
         </div>
 
-        {/* Right Column: Court Paper Document Live Preview OR Devil's Advocate Simulation */}
-        <div className="lg:col-span-7 space-y-4">
-          {/* Workspace Tabs (Hidden during print) */}
-          <div className="print:hidden flex flex-wrap items-center justify-between gap-2 p-1.5 rounded-xl border border-line dark:border-[#28443E] bg-surface dark:bg-[#13221E] shadow-sm">
-            <div className="flex items-center gap-1.5">
-              <button
-                onClick={() => setActiveWorkspaceTab('notice')}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  activeWorkspaceTab === 'notice'
-                    ? 'bg-chamber-700 text-white dark:bg-emerald-600 shadow-sm'
-                    : 'text-ink-muted dark:text-[#A7BFB8] hover:text-ink dark:hover:text-white hover:bg-paper dark:hover:bg-[#1A2C27]'
-                }`}
-              >
-                <FileText size={14} /> Court Notice Draft
-              </button>
-              <button
-                onClick={() => setActiveWorkspaceTab('devils_advocate')}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                  activeWorkspaceTab === 'devils_advocate'
-                    ? 'bg-rose-700 text-white shadow-sm ring-2 ring-rose-500/30'
-                    : 'text-rose-600 dark:text-rose-400 hover:bg-rose-500/10'
-                }`}
-              >
-                <Swords size={14} className="text-rose-500" />
-                Devil's Advocate Simulator
-                <span className="rounded-full bg-rose-500/20 px-1.5 py-0.5 text-[9px] font-extrabold uppercase text-rose-300 border border-rose-500/30">
-                  AI Red-Team
-                </span>
-              </button>
-            </div>
-
-            {activeWorkspaceTab === 'notice' ? (
-              <button
-                onClick={() => setActiveWorkspaceTab('devils_advocate')}
-                className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors"
-              >
-                <Swords size={12} /> Test Loopholes →
-              </button>
-            ) : (
-              <button
-                onClick={() => setActiveWorkspaceTab('notice')}
-                className="inline-flex items-center gap-1 text-[11px] font-semibold text-chamber-700 dark:text-emerald-400 hover:underline"
-              >
-                ← Back to Notice
-              </button>
-            )}
-          </div>
-
-          {activeWorkspaceTab === 'devils_advocate' ? (
-            <DevilsAdvocatePanel
-              category={activeCategory}
-              formData={formData}
-              lang={lang}
-              onClose={() => setActiveWorkspaceTab('notice')}
-            />
-          ) : (
-            <>
-              {/* Action Toolbar (Hidden during print) */}
-              <div className="print:hidden flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl border border-line dark:border-[#28443E] bg-surface dark:bg-[#13221E] shadow-sm">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold text-ink-muted dark:text-[#CBDAD5]">Document Output:</span>
-                  <Badge variant="emerald">{lang === 'hi' ? 'विधिक हिन्दी' : 'High Court Legal English'}</Badge>
-                </div>
-                <div className="flex items-center gap-2">
-                  {/* Paper Appearance Switcher */}
-                  <button
-                    onClick={() => setPaperMode((prev) => (prev === 'dark' ? 'white' : 'dark'))}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-line dark:border-[#28443E] px-2.5 py-1.5 text-xs font-semibold text-ink dark:text-[#E2ECE8] hover:bg-paper dark:hover:bg-[#1A2C27] transition-colors"
-                    title="Toggle Paper Appearance"
-                  >
-                    {paperMode === 'dark' ? '📄 Switch to White Paper' : '🌙 Switch to Dark Paper'}
-                  </button>
-                  <button
-                    onClick={handleCopy}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-line dark:border-[#28443E] px-3 py-1.5 text-xs font-medium text-ink dark:text-[#E2ECE8] hover:bg-paper dark:hover:bg-[#1A2C27] transition-colors"
-                  >
-                    {copied ? <CheckCircle size={14} className="text-emerald-500" /> : <Copy size={14} />}
-                    {copied ? 'Copied!' : 'Copy Text'}
-                  </button>
-                  <button
-                    onClick={handlePrint}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-chamber-700 hover:bg-chamber-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white px-3.5 py-1.5 text-xs font-semibold shadow transition-colors"
-                  >
-                    <Printer size={14} /> Print / Save PDF
-                  </button>
-                </div>
-              </div>
-
-              {/* Actual Legal Document (Simulated A4 Court Paper) */}
-              <div
-                id="legal-notice-document"
-                className={`legal-paper-preview ${paperMode === 'dark' ? 'dark-paper' : 'white-paper'} relative p-8 sm:p-12 rounded-xl shadow-2xl font-serif text-[13px] leading-relaxed select-text print:border-none print:shadow-none print:p-0 print:m-0`}
-                style={{ minHeight: '800px' }}
-              >
-                {/* Watermark Ribbon */}
-                <div className="watermark-tag absolute top-4 right-4 text-[10px] font-sans font-bold tracking-widest uppercase px-2.5 py-1 rounded">
-                  FORMAL STATUTORY NOTICE
-                </div>
-
-                {/* Document Content */}
-                <pre className="whitespace-pre-wrap font-serif leading-6 text-[13.5px]">
-                  {noticeText}
-                </pre>
-
-                {/* Speed Post Instructions Box (Hidden during print) */}
-                <div className="dispatch-box print:hidden mt-8 pt-6 border-t-2 border-dashed font-sans text-xs p-4 rounded-lg">
-                  <h4 className="font-bold flex items-center gap-1.5 mb-1.5">
-                    <AlertTriangle size={15} className="text-amber-500" />
-                    Dispatch & Evidence Instructions (For Court Admissibility)
-                  </h4>
-                  <ul className="list-disc list-inside space-y-1">
-                    <li>Print 2 copies: Sign both. Send one copy to the recipient via <strong>Speed Post with A.D.</strong></li>
-                    <li>Keep the post office postal dispatch receipt and consignment tracking sheet safely.</li>
-                    <li>The statutory 15-day countdown begins from the date the delivery report marks <em>"Item Delivered"</em>.</li>
-                  </ul>
-                </div>
-              </div>
-            </>
-          )}
+        {/* Quick helper tag */}
+        <div className="hidden lg:flex items-center gap-2 text-xs text-ink-muted dark:text-[#CBDAD5] px-2 font-medium">
+          {activeWorkspaceTab === 'notice' && <span>✏️ Fill details on left, preview A4 paper on right</span>}
+          {activeWorkspaceTab === 'chat' && <span>⚔️ Test your arguments against Adv. Singhania in real-time</span>}
+          {activeWorkspaceTab === 'audit' && <span>📄 Official written counter-notice & pre-dispatch checklist</span>}
         </div>
       </div>
+
+      {/* ─── Mode 1: Notice Editor & Court Paper Preview (Split 2-Column Grid) ─── */}
+      {activeWorkspaceTab === 'notice' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left Column: Form Details (Hidden during print) */}
+          <div className="print:hidden lg:col-span-5 space-y-4 rounded-2xl border border-line dark:border-[#28443E] bg-surface dark:bg-[#13221E] p-5 shadow-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-line dark:border-[#28443E]">
+              <h2 className="font-serif font-bold text-lg text-ink dark:text-white flex items-center gap-2">
+                <FileText size={18} className="text-chamber-700 dark:text-emerald-400" />
+                Notice Parameters
+              </h2>
+              <Badge variant="blue">{activeCategory.law.split(',')[0]}</Badge>
+            </div>
+
+            <div className="space-y-3.5 text-sm">
+              {/* Sender */}
+              <div className="p-3.5 rounded-xl bg-paper/80 dark:bg-[#182C27] border border-line dark:border-[#28443E] space-y-2.5">
+                <span className="text-xs font-bold text-chamber-700 dark:text-emerald-400 uppercase tracking-wider block">
+                  1. Sender (Your Details)
+                </span>
+                <FormField
+                  label="Your Full Name"
+                  type="text"
+                  name="senderName"
+                  value={formData.senderName || ''}
+                  onChange={handleChange}
+                />
+                <FormField
+                  label="Your Complete Address"
+                  as="textarea"
+                  rows={2}
+                  name="senderAddress"
+                  value={formData.senderAddress || ''}
+                  onChange={handleChange}
+                />
+                <FormField
+                  label="Phone / Mobile Number"
+                  type="text"
+                  name="senderPhone"
+                  value={formData.senderPhone || ''}
+                  onChange={handleChange}
+                />
+              </div>
+
+              {/* Recipient */}
+              <div className="p-3.5 rounded-xl bg-paper/80 dark:bg-[#182C27] border border-line dark:border-[#28443E] space-y-2.5">
+                <span className="text-xs font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider block">
+                  2. Opposite Party (Defaulter)
+                </span>
+                <FormField
+                  label="Recipient / Defaulter Name"
+                  type="text"
+                  name="recipientName"
+                  value={formData.recipientName || ''}
+                  onChange={handleChange}
+                />
+                <FormField
+                  label="Recipient Complete Address"
+                  as="textarea"
+                  rows={2}
+                  name="recipientAddress"
+                  value={formData.recipientAddress || ''}
+                  onChange={handleChange}
+                />
+              </div>
+
+              {/* Claim / Dispute Details */}
+              <div className="p-3.5 rounded-xl bg-paper/80 dark:bg-[#182C27] border border-line dark:border-[#28443E] space-y-2.5">
+                <span className="text-xs font-bold text-ink-muted dark:text-emerald-300/80 uppercase tracking-wider block">
+                  3. Dispute Facts & Amounts
+                </span>
+                <div className="grid grid-cols-2 gap-2">
+                  <FormField
+                    label="Claim Amount (₹)"
+                    type="text"
+                    name="amount"
+                    value={formData.amount || ''}
+                    onChange={handleChange}
+                    className="font-semibold text-chamber-800"
+                  />
+                  <FormField
+                    label="Notice Issue Date"
+                    type="date"
+                    name="noticeDate"
+                    value={formData.noticeDate || ''}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {selectedCatId === 'cheque_bounce' && (
+                  <>
+                    <div className="grid grid-cols-2 gap-2">
+                      <FormField
+                        label="Cheque Number"
+                        type="text"
+                        name="chequeNumber"
+                        value={formData.chequeNumber || ''}
+                        onChange={handleChange}
+                      />
+                      <FormField
+                        label="Cheque Date"
+                        type="date"
+                        name="chequeDate"
+                        value={formData.chequeDate || ''}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <FormField
+                      label="Drawn Bank & Branch"
+                      type="text"
+                      name="bankName"
+                      value={formData.bankName || ''}
+                      onChange={handleChange}
+                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <FormField
+                        label="Return Memo Date"
+                        type="date"
+                        name="memoDate"
+                        value={formData.memoDate || ''}
+                        onChange={handleChange}
+                      />
+                      <FormField
+                        label="Bank Reason"
+                        type="text"
+                        name="returnReason"
+                        value={formData.returnReason || ''}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </>
+                )}
+
+                {selectedCatId === 'security_deposit' && (
+                  <>
+                    <FormField
+                      label="Tenancy Property Address"
+                      type="text"
+                      name="tenancyAddress"
+                      value={formData.tenancyAddress || ''}
+                      onChange={handleChange}
+                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <FormField
+                        label="Handover Date"
+                        type="date"
+                        name="handoverDate"
+                        value={formData.handoverDate || ''}
+                        onChange={handleChange}
+                      />
+                      <FormField
+                        label="Agreement Date"
+                        type="date"
+                        name="agreementDate"
+                        value={formData.agreementDate || ''}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </>
+                )}
+
+                {selectedCatId === 'unpaid_salary' && (
+                  <div className="grid grid-cols-2 gap-2">
+                    <FormField
+                      label="Your Designation"
+                      type="text"
+                      name="designation"
+                      value={formData.designation || ''}
+                      onChange={handleChange}
+                    />
+                    <FormField
+                      label="Unpaid Months"
+                      type="text"
+                      name="unpaidMonths"
+                      value={formData.unpaidMonths || ''}
+                      onChange={handleChange}
+                    />
+                  </div>
+                )}
+
+                {selectedCatId === 'consumer_refund' && (
+                  <>
+                    <div className="grid grid-cols-2 gap-2">
+                      <FormField
+                        label="Invoice Number"
+                        type="text"
+                        name="invoiceNumber"
+                        value={formData.invoiceNumber || ''}
+                        onChange={handleChange}
+                      />
+                      <FormField
+                        label="Purchase Date"
+                        type="date"
+                        name="purchaseDate"
+                        value={formData.purchaseDate || ''}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <FormField
+                      label="Defect / Problem Description"
+                      type="text"
+                      name="defectDetails"
+                      value={formData.defectDetails || ''}
+                      onChange={handleChange}
+                    />
+                  </>
+                )}
+
+                <FormField
+                  label="Advocate / Authorized Representative"
+                  type="text"
+                  name="advocateName"
+                  value={formData.advocateName || ''}
+                  onChange={handleChange}
+                  className="text-ink-muted"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Court Paper Live Preview */}
+          <div className="lg:col-span-7 space-y-4">
+            {/* Action Toolbar (Hidden during print) */}
+            <div className="print:hidden flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl border border-line dark:border-[#28443E] bg-surface dark:bg-[#13221E] shadow-sm">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-ink-muted dark:text-[#CBDAD5]">Document Output:</span>
+                <Badge variant="emerald">{lang === 'hi' ? 'विधिक हिन्दी' : 'High Court Legal English'}</Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                {/* Paper Appearance Switcher */}
+                <button
+                  onClick={() => setPaperMode((prev) => (prev === 'dark' ? 'white' : 'dark'))}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-line dark:border-[#28443E] px-2.5 py-1.5 text-xs font-semibold text-ink dark:text-[#E2ECE8] hover:bg-paper dark:hover:bg-[#1A2C27] transition-colors"
+                  title="Toggle Paper Appearance"
+                >
+                  {paperMode === 'dark' ? '📄 Switch to White Paper' : '🌙 Switch to Dark Paper'}
+                </button>
+                <button
+                  onClick={handleCopy}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-line dark:border-[#28443E] px-3 py-1.5 text-xs font-medium text-ink dark:text-[#E2ECE8] hover:bg-paper dark:hover:bg-[#1A2C27] transition-colors"
+                >
+                  {copied ? <CheckCircle size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                  {copied ? 'Copied!' : 'Copy Text'}
+                </button>
+                <button
+                  onClick={handlePrint}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-chamber-700 hover:bg-chamber-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white px-3.5 py-1.5 text-xs font-semibold shadow transition-colors"
+                >
+                  <Printer size={14} /> Print / Save PDF
+                </button>
+              </div>
+            </div>
+
+            {/* Actual Legal Document (Simulated A4 Court Paper) */}
+            <div
+              id="legal-notice-document"
+              className={`legal-paper-preview ${paperMode === 'dark' ? 'dark-paper' : 'white-paper'} relative p-8 sm:p-12 rounded-xl shadow-2xl font-serif text-[13px] leading-relaxed select-text print:border-none print:shadow-none print:p-0 print:m-0`}
+              style={{ minHeight: '800px' }}
+            >
+              {/* Watermark Ribbon */}
+              <div className="watermark-tag absolute top-4 right-4 text-[10px] font-sans font-bold tracking-widest uppercase px-2.5 py-1 rounded">
+                FORMAL STATUTORY NOTICE
+              </div>
+
+              {/* Document Content */}
+              <pre className="whitespace-pre-wrap font-serif leading-6 text-[13.5px]">
+                {noticeText}
+              </pre>
+
+              {/* Speed Post Instructions Box (Hidden during print) */}
+              <div className="dispatch-box print:hidden mt-8 pt-6 border-t-2 border-dashed font-sans text-xs p-4 rounded-lg">
+                <h4 className="font-bold flex items-center gap-1.5 mb-1.5">
+                  <AlertTriangle size={15} className="text-amber-500" />
+                  Dispatch & Evidence Instructions (For Court Admissibility)
+                </h4>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>Print 2 copies: Sign both. Send one copy to the recipient via <strong>Speed Post with A.D.</strong></li>
+                  <li>Keep the post office postal dispatch receipt and consignment tracking sheet safely.</li>
+                  <li>The statutory 15-day countdown begins from the date the delivery report marks <em>"Item Delivered"</em>.</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Ready to Test CTA Banner */}
+            <div className="print:hidden mt-4 p-4 rounded-xl bg-gradient-to-r from-rose-950/40 via-surface to-paper dark:from-rose-950/60 dark:to-[#182C27] border border-rose-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <span className="text-xs font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                  <Swords size={14} /> Ready to test this notice before dispatching?
+                </span>
+                <p className="text-[11px] text-ink-muted dark:text-[#CBDAD5] mt-0.5">
+                  Simulate how opposing counsel will cross-examine you and uncover loopholes before you spend money on Speed Post.
+                </p>
+              </div>
+              <button
+                onClick={() => setActiveWorkspaceTab('chat')}
+                className="shrink-0 px-3.5 py-2 rounded-lg bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold shadow transition-colors flex items-center gap-1.5"
+              >
+                <MessageSquare size={14} /> Start Opponent Chat →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Mode 2: Opponent Cross-Examination Chat (Full-Width Suite) ─── */}
+      {activeWorkspaceTab === 'chat' && (
+        <DevilsAdvocatePanel
+          viewMode="chat"
+          category={activeCategory}
+          formData={formData}
+          lang={lang}
+          onSwitchView={(view) => setActiveWorkspaceTab(view)}
+        />
+      )}
+
+      {/* ─── Mode 3: Counter-Notice & Loopholes Audit (Full-Width Suite) ─── */}
+      {activeWorkspaceTab === 'audit' && (
+        <DevilsAdvocatePanel
+          viewMode="audit"
+          category={activeCategory}
+          formData={formData}
+          lang={lang}
+          onSwitchView={(view) => setActiveWorkspaceTab(view)}
+        />
+      )}
     </div>
   );
 }
