@@ -13,11 +13,13 @@ import {
   Clock,
   RotateCcw,
   Languages,
+  Swords,
 } from 'lucide-react';
 import Button from '../../components/ui/Button.jsx';
 import Badge from '../../components/ui/Badge.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
 import { useToast } from '../../context/ToastContext.jsx';
+import DevilsAdvocatePanel from '../../components/DevilsAdvocatePanel.jsx';
 
 // ─── Clean Form Input Helper (High Contrast Dark Mode) ───────────
 function FormField({ label, as: Component = 'input', className = '', ...props }) {
@@ -141,6 +143,7 @@ export default function LegalNoticeGenerator() {
   const [selectedCatId, setSelectedCatId] = useState(NOTICE_CATEGORIES[0].id);
   const [lang, setLang] = useState('en'); // 'en' | 'hi'
   const [copied, setCopied] = useState(false);
+  const [activeWorkspaceTab, setActiveWorkspaceTab] = useState('notice'); // 'notice' | 'devils_advocate'
   const [paperMode, setPaperMode] = useState(() => {
     if (typeof document !== 'undefined' && document.documentElement.classList.contains('dark')) {
       return 'dark';
@@ -399,7 +402,13 @@ ${formData.senderName}`;
               Security Deposit, Unpaid Salary) in English & हिन्दी. Ready to print, sign, and dispatch via Speed Post.
             </p>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <button
+              onClick={() => setActiveWorkspaceTab('devils_advocate')}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-rose-500/25 hover:bg-rose-500/35 border border-rose-400/40 px-3.5 py-2 text-xs font-semibold text-rose-200 transition-colors shadow-sm"
+            >
+              <Swords size={14} className="text-rose-300" /> Devil's Advocate
+            </button>
             <button
               onClick={handleFillDemo}
               className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 hover:bg-white/20 px-3.5 py-2 text-xs font-medium text-white transition-colors"
@@ -686,68 +695,125 @@ ${formData.senderName}`;
           </div>
         </div>
 
-        {/* Right Column: Court Paper Document Live Preview */}
+        {/* Right Column: Court Paper Document Live Preview OR Devil's Advocate Simulation */}
         <div className="lg:col-span-7 space-y-4">
-          {/* Action Toolbar (Hidden during print) */}
-          <div className="print:hidden flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl border border-line dark:border-[#28443E] bg-surface dark:bg-[#13221E] shadow-sm">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-ink-muted dark:text-[#CBDAD5]">Document Output:</span>
-              <Badge variant="emerald">{lang === 'hi' ? 'विधिक हिन्दी' : 'High Court Legal English'}</Badge>
+          {/* Workspace Tabs (Hidden during print) */}
+          <div className="print:hidden flex flex-wrap items-center justify-between gap-2 p-1.5 rounded-xl border border-line dark:border-[#28443E] bg-surface dark:bg-[#13221E] shadow-sm">
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => setActiveWorkspaceTab('notice')}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  activeWorkspaceTab === 'notice'
+                    ? 'bg-chamber-700 text-white dark:bg-emerald-600 shadow-sm'
+                    : 'text-ink-muted dark:text-[#A7BFB8] hover:text-ink dark:hover:text-white hover:bg-paper dark:hover:bg-[#1A2C27]'
+                }`}
+              >
+                <FileText size={14} /> Court Notice Draft
+              </button>
+              <button
+                onClick={() => setActiveWorkspaceTab('devils_advocate')}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  activeWorkspaceTab === 'devils_advocate'
+                    ? 'bg-rose-700 text-white shadow-sm ring-2 ring-rose-500/30'
+                    : 'text-rose-600 dark:text-rose-400 hover:bg-rose-500/10'
+                }`}
+              >
+                <Swords size={14} className="text-rose-500" />
+                Devil's Advocate Simulator
+                <span className="rounded-full bg-rose-500/20 px-1.5 py-0.5 text-[9px] font-extrabold uppercase text-rose-300 border border-rose-500/30">
+                  AI Red-Team
+                </span>
+              </button>
             </div>
-            <div className="flex items-center gap-2">
-              {/* Paper Appearance Switcher */}
+
+            {activeWorkspaceTab === 'notice' ? (
               <button
-                onClick={() => setPaperMode((prev) => (prev === 'dark' ? 'white' : 'dark'))}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-line dark:border-[#28443E] px-2.5 py-1.5 text-xs font-semibold text-ink dark:text-[#E2ECE8] hover:bg-paper dark:hover:bg-[#1A2C27] transition-colors"
-                title="Toggle Paper Appearance"
+                onClick={() => setActiveWorkspaceTab('devils_advocate')}
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors"
               >
-                {paperMode === 'dark' ? '📄 Switch to White Paper' : '🌙 Switch to Dark Paper'}
+                <Swords size={12} /> Test Loopholes →
               </button>
+            ) : (
               <button
-                onClick={handleCopy}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-line dark:border-[#28443E] px-3 py-1.5 text-xs font-medium text-ink dark:text-[#E2ECE8] hover:bg-paper dark:hover:bg-[#1A2C27] transition-colors"
+                onClick={() => setActiveWorkspaceTab('notice')}
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-chamber-700 dark:text-emerald-400 hover:underline"
               >
-                {copied ? <CheckCircle size={14} className="text-emerald-500" /> : <Copy size={14} />}
-                {copied ? 'Copied!' : 'Copy Text'}
+                ← Back to Notice
               </button>
-              <button
-                onClick={handlePrint}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-chamber-700 hover:bg-chamber-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white px-3.5 py-1.5 text-xs font-semibold shadow transition-colors"
-              >
-                <Printer size={14} /> Print / Save PDF
-              </button>
-            </div>
+            )}
           </div>
 
-          {/* Actual Legal Document (Simulated A4 Court Paper) */}
-          <div
-            id="legal-notice-document"
-            className={`legal-paper-preview ${paperMode === 'dark' ? 'dark-paper' : 'white-paper'} relative p-8 sm:p-12 rounded-xl shadow-2xl font-serif text-[13px] leading-relaxed select-text print:border-none print:shadow-none print:p-0 print:m-0`}
-            style={{ minHeight: '800px' }}
-          >
-            {/* Watermark Ribbon */}
-            <div className="watermark-tag absolute top-4 right-4 text-[10px] font-sans font-bold tracking-widest uppercase px-2.5 py-1 rounded">
-              FORMAL STATUTORY NOTICE
-            </div>
+          {activeWorkspaceTab === 'devils_advocate' ? (
+            <DevilsAdvocatePanel
+              category={activeCategory}
+              formData={formData}
+              lang={lang}
+              onClose={() => setActiveWorkspaceTab('notice')}
+            />
+          ) : (
+            <>
+              {/* Action Toolbar (Hidden during print) */}
+              <div className="print:hidden flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl border border-line dark:border-[#28443E] bg-surface dark:bg-[#13221E] shadow-sm">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold text-ink-muted dark:text-[#CBDAD5]">Document Output:</span>
+                  <Badge variant="emerald">{lang === 'hi' ? 'विधिक हिन्दी' : 'High Court Legal English'}</Badge>
+                </div>
+                <div className="flex items-center gap-2">
+                  {/* Paper Appearance Switcher */}
+                  <button
+                    onClick={() => setPaperMode((prev) => (prev === 'dark' ? 'white' : 'dark'))}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-line dark:border-[#28443E] px-2.5 py-1.5 text-xs font-semibold text-ink dark:text-[#E2ECE8] hover:bg-paper dark:hover:bg-[#1A2C27] transition-colors"
+                    title="Toggle Paper Appearance"
+                  >
+                    {paperMode === 'dark' ? '📄 Switch to White Paper' : '🌙 Switch to Dark Paper'}
+                  </button>
+                  <button
+                    onClick={handleCopy}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-line dark:border-[#28443E] px-3 py-1.5 text-xs font-medium text-ink dark:text-[#E2ECE8] hover:bg-paper dark:hover:bg-[#1A2C27] transition-colors"
+                  >
+                    {copied ? <CheckCircle size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                    {copied ? 'Copied!' : 'Copy Text'}
+                  </button>
+                  <button
+                    onClick={handlePrint}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-chamber-700 hover:bg-chamber-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white px-3.5 py-1.5 text-xs font-semibold shadow transition-colors"
+                  >
+                    <Printer size={14} /> Print / Save PDF
+                  </button>
+                </div>
+              </div>
 
-            {/* Document Content */}
-            <pre className="whitespace-pre-wrap font-serif leading-6 text-[13.5px]">
-              {noticeText}
-            </pre>
+              {/* Actual Legal Document (Simulated A4 Court Paper) */}
+              <div
+                id="legal-notice-document"
+                className={`legal-paper-preview ${paperMode === 'dark' ? 'dark-paper' : 'white-paper'} relative p-8 sm:p-12 rounded-xl shadow-2xl font-serif text-[13px] leading-relaxed select-text print:border-none print:shadow-none print:p-0 print:m-0`}
+                style={{ minHeight: '800px' }}
+              >
+                {/* Watermark Ribbon */}
+                <div className="watermark-tag absolute top-4 right-4 text-[10px] font-sans font-bold tracking-widest uppercase px-2.5 py-1 rounded">
+                  FORMAL STATUTORY NOTICE
+                </div>
 
-            {/* Speed Post Instructions Box (Hidden during print) */}
-            <div className="dispatch-box print:hidden mt-8 pt-6 border-t-2 border-dashed font-sans text-xs p-4 rounded-lg">
-              <h4 className="font-bold flex items-center gap-1.5 mb-1.5">
-                <AlertTriangle size={15} className="text-amber-500" />
-                Dispatch & Evidence Instructions (For Court Admissibility)
-              </h4>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Print 2 copies: Sign both. Send one copy to the recipient via <strong>Speed Post with A.D.</strong></li>
-                <li>Keep the post office postal dispatch receipt and consignment tracking sheet safely.</li>
-                <li>The statutory 15-day countdown begins from the date the delivery report marks <em>"Item Delivered"</em>.</li>
-              </ul>
-            </div>
-          </div>
+                {/* Document Content */}
+                <pre className="whitespace-pre-wrap font-serif leading-6 text-[13.5px]">
+                  {noticeText}
+                </pre>
+
+                {/* Speed Post Instructions Box (Hidden during print) */}
+                <div className="dispatch-box print:hidden mt-8 pt-6 border-t-2 border-dashed font-sans text-xs p-4 rounded-lg">
+                  <h4 className="font-bold flex items-center gap-1.5 mb-1.5">
+                    <AlertTriangle size={15} className="text-amber-500" />
+                    Dispatch & Evidence Instructions (For Court Admissibility)
+                  </h4>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>Print 2 copies: Sign both. Send one copy to the recipient via <strong>Speed Post with A.D.</strong></li>
+                    <li>Keep the post office postal dispatch receipt and consignment tracking sheet safely.</li>
+                    <li>The statutory 15-day countdown begins from the date the delivery report marks <em>"Item Delivered"</em>.</li>
+                  </ul>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
