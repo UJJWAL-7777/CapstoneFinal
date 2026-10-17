@@ -19,8 +19,8 @@ export default function PublicLayout() {
             <Link to="/how-it-works" className="hidden sm:block px-3 py-2 text-sm font-medium text-ink-soft hover:text-ink dark:text-[#CBDAD5] dark:hover:text-white transition-colors">How It Works</Link>
             <Link to="/legal-resources" className="hidden sm:block px-3 py-2 text-sm font-medium text-ink-soft hover:text-ink dark:text-[#CBDAD5] dark:hover:text-white transition-colors">Resources</Link>
             <Link to="/legal-notice" className="hidden sm:block px-3 py-2 text-sm font-semibold text-chamber-700 hover:text-chamber-800 dark:text-emerald-400 dark:hover:text-emerald-300 transition-colors">Notice Generator</Link>
-            <Link to="/emergency" className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-bold bg-rose-500/10 text-rose-600 hover:bg-rose-600 hover:text-white dark:bg-rose-500/20 dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white border border-rose-500/20 transition-all shadow-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping" />
+            <Link to="/emergency" className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg border border-rose-200/80 dark:border-rose-900/60 transition-colors">
+              <span className="h-1.5 w-1.5 rounded-full bg-rose-600 animate-pulse" />
               SOS Helplines
             </Link>
             <ThemeToggle className="ml-1" />
