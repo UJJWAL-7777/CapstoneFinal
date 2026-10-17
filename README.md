@@ -138,6 +138,16 @@ Accessible in `/legal-resources` and directly via LexBot:
 - **Lalita Kumari v. Govt. of U.P. (2014)**: Mandatory registration of FIR under Section 154 CrPC (now Section 173 BNSS) in cognizable cases.
 - **Satender Kumar Antil v. CBI (2022)**: Landmark categorization of offences for streamlined bail administration.
 
+### 5. 24x7 Emergency SOS Legal Hotline Directory
+A panic-ready, toll-free Indian citizen emergency directory integrated across public and authenticated routes:
+- **Priority Quick-Dial Cards**:
+  - 🚨 **Women's Safety & Domestic Violence (1091 / 112)**: 24x7 police response, medical aid, and shelter home referrals under MWCD & NCW.
+  - 🚨 **National Cyber Crime Helpline (1930)**: Operated by I4C (Ministry of Home Affairs); call within the "Golden Hour" (2 hours) to trigger automated inter-bank account freeze for UPI/banking fraud.
+  - 🚨 **Senior Citizens National Helpline — Elderline (14567)**: Field-level rescue against elder abuse, abandonment, and maintenance tribunal support under the 2007 Act.
+  - 🚨 **Childline — National Emergency (1098)**: Mission Vatsalya emergency service for child labour, runaway children, and POCSO abuse.
+- **Unified & Free Legal Aid Lines**: **National Emergency 112**, **NALSA Free Legal Aid 15100**, **Consumer Helpline 1915**, and **KIRAN Mental Health 1800-599-0019**.
+- **Features**: One-touch `tel:` mobile dialing, one-click copy with toast confirmation, downloadable/printable offline emergency contact sheet (`window.print()`), category filters, and statutory checklists.
+
 ---
 
 ## 🏗️ Architecture & Technology Stack

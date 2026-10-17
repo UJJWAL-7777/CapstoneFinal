@@ -38,10 +38,26 @@ export default function PublicLayout() {
         </div>
       </header>
       <main className="flex-1"><Outlet /></main>
-      <footer className="border-t border-line bg-white transition-colors">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-sm text-ink-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p>&copy; {new Date().getFullYear()} LegalConnect</p>
-          <p className="max-w-xl">LegalConnect provides general legal information and does not replace professional legal advice.</p>
+      <footer className="border-t border-line dark:border-[#1E302B] bg-white dark:bg-[#080E0C] transition-colors">
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-line/60 dark:border-[#1A2824]">
+            <Logo />
+            <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-ink-soft dark:text-[#CBDAD5]">
+              <Link to="/about" className="hover:text-ink dark:hover:text-white transition-colors">About Us</Link>
+              <Link to="/how-it-works" className="hover:text-ink dark:hover:text-white transition-colors">How It Works</Link>
+              <Link to="/legal-resources" className="hover:text-ink dark:hover:text-white transition-colors">Bharat Legal Hub</Link>
+              <Link to="/legal-notice" className="hover:text-ink dark:hover:text-white transition-colors">Legal Notice Generator</Link>
+              <Link to="/emergency" className="text-rose-600 dark:text-rose-400 hover:underline transition-colors font-bold">
+                🚨 Emergency SOS (1091 / 1930 / 14567 / 1098)
+              </Link>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 text-xs text-ink-muted dark:text-[#7A968F]">
+            <p>&copy; {new Date().getFullYear()} LegalConnect Technologies. All rights reserved.</p>
+            <p className="max-w-xl text-center sm:text-right">
+              LegalConnect provides legal enablement & directory services compliant with Bar Council of India guidelines. Does not constitute an advertisement or direct solicitation.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
