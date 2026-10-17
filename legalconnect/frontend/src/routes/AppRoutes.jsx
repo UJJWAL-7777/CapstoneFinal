@@ -12,6 +12,7 @@ const About = lazy(() => import('../pages/public/About.jsx'));
 const HowItWorks = lazy(() => import('../pages/public/HowItWorks.jsx'));
 const LegalResources = lazy(() => import('../pages/public/LegalResources.jsx'));
 const NotFound = lazy(() => import('../pages/public/NotFound.jsx'));
+const EmergencyDirectory = lazy(() => import('../pages/public/EmergencyDirectory.jsx'));
 const Login = lazy(() => import('../pages/auth/Login.jsx'));
 const Register = lazy(() => import('../pages/auth/Register.jsx'));
 
@@ -77,6 +78,8 @@ export default function AppRoutes() {
           <Route path="how-it-works" element={<HowItWorks />} />
           <Route path="legal-resources" element={<LegalResources />} />
           <Route path="legal-notice" element={<LegalNoticeGenerator />} />
+          <Route path="emergency" element={<EmergencyDirectory />} />
+          <Route path="sos" element={<EmergencyDirectory />} />
           <Route element={<GuestRoute />}>
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
@@ -104,6 +107,7 @@ export default function AppRoutes() {
               <Route path="client/profile" element={<ClientProfile />} />
               <Route path="client/settings" element={<ClientSettings />} />
               <Route path="client/legal-notice" element={<LegalNoticeGenerator />} />
+              <Route path="client/emergency" element={<EmergencyDirectory />} />
             </Route>
 
             {/* Advocate */}
@@ -122,6 +126,7 @@ export default function AppRoutes() {
               <Route path="advocate/badges" element={<AdvocateBadges />} />
               <Route path="advocate/settings" element={<AdvocateSettings />} />
               <Route path="advocate/legal-notice" element={<LegalNoticeGenerator />} />
+              <Route path="advocate/emergency" element={<EmergencyDirectory />} />
             </Route>
 
             {/* Admin */}
@@ -138,6 +143,7 @@ export default function AppRoutes() {
               <Route path="admin/audit-logs" element={<AdminAuditLogs />} />
               <Route path="admin/analytics" element={<AdminAnalytics />} />
               <Route path="admin/settings" element={<AdminSettings />} />
+              <Route path="admin/emergency" element={<EmergencyDirectory />} />
             </Route>
           </Route>
         </Route>

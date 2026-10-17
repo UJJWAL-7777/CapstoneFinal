@@ -817,6 +817,59 @@ const APPLIED_SECTIONS_DB = [
     },
   },
 
+  // 0. Emergency SOS & National Legal Hotlines
+  {
+    id: 'emergency_sos',
+    patterns: [
+      /(emergency|sos|helpline|help\s*line|distress|panic|urgent\s*help|police\s*number|women\s*helpline|cyber\s*helpline|elderline|childline|1091|1930|14567|1098|112|15100)/i,
+      /(आपातकालीन|हेल्पलाइन|संकट|महिला\s*हेल्पलाइन|साइबर\s*हेल्पलाइन|वरिष्ठ\s*नागरिक|चाइल्डलाइन|पुलिस\s*नंबर)/i,
+      /(emergency\s*number|madad\s*chahiye|police\s*ko\s*call|sos\s*number)/i,
+    ],
+    incident: 'Emergency SOS Legal Hotlines & Citizen Protection',
+    en: {
+      title: '🚨 Emergency SOS Legal Hotlines & Citizen Protection (Pan-India 24x7)',
+      summary: 'Immediate toll-free government hotlines for crisis intervention, cyber financial fraud, women safety, and child protection.',
+      sections: [
+        '🚨 **Women\'s Safety & Distress Helpline — 1091 / 112**: Available 24x7 pan-India under MWCD & NCW for domestic violence (Sec 85/86 BNS), physical assault, stalking, and eve-teasing with immediate police dispatch.',
+        '🚨 **National Cyber Crime Helpline — 1930**: Operated by I4C (Ministry of Home Affairs). Call within 2 hours of unauthorized financial debit/UPI fraud to freeze funds in the recipient bank account.',
+        '🚨 **Elder Line (Senior Citizens) — 14567**: Managed by MoSJE & NISD. Provides free rescue from elder abuse, abandonment, and illegal eviction under the Senior Citizens Act, 2007.',
+        '🚨 **Childline — 1098**: 24-hour emergency response for children facing abuse, POCSO violations, child labour, or abandonment.',
+        '🚨 **National Emergency Unified Response — 112**: Single integrated number for Police (100), Fire (101), and Ambulance (102).',
+        '⚖️ **NALSA Free Legal Aid — 15100**: Free legal counsel and advocate appointment for women, children, undertrials, and marginalized citizens (Article 39A).',
+      ],
+      intellectualAnalysis: 'Under Article 21 (Right to Life and Personal Liberty) and Supreme Court guidelines in *DK Basu v. State of West Bengal*, every citizen in distress has a constitutional entitlement to prompt police protection and state assistance without preliminary delays.',
+      action: 'Click to dial directly or visit the full Emergency Directory (/emergency) for pre-call checklists and Golden Hour protocols.',
+    },
+    hi: {
+      title: '🚨 आपातकालीन SOS कानूनी हेल्पलाइन एवं नागरिक सुरक्षा (भारत भर में 24x7)',
+      summary: 'संकट, वित्तीय साइबर धोखाधड़ी, महिला सुरक्षा व बाल संरक्षण के लिए सरकार द्वारा अधिकृत टोल-फ्री राष्ट्रीय हेल्पलाइन नंबर।',
+      sections: [
+        '🚨 **महिला सुरक्षा एवं संकट हेल्पलाइन — 1091 / 112**: घरेलू हिंसा (धारा 85/86 BNS), छेड़छाड़ या हमले की स्थिति में तुरंत पुलिस व आश्रय सहायता हेतु 24x7 सेवा।',
+        '🚨 **राष्ट्रीय साइबर क्राइम हेल्पलाइन — 1930**: गृह मंत्रालय (MHA) द्वारा संचालित। बैंक/UPI खाते से फर्जी निकासी होने पर 2 घंटे ("गोल्डन ऑवर") के भीतर 1930 पर कॉल करें ताकि पैसा रोका जा सके।',
+        '🚨 **एल्डर लाइन (वरिष्ठ नागरिक) — 14567**: बुजुर्गों के साथ दुर्व्यवहार, घर से बेदखली या उपेक्षा के खिलाफ निःशुल्क बचाव व भरण-पोषण कानून के तहत मदद।',
+        '🚨 **चाइल्डलाइन — 1098**: बच्चों के शोषण, POCSO अपराधों, बाल श्रम व लापता बच्चों के लिए 24 घंटे आपातकालीन सेवा।',
+        '🚨 **राष्ट्रीय आपातकालीन एकीकृत सेवा — 112**: पुलिस (100), फायर (101) और एम्बुलेंस (102) के लिए एक ही राष्ट्रीय नंबर।',
+        '⚖️ **नालसा निःशुल्क कानूनी सहायता — 15100**: महिलाओं, बच्चों व निर्धन नागरिकों के लिए मुफ्त सरकारी वकील व कानूनी सलाह (अनुच्छेद 39A)।',
+      ],
+      intellectualAnalysis: 'संविधान के अनुच्छेद 21 के तहत जीवन की सुरक्षा हर नागरिक का मौलिक अधिकार है। संकट के समय पुलिस व राज्य एजेंसियों का कर्तव्य त्वरित सहायता पहुंचाना है।',
+      action: 'तत्काल 112 या संबंधित नंबर पर कॉल करें या पूरी सूची के लिए /emergency डायरेक्टरी देखें।',
+    },
+    hinglish: {
+      title: '🚨 Emergency SOS Legal Hotlines (Women 1091, Cyber 1930, Elders 14567, Child 1098)',
+      summary: 'Emergency situation me government ki toll-free 24x7 helplines par turant contact karein.',
+      sections: [
+        '🚨 **Women\'s Helpline — 1091 / 112**: Domestic violence (Sec 85/86 BNS), physical harassment ya stalking ke liye 24x7 police aur shelter assistance.',
+        '🚨 **Cyber Crime Helpline — 1930**: Online banking fraud ya fake UPI debit hone par pehle 2 ghante me 1930 call karein taaki siphoned funds freeze ho sakein.',
+        '🚨 **Elder Line — 14567**: Senior citizens ke against abuse, ghar se nikalna ya maintenance claims ke liye rescue team aur legal aid.',
+        '🚨 **Childline — 1098**: Children safety, POCSO crimes, child labour aur emergency shelter ke liye 24x7 active.',
+        '🚨 **National Emergency — 112**: Police, Fire aur Ambulance ke liye unified national number.',
+        '⚖️ **NALSA Legal Aid — 15100**: Free advocate aur court representation marginalized citizens ke liye.',
+      ],
+      intellectualAnalysis: 'Article 21 ke tehat emergency police protection aur immediate medical/legal aid har citizen ka fundamental entitlement hai.',
+      action: 'Turant number dial karein ya hamare portal par /emergency khol kar checklist check karein.',
+    },
+  },
+
   // 1. Theft / Stealing Pen / Petty Items
   {
     id: 'theft_petty',

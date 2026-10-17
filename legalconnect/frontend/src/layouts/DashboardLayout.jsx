@@ -4,7 +4,7 @@ import {
   LayoutDashboard, LogOut, Menu, X, Users, Scale, Calendar,
   MessageSquare, FileText, Bell, Settings, CreditCard, Award,
   ShieldCheck, ClipboardList, Search, Briefcase, Star,
-  BarChart2, ScrollText, UserCheck, AlertCircle,
+  BarChart2, ScrollText, UserCheck, AlertCircle, PhoneCall,
 } from 'lucide-react';
 import Logo from '../components/Logo.jsx';
 import { useAuth } from '../hooks/useAuth.js';
@@ -24,6 +24,7 @@ const NAV = {
     { to: '/client/cases', label: 'My Cases', icon: Scale },
     { to: '/client/documents', label: 'Documents', icon: FileText },
     { to: '/client/legal-notice', label: 'Notice Generator', icon: ScrollText },
+    { to: '/emergency', label: 'SOS Helplines', icon: PhoneCall, isSos: true },
     { to: '/client/messages', label: 'Messages', icon: MessageSquare },
     { to: '/client/notifications', label: 'Notifications', icon: Bell },
     { to: '/client/profile', label: 'Profile', icon: Users },
@@ -35,6 +36,7 @@ const NAV = {
     { to: '/advocate/clients', label: 'Clients', icon: Users },
     { to: '/advocate/cases', label: 'Cases', icon: Scale },
     { to: '/advocate/legal-notice', label: 'Notice Drafts', icon: ScrollText },
+    { to: '/emergency', label: 'SOS Helplines', icon: PhoneCall, isSos: true },
     { to: '/advocate/messages', label: 'Messages', icon: MessageSquare },
     { to: '/advocate/calendar', label: 'Availability', icon: ClipboardList },
     { to: '/advocate/earnings', label: 'Earnings', icon: CreditCard },
@@ -55,6 +57,7 @@ const NAV = {
     { to: '/admin/badges', label: 'Badges', icon: Award },
     { to: '/admin/audit-logs', label: 'Audit Logs', icon: ScrollText },
     { to: '/admin/analytics', label: 'Analytics', icon: BarChart2 },
+    { to: '/emergency', label: 'SOS Helplines', icon: PhoneCall, isSos: true },
     { to: '/admin/settings', label: 'Settings', icon: Settings },
   ],
 };
@@ -66,17 +69,26 @@ const SidebarContent = memo(function SidebarContent({ user, navItems, unreadCoun
         <Logo to={ROLE_HOME[user.role]} light />
       </div>
       <nav className="flex-1 space-y-0.5 px-2 py-3 overflow-y-auto scrollbar-thin">
-        {navItems.map(({ to, label, icon: Icon }) => (
+        {navItems.map(({ to, label, icon: Icon, isSos }) => (
           <NavLink
             key={to}
             to={to}
             onClick={onNavClick}
             className={({ isActive }) =>
-              `nav-link ${isActive ? 'active' : ''}`
+              isSos
+                ? `nav-link !text-rose-300 hover:!text-white hover:!bg-rose-500/20 ${
+                    isActive ? 'active !bg-rose-600/30 !text-white' : ''
+                  }`
+                : `nav-link ${isActive ? 'active' : ''}`
             }
           >
-            <Icon className="h-4 w-4 shrink-0" aria-hidden />
+            <Icon className={`h-4 w-4 shrink-0 ${isSos ? 'text-rose-400 animate-pulse' : ''}`} aria-hidden />
             <span className="flex-1">{label}</span>
+            {isSos && (
+              <span className="rounded-full bg-rose-500/20 border border-rose-500/40 px-1.5 py-0.5 text-[9px] font-extrabold text-rose-300">
+                24x7
+              </span>
+            )}
             {label === 'Notifications' && unreadCount > 0 && (
               <span className="rounded-full bg-brass-500 px-1.5 py-0.5 text-[10px] font-bold text-white">
                 {unreadCount > 99 ? '99+' : unreadCount}

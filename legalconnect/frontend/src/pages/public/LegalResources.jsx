@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import {
   BookOpen,
   ExternalLink,
@@ -178,6 +179,14 @@ export default function LegalResources() {
               <ExternalLink className="h-4 w-4" />
               <span>3. Statutory Portals & Free Legal Aid</span>
             </button>
+            <Link
+              to="/emergency"
+              className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold bg-rose-500/10 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400 border border-rose-500/30 hover:bg-rose-600 hover:text-white dark:hover:bg-rose-600 dark:hover:text-white transition-all shadow-sm"
+            >
+              <span className="h-2 w-2 rounded-full bg-rose-500 animate-ping" />
+              <PhoneCall className="h-4 w-4" />
+              <span>4. Emergency SOS Hotlines (1091 / 1930 / 14567 / 1098)</span>
+            </Link>
           </div>
         </div>
 
